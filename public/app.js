@@ -170,14 +170,14 @@ document.querySelector('#app').innerHTML = `
 </main>
 
   </div>
-function escapeHTML(value) {
-return String(value ?? '').replace(/[&<>"']/g, char => ({
-'&': '&',
-'<': '<',
-'>': '>',
-'"': '"',
-"'": '''
-})[char]);
+ function escapeHTML(value) {
+  return String(value ?? '').replace(/[&<>"']/g, char => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  })[char]);
 }
 
 const researchPanel = document.querySelector('.research-panel');
@@ -189,90 +189,120 @@ resultContainer.style.marginTop = '20px';
 researchPanel.appendChild(resultContainer);
 
 async function jalankanRiset() {
-resultContainer.innerHTML = "<p style="color:#147c65;font-size:12px"> ⏳ Sedang mengambil data Google Trends Indonesia... </p>";
+  resultContainer.innerHTML = `
+    <p style="color:#147c65;font-size:12px">
+      ⏳ Sedang mengambil data Google Trends Indonesia...
+    </p>
+  `;
 
-try {
-const response = await fetch('/api/research');
-const result = await response.json();
+  try {
+    const response = await fetch('/api/research');
+    const result = await response.json();
 
-if (!response.ok || !result.success) {
-  throw new Error(result.message || 'Gagal mengambil data riset');
-}
+    if (!response.ok || !result.success) {
+      throw new Error(result.message || 'Gagal mengambil data riset');
+    }
 
-if (!result.trends || result.trends.length === 0) {
-  throw new Error('Belum ada topik yang ditemukan.');
-}
+    if (!result.trends || result.trends.length === 0) {
+      throw new Error('Belum ada topik yang ditemukan.');
+    }
 
-resultContainer.innerHTML = `
-  <h3 style="margin-bottom:8px">Hasil Riset Pasar Indonesia</h3>
+    resultContainer.innerHTML = `
+      <h3 style="margin-bottom:8px">
+        Hasil Riset Pasar Indonesia
+      </h3>
 
-  <p style="font-size:11px;color:#8496aa">
-    ${result.total} topik ditemukan
-    · ${result.cached ? 'Data cache' : 'Data terbaru'}
-  </p>
+      <p style="font-size:11px;color:#8496aa">
+        ${result.total} topik ditemukan
+        · ${result.cached ? 'Data cache' : 'Data terbaru'}
+      </p>
 
-  ${result.trends.map(item => `
-    <div style="
-      padding:13px;
-      margin:10px 0;
-      background:#f5f8fb;
-      border-radius:10px;
-      border:1px solid #e7edf3;
-    ">
-      <strong style="font-size:13px;color:#183653">
-        ${escapeHTML(item.title)}
-      </strong>
+      ${result.trends.map(item => `
+        <div style="
+          padding:13px;
+          margin:10px 0;
+          background:#f5f8fb;
+          border-radius:10px;
+          border:1px solid #e7edf3;
+        ">
+          <strong style="font-size:13px;color:#183653">
+            ${escapeHTML(item.title)}
+          </strong>
 
-      <div style="margin-top:7px;font-size:11px;color:#72849a">
-        Kategori: ${escapeHTML(item.category)}
+          <div style="margin-top:7px;font-size:11px;color:#72849a">
+            Kategori: ${escapeHTML(item.category)}
+          </div>
+
+          <div style="margin-top:5px;font-size:11px;color:#147c65">
+            Relevansi: ${escapeHTML(item.relevance)}
+          </div>
+
+          <div style="margin-top:5px;font-size:10px;color:#8496aa">
+            Perkiraan trafik:
+            ${escapeHTML(item.traffic || 'Tidak tersedia')}
+          </div>
+        </div>
+      `).join('')}
+
+      <p style="font-size:10px;color:#8496aa">
+        Sumber: Google Trends Indonesia
+      </p>
+    `;
+
+  } catch (error) {
+    resultContainer.innerHTML = `
+      <div style="
+        padding:14px;
+        background:#fff0ed;
+        color:#b44435;
+        border-radius:10px;
+        font-size:12px;
+      ">
+        <strong>Riset belum berhasil.</strong>
+        <p>${escapeHTML(error.message)}</p>
+
+        <button id="retryResearch" style="
+          padding:8px 12px;
+          border:0;
+          border-radius:6px;
+          background:#147c65;
+          color:white;
+        ">
+          Coba Lagi
+        </button>
       </div>
+    `;
 
-      <div style="margin-top:5px;font-size:11px;color:#147c65">
-        Relevansi: ${escapeHTML(item.relevance)}
-      </div>
-
-      <div style="margin-top:5px;font-size:10px;color:#8496aa">
-        Perkiraan trafik: ${escapeHTML(item.traffic || 'Tidak tersedia')}
-      </div>
-    </div>
-  `).join('')}
-
-  <p style="font-size:10px;color:#8496aa">
-    Sumber: Google Trends Indonesia
-  </p>
-`;
-
-} catch (error) {
-resultContainer.innerHTML = "<div style=" padding:14px; background:#fff0ed; color:#b44435; border-radius:10px; font-size:12px; "> <strong>Riset belum berhasil.</strong> <p>${escapeHTML(error.message)}</p> <button id="retryResearch" style="padding:8px 12px;border:0;border-radius:6px;background:#147c65;color:white"> Coba Lagi </button> </div>";
-
-document.querySelector('#retryResearch')
-  .addEventListener('click', jalankanRiset);
-
-}
+    document.querySelector('#retryResearch')
+      .addEventListener('click', jalankanRiset);
+  }
 }
 
 document.querySelectorAll('.nav-item').forEach(button => {
-button.addEventListener('click', () => {
+  button.addEventListener('click', () => {
 
-document.querySelectorAll('.nav-item').forEach(item => {
-  item.classList.remove('active');
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.classList.remove('active');
+    });
+
+    button.classList.add('active');
+
+    if (button.dataset.menu === 'Riset Pasar') {
+      jalankanRiset();
+
+    } else if (button.dataset.menu === 'Dashboard') {
+      resultContainer.innerHTML = '';
+
+    } else {
+      resultContainer.innerHTML = `
+        <p style="font-size:12px;color:#8496aa">
+          Modul ${escapeHTML(button.dataset.menu)}
+          akan diaktifkan pada tahap berikutnya.
+        </p>
+      `;
+    }
+  });
 });
 
-button.classList.add('active');
-
-if (button.dataset.menu === 'Riset Pasar') {
-  jalankanRiset();
-} else if (button.dataset.menu === 'Dashboard') {
-  resultContainer.innerHTML = '';
-} else {
-  resultContainer.innerHTML = `
-    <p style="font-size:12px;color:#8496aa">
-      Modul ${escapeHTML(button.dataset.menu)}
-      akan diaktifkan pada tahap berikutnya.
-    </p>
-  `;
-}
-
-});
-
-document.querySelector('#researchBtn').addEventListener('click', jalankanRiset);
+document.querySelector('#researchBtn')
+  .addEventListener('click', jalankanRiset);

@@ -189,6 +189,198 @@ resultContainer.style.marginTop = '20px';
 
 researchPanel.appendChild(resultContainer);
 
+// KATALOG IDE KONTEN SEO DIGITEK STORE
+const contentIdeas = [
+  {
+    title: 'Cara Membeli Pulsa Online dengan Mudah dan Aman',
+    category: 'Pulsa',
+    keyword: 'cara membeli pulsa online',
+    intent: 'Transaksional'
+  },
+  {
+    title: 'Cara Memilih Paket Data Internet Sesuai Kebutuhan',
+    category: 'Paket Data',
+    keyword: 'cara memilih paket data internet',
+    intent: 'Informasional'
+  },
+  {
+    title: 'Cara Cek Kuota Internet Berbagai Operator',
+    category: 'Paket Data',
+    keyword: 'cara cek kuota internet',
+    intent: 'Informasional'
+  },
+  {
+    title: 'Cara Membeli Token Listrik PLN Secara Online',
+    category: 'Token PLN',
+    keyword: 'cara membeli token listrik online',
+    intent: 'Transaksional'
+  },
+  {
+    title: 'Cara Mengisi Token Listrik ke Meteran dengan Benar',
+    category: 'Token PLN',
+    keyword: 'cara memasukkan token listrik',
+    intent: 'Informasional'
+  },
+  {
+    title: 'Cara Top Up DANA dengan Mudah',
+    category: 'E-Wallet',
+    keyword: 'cara top up dana',
+    intent: 'Transaksional'
+  },
+  {
+    title: 'Cara Top Up OVO dan GoPay Secara Online',
+    category: 'E-Wallet',
+    keyword: 'cara top up ovo gopay',
+    intent: 'Transaksional'
+  },
+  {
+    title: 'Cara Membeli Voucher Game Online',
+    category: 'Voucher Game',
+    keyword: 'cara membeli voucher game online',
+    intent: 'Transaksional'
+  },
+  {
+    title: 'Tips Memilih Nominal Top Up Mobile Legends',
+    category: 'Voucher Game',
+    keyword: 'nominal top up mobile legends',
+    intent: 'Informasional'
+  },
+  {
+    title: 'Tips Aman Melakukan Transaksi Digital',
+    category: 'Keamanan Digital',
+    keyword: 'tips aman transaksi digital',
+    intent: 'Informasional'
+  },
+  {
+    title: 'Keuntungan Membeli Pulsa dan Paket Data Secara Online',
+    category: 'Pulsa & Paket Data',
+    keyword: 'keuntungan membeli pulsa online',
+    intent: 'Informasional'
+  },
+  {
+    title: 'Cara Memilih Layanan Top Up Digital yang Terpercaya',
+    category: 'Layanan Digital',
+    keyword: 'layanan top up digital terpercaya',
+    intent: 'Informasional'
+  }
+];
+
+// TAMPILKAN IDE KONTEN
+const ideaContainer = document.createElement('div');
+ideaContainer.style.marginTop = '22px';
+
+ideaContainer.innerHTML = `
+  <div style="
+    padding:16px;
+    border:1px solid #e7edf3;
+    border-radius:12px;
+    background:white;
+  ">
+    <span style="
+      font-size:10px;
+      color:#147c65;
+      font-weight:bold;
+    ">
+      SUMBER IDE KEDUA
+    </span>
+
+    <h3 style="margin:7px 0">
+      Ide Konten SEO Digitek Store
+    </h3>
+
+    <p style="
+      font-size:11px;
+      color:#8496aa;
+      line-height:1.6;
+    ">
+      Rekomendasi topik berdasarkan kategori layanan
+      dan kebutuhan informasi pelanggan.
+    </p>
+
+    <div style="
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:8px;
+      margin:15px 0;
+    ">
+      <div style="
+        background:#e5f7ef;
+        padding:12px;
+        border-radius:9px;
+      ">
+        <strong style="font-size:22px;color:#147c65">
+          ${contentIdeas.length}
+        </strong>
+        <div style="font-size:10px;color:#147c65">
+          Ide tersedia
+        </div>
+      </div>
+
+      <div style="
+        background:#eef3ff;
+        padding:12px;
+        border-radius:9px;
+      ">
+        <strong style="font-size:22px;color:#365da8">
+          2
+        </strong>
+        <div style="font-size:10px;color:#365da8">
+          Jenis intent utama
+        </div>
+      </div>
+    </div>
+
+    ${contentIdeas.map((idea, index) => `
+      <div style="
+        padding:12px;
+        margin:9px 0;
+        background:#f5f8fb;
+        border:1px solid #e7edf3;
+        border-radius:9px;
+      ">
+        <strong style="font-size:12px;color:#183653">
+          ${index + 1}. ${escapeHTML(idea.title)}
+        </strong>
+
+        <div style="
+          font-size:10px;
+          color:#147c65;
+          margin-top:7px;
+        ">
+          ${escapeHTML(idea.category)}
+        </div>
+
+        <div style="
+          font-size:11px;
+          color:#72849a;
+          margin-top:5px;
+        ">
+          Keyword: ${escapeHTML(idea.keyword)}
+        </div>
+
+        <div style="
+          font-size:10px;
+          color:#8496aa;
+          margin-top:5px;
+        ">
+          Intent: ${escapeHTML(idea.intent)}
+        </div>
+      </div>
+    `).join('')}
+
+    <p style="
+      font-size:10px;
+      color:#8496aa;
+      margin-top:12px;
+    ">
+      Sumber: Katalog ide internal Digitek Store.
+      Belum merupakan hasil pengukuran volume pencarian Google.
+    </p>
+  </div>
+`;
+
+researchPanel.appendChild(ideaContainer);
+
 async function jalankanRiset() {
   resultContainer.innerHTML = `
     <p style="color:#147c65;font-size:12px">

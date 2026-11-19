@@ -1,37 +1,73 @@
 const CACHE_DURATION = 30 * 60 * 1000;
+
 let cache = null;
 let cacheTime = 0;
 
+// DECODE XML
 function decodeXML(text) {
-return text
-.replace(/&/g, '&')
-.replace(/</g, '<')
-.replace(/>/g, '>')
-.replace(/"/g, '"')
-.replace(/'/g, "'");
+return text.replace(
+/&(#x[0-9a-f]+|#\d+|amp|lt|gt|quot|apos);/gi,
+(match, entity) => {
+const entities = {
+amp: '&',
+lt: '<',
+gt: '>',
+quot: '"',
+apos: "'"
+};
+
+  if (entity.startsWith('#x')) {
+    return String.fromCodePoint(
+      parseInt(entity.slice(2), 16)
+    );
+  }
+
+  if (entity.startsWith('#')) {
+    return String.fromCodePoint(
+      parseInt(entity.slice(1), 10)
+    );
+  }
+
+  return entities[entity.toLowerCase()] || match;
 }
 
+);
+}
+
+// BACA TAG XML
 function getTag(xml, tag) {
-const escaped = tag.replace(':', '\:');
-const match = xml.match(
-new RegExp("<${escaped}[^>]*>([\\\\s\\\\S]*?)<\\\\/${escaped}>", 'i')
+const escaped = tag.replace(
+/[.*+?^${}()|[]\]/g,
+'\$&'
 );
 
-return match ? decodeXML(match[1].trim()) : '';
+const regex = new RegExp(
+"<${escaped}\\b[^>]*>([\\s\\S]*?)<\\/${escaped}\\s*>",
+'i'
+);
+
+const match = xml.match(regex);
+
+return match
+? decodeXML(match[1].trim())
+: '';
 }
 
+// BACA GOOGLE TRENDS RSS
 function getTrends(xml) {
-const items = xml.match(/<item[\s\S]*?</item>/gi) || [];
+const items =
+xml.match(/<item\b[^>]>[\s\S]?</item>/gi) || [];
 
 return items.map((item, index) => {
+
 const title = getTag(item, 'title');
 const traffic = getTag(item, 'ht:approx_traffic');
 const pubDate = getTag(item, 'pubDate');
 
 const news = [];
-const newsMatches = item.match(
-  /<ht:news_item>[\s\S]*?<\/ht:news_item>/gi
-) || [];
+
+const newsMatches =
+  item.match(/<ht:news_item\b[^>]*>[\s\S]*?<\/ht:news_item>/gi) || [];
 
 newsMatches.forEach(entry => {
   news.push({
@@ -52,24 +88,33 @@ return {
 }).filter(item => item.title);
 }
 
+// KATEGORI DIGITEK STORE
 function classify(title) {
 const text = title.toLowerCase();
 
 const categories = {
 'Pulsa & Paket Data': [
-'telkomsel', 'indosat', 'xl', 'axis', 'tri',
-'smartfren', 'internet', 'paket data', 'kuota', 'pulsa'
+'telkomsel', 'indosat', 'xl', 'axis',
+'tri', 'smartfren', 'internet',
+'paket data', 'kuota', 'pulsa'
 ],
+
 'PLN & Listrik': [
-'pln', 'token listrik', 'listrik', 'tarif listrik'
+  'pln', 'token listrik',
+  'listrik', 'tarif listrik'
 ],
+
 'E-Wallet': [
-'dana', 'ovo', 'gopay', 'shopeepay', 'linkaja'
+  'dana', 'ovo', 'gopay',
+  'shopeepay', 'linkaja'
 ],
+
 'Voucher & Game': [
-'mobile legends', 'free fire', 'pubg', 'game',
-'steam', 'roblox', 'voucher'
+  'mobile legends', 'free fire',
+  'pubg', 'game', 'steam',
+  'roblox', 'voucher'
 ]
+
 };
 
 for (const [category, keywords] of Object.entries(categories)) {
@@ -89,7 +134,9 @@ score: 30
 };
 }
 
+// API HANDLER
 export default async function handler(req, res) {
+
 if (req.method !== 'GET') {
 return res.status(405).json({
 success: false,
@@ -97,6 +144,7 @@ message: 'Method tidak diizinkan'
 });
 }
 
+// CEK CACHE
 if (cache && Date.now() - cacheTime < CACHE_DURATION) {
 return res.status(200).json({
 success: true,
@@ -109,25 +157,32 @@ trends: cache
 }
 
 try {
+
 const response = await fetch(
-'https://trends.google.com/trending/rss?geo=ID',
-{
-headers: {
-'User-Agent': 'Mozilla/5.0 DigitekContentEngine/1.0'
-},
-signal: AbortSignal.timeout(12000)
-}
+  'https://trends.google.com/trending/rss?geo=ID',
+  {
+    headers: {
+      'User-Agent': 'Mozilla/5.0 DigitekContentEngine/1.0',
+      'Accept': 'application/rss+xml, application/xml, text/xml'
+    },
+    signal: AbortSignal.timeout(12000)
+  }
 );
 
 if (!response.ok) {
-  throw new Error(`Google Trends HTTP ${response.status}`);
+  throw new Error(
+    `Google Trends HTTP ${response.status}`
+  );
 }
 
 const xml = await response.text();
+
 const rawTrends = getTrends(xml);
 
 if (!rawTrends.length) {
-  throw new Error('Data tren belum berhasil dibaca');
+  throw new Error(
+    'RSS diterima tetapi data tren tidak ditemukan'
+  );
 }
 
 const trends = rawTrends.map(item => ({
@@ -148,7 +203,11 @@ return res.status(200).json({
 });
 
 } catch (error) {
-console.error('RISET PASAR ERROR:', error);
+
+console.error(
+  'RISET PASAR ERROR:',
+  error
+);
 
 return res.status(502).json({
   success: false,

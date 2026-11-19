@@ -208,17 +208,30 @@ async function jalankanRiset() {
       throw new Error('Belum ada topik yang ditemukan.');
     }
 
-    resultContainer.innerHTML = `
-      <h3 style="margin-bottom:8px">
-        Hasil Riset Pasar Indonesia
-      </h3>
+        // KELOMPOKKAN HASIL RISET
+    const relevant = result.trends.filter(
+      item => item.relevance === 'Relevan'
+    );
 
-      <p style="font-size:11px;color:#8496aa">
-        ${result.total} topik ditemukan
-        · ${result.cached ? 'Data cache' : 'Data terbaru'}
-      </p>
+    const potential = result.trends.filter(
+      item => item.relevance === 'Potensial'
+    );
 
-      ${result.trends.map(item => `
+    const irrelevant = result.trends.filter(
+      item => item.relevance === 'Tidak relevan'
+    );
+
+    // TAMPILKAN KARTU TOPIK
+    function renderTopics(items) {
+      if (!items.length) {
+        return `
+          <p style="font-size:11px;color:#8496aa;padding:10px">
+            Belum ada topik dalam kelompok ini.
+          </p>
+        `;
+      }
+
+      return items.map(item => `
         <div style="
           padding:13px;
           margin:10px 0;
@@ -239,13 +252,73 @@ async function jalankanRiset() {
           </div>
 
           <div style="margin-top:5px;font-size:10px;color:#8496aa">
-            Perkiraan trafik:
-            ${escapeHTML(item.traffic || 'Tidak tersedia')}
+            Skor internal: ${escapeHTML(item.score)}
+            · Perkiraan trafik: ${escapeHTML(item.traffic || 'Tidak tersedia')}
           </div>
         </div>
-      `).join('')}
+      `).join('');
+    }
 
-      <p style="font-size:10px;color:#8496aa">
+    resultContainer.innerHTML = `
+      <h3 style="margin-bottom:8px">
+        Hasil Riset Pasar Indonesia
+      </h3>
+
+      <p style="font-size:11px;color:#8496aa">
+        ${result.total} topik ditemukan
+        · ${result.cached ? 'Data cache' : 'Data terbaru'}
+      </p>
+
+      <div style="
+        display:grid;
+        grid-template-columns:repeat(3,1fr);
+        gap:7px;
+        margin:15px 0;
+      ">
+        <div style="background:#e5f7ef;padding:12px 5px;border-radius:9px;text-align:center">
+          <strong style="font-size:22px;color:#147c65">${relevant.length}</strong>
+          <div style="font-size:10px;color:#147c65">Relevan</div>
+        </div>
+
+        <div style="background:#fff5df;padding:12px 5px;border-radius:9px;text-align:center">
+          <strong style="font-size:22px;color:#b47a17">${potential.length}</strong>
+          <div style="font-size:10px;color:#b47a17">Potensial</div>
+        </div>
+
+        <div style="background:#f0f2f5;padding:12px 5px;border-radius:9px;text-align:center">
+          <strong style="font-size:22px;color:#8496aa">${irrelevant.length}</strong>
+          <div style="font-size:10px;color:#8496aa">Tidak relevan</div>
+        </div>
+      </div>
+
+      <h4 style="color:#147c65;margin:20px 0 8px">
+        ✓ Topik Relevan
+      </h4>
+
+      ${renderTopics(relevant)}
+
+      <h4 style="color:#b47a17;margin:20px 0 8px">
+        ◉ Topik Potensial
+      </h4>
+
+      ${renderTopics(potential)}
+
+      <details style="margin-top:20px">
+        <summary style="
+          cursor:pointer;
+          color:#8496aa;
+          font-size:12px;
+          padding:10px;
+          background:#f0f2f5;
+          border-radius:8px;
+        ">
+          Lihat ${irrelevant.length} topik tidak relevan
+        </summary>
+
+        ${renderTopics(irrelevant)}
+      </details>
+
+      <p style="font-size:10px;color:#8496aa;margin-top:15px">
         Sumber: Google Trends Indonesia
       </p>
     `;

@@ -93,65 +93,112 @@ function getTrends(xml) {
 }
 
 // KATEGORI DIGITEK STORE
+// KLASIFIKASI TREN DIGITEK STORE
 function classify(title) {
   const text = title.toLowerCase();
 
   const categories = {
     'Pulsa & Paket Data': [
+      'pulsa',
+      'paket data',
+      'kuota internet',
       'telkomsel',
       'indosat',
-      'xl',
-      'axis',
-      'tri',
+      'xl axiata',
       'smartfren',
-      'internet',
-      'paket data',
-      'kuota',
-      'pulsa'
+      'by.u',
+      'provider internet',
+      'internet murah'
     ],
 
     'PLN & Listrik': [
-      'pln',
       'token listrik',
-      'listrik',
-      'tarif listrik'
+      'listrik prabayar',
+      'tagihan listrik',
+      'tarif listrik',
+      'pln'
     ],
 
-    'E-Wallet': [
-      'dana',
-      'ovo',
+    'E-Wallet & Pembayaran': [
+      'dompet digital',
+      'top up dana',
+      'saldo dana',
       'gopay',
+      'ovo',
       'shopeepay',
-      'linkaja'
+      'linkaja',
+      'qris',
+      'pembayaran digital'
     ],
 
     'Voucher & Game': [
       'mobile legends',
+      'mobile legend',
       'free fire',
-      'pubg',
-      'game',
-      'steam',
+      'pubg mobile',
       'roblox',
-      'voucher'
+      'voucher game',
+      'top up game',
+      'steam wallet'
+    ],
+
+    'Tagihan & Layanan Digital': [
+      'bpjs',
+      'pdam',
+      'tagihan internet',
+      'tv kabel',
+      'pascabayar',
+      'tagihan bulanan',
+      'pembayaran online'
     ]
   };
 
+  // RELEVANSI LANGSUNG
   for (const [category, keywords] of Object.entries(categories)) {
     if (keywords.some(keyword => text.includes(keyword))) {
       return {
         category,
         relevance: 'Relevan',
-        score: 80
+        score: 90
       };
     }
   }
 
+  // TOPIK POTENSIAL
+  const potentialKeywords = [
+    'harga internet',
+    'internet cepat',
+    'jaringan internet',
+    'smartphone',
+    'aplikasi digital',
+    'belanja online',
+    'teknologi',
+    'transaksi online',
+    'ekonomi digital',
+    'bisnis online'
+  ];
+
+  if (
+    potentialKeywords.some(keyword =>
+      text.includes(keyword)
+    )
+  ) {
+    return {
+      category: 'Teknologi & Digital',
+      relevance: 'Potensial',
+      score: 60
+    };
+  }
+
+  // TREN TIDAK RELEVAN
   return {
     category: 'Tren umum',
-    relevance: 'Perlu dianalisis',
-    score: 30
+    relevance: 'Tidak relevan',
+    score: 10
   };
-}
+      }
+
+  
 
 // API HANDLER
 export default async function handler(req, res) {

@@ -168,9 +168,10 @@ document.querySelector('#app').innerHTML = `
     <span>Versi awal · Dashboard prototype</span>
   </footer>
 </main>
-
   </div>
- function escapeHTML(value) {
+  `;
+
+function escapeHTML(value) {
   return String(value ?? '').replace(/[&<>"']/g, char => ({
     '&': '&amp;',
     '<': '&lt;',

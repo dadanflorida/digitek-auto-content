@@ -12,9 +12,9 @@ export default async function handler(req, res) {
   const auth = req.headers.authorization;
 
   if (
-    !process.env.CRON_SECRET ||
-    auth !== `Bearer ${process.env.CRON_SECRET}`
-  ) {
+  !process.env.MANUAL_GENERATE_SECRET ||
+  auth !== `Bearer ${process.env.MANUAL_GENERATE_SECRET}`
+) {
     return res.status(401).json({
       success: false,
       message: 'Akses ditolak.'

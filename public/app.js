@@ -1070,6 +1070,168 @@ filterContainer.querySelectorAll('.filter-intent').forEach(button => {
 
 }
 
+// ===================================
+// MODUL JADWAL POSTING DIGITEK STORE
+// ===================================
+
+function tampilkanJadwalPosting() {
+
+  const scheduleContainer = document.createElement('div');
+
+  scheduleContainer.innerHTML = `
+    <div style="
+      padding:18px;
+      background:white;
+      border:1px solid #e7edf3;
+      border-radius:12px;
+    ">
+
+      <span style="
+        font-size:10px;
+        color:#147c65;
+        font-weight:bold;
+      ">
+        CONTENT AUTOMATION SYSTEM
+      </span>
+
+      <h3 style="margin:8px 0">
+        Pengaturan Jadwal Posting
+      </h3>
+
+        <p style="font-size:11px;color:#8496aa">
+        Tentukan cara DIGITEK AUTO CONTENT ENGINE
+        memproduksi dan menerbitkan artikel.
+      </p>
+
+      <div style="
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:15px;
+  margin-top:18px;
+  background:#f1f7f5;
+  border:1px solid #dcebe5;
+  border-radius:10px;
+">
+
+  <div>
+    <strong style="font-size:13px;color:#183653">
+      Mesin Otomatis
+    </strong>
+
+    <p id="modeStatus" style="
+      margin:5px 0 0;
+      font-size:11px;
+      color:#147c65;
+    ">
+      OFF · Mode Manual
+    </p>
+  </div>
+
+  <label style="
+    position:relative;
+    display:inline-block;
+    width:52px;
+    height:28px;
+  ">
+
+    <input
+      type="checkbox"
+      id="autoMode"
+      style="opacity:0;width:0;height:0"
+    >
+
+    <span id="autoSlider" style="
+      position:absolute;
+      inset:0;
+      cursor:pointer;
+      background:#aab7c4;
+      border-radius:30px;
+      transition:.3s;
+    "></span>
+
+    <span id="autoKnob" style="
+      position:absolute;
+      left:3px;
+      top:3px;
+      width:22px;
+      height:22px;
+      background:white;
+      border-radius:50%;
+      transition:.3s;
+      pointer-events:none;
+    "></span>
+
+  </label>
+
+</div>
+
+      <div style="margin-top:18px">
+
+        <label style="font-size:12px;font-weight:bold">
+          Jumlah artikel per hari
+        </label>
+
+        <select id="jumlahArtikel" style="
+          width:100%;
+          padding:11px;
+          margin-top:7px;
+          border:1px solid #dce5ed;
+          border-radius:7px;
+        ">
+          <option value="1">1 Artikel</option>
+          <option value="2">2 Artikel</option>
+          <option value="3">3 Artikel</option>
+        </select>
+
+        <label style="
+          display:block;
+          margin-top:15px;
+          font-size:12px;
+          font-weight:bold;
+        ">
+          Jam publikasi
+        </label>
+
+        <input type="time"
+          id="jamPosting"
+          value="06:00"
+          style="
+            width:100%;
+            padding:11px;
+            margin-top:7px;
+            border:1px solid #dce5ed;
+            border-radius:7px;
+          ">
+
+        <button id="simpanJadwal" style="
+          width:100%;
+          margin-top:20px;
+          padding:12px;
+          border:0;
+          border-radius:8px;
+          background:#147c65;
+          color:white;
+          font-weight:bold;
+          cursor:pointer;
+        ">
+          Simpan Pengaturan
+        </button>
+
+        <p id="statusJadwal"
+          style="font-size:11px;color:#147c65;margin-top:12px">
+        </p>
+
+      </div>
+
+    </div>
+  `;
+
+  resultContainer.innerHTML = '';
+  resultContainer.appendChild(scheduleContainer);
+
+}
+
 document.querySelectorAll('.nav-item').forEach(button => {
   button.addEventListener('click', () => {
 

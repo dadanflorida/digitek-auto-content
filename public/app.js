@@ -544,6 +544,137 @@ async function jalankanRiset() {
   }
 }
 
+// ===================================
+// MODUL RISET KEYWORD DIGITEK STORE
+// ===================================
+
+function tampilkanRisetKeyword() {
+
+  const keywordContainer = document.createElement('div');
+
+  const variasiKeyword = [
+    'cara {keyword}',
+    'tips {keyword}',
+    '{keyword} online',
+    '{keyword} murah',
+    'tempat {keyword}',
+    '{keyword} dengan mudah'
+  ];
+
+  keywordContainer.innerHTML = `
+    <div style="
+      padding:18px;
+      background:white;
+      border:1px solid #e7edf3;
+      border-radius:12px;
+    ">
+
+      <span style="
+        font-size:10px;
+        color:#147c65;
+        font-weight:bold;
+      ">
+        KEYWORD RESEARCH ENGINE
+      </span>
+
+      <h3 style="margin:8px 0">
+        Riset Keyword SEO
+      </h3>
+
+      <p style="
+        font-size:11px;
+        color:#8496aa;
+        line-height:1.7;
+      ">
+        Temukan variasi keyword berdasarkan
+        12 ide konten SEO Digitek Store.
+      </p>
+
+      <div id="keywordList"></div>
+
+    </div>
+  `;
+
+  resultContainer.innerHTML = '';
+  resultContainer.appendChild(keywordContainer);
+
+  const keywordList = keywordContainer.querySelector('#keywordList');
+
+  keywordList.innerHTML = contentIdeas.map((idea, index) => {
+
+    const variations = variasiKeyword.map(template =>
+      template.replace('{keyword}', idea.keyword)
+    );
+
+    const uniqueKeywords = [...new Set([
+      idea.keyword,
+      ...variations
+    ])];
+
+    return `
+      <details style="
+        margin-top:12px;
+        padding:13px;
+        background:#f5f8fb;
+        border:1px solid #e7edf3;
+        border-radius:9px;
+      ">
+
+        <summary style="
+          cursor:pointer;
+          font-size:12px;
+          font-weight:bold;
+          color:#183653;
+        ">
+          ${index + 1}. ${escapeHTML(idea.keyword)}
+        </summary>
+
+        <div style="
+          margin-top:12px;
+          font-size:11px;
+          color:#147c65;
+        ">
+          Kategori: ${escapeHTML(idea.category)}
+        </div>
+
+        <div style="
+          margin-top:6px;
+          font-size:11px;
+          color:#72849a;
+        ">
+          Intent: ${escapeHTML(idea.intent)}
+        </div>
+
+        <div style="
+          margin-top:12px;
+          font-size:11px;
+          font-weight:bold;
+          color:#183653;
+        ">
+          Keyword utama dan turunannya:
+        </div>
+
+        ${uniqueKeywords.map(keyword => `
+          <div style="
+            padding:9px;
+            margin-top:6px;
+            background:white;
+            border:1px solid #e7edf3;
+            border-radius:7px;
+            font-size:11px;
+            color:#52677d;
+          ">
+            ${escapeHTML(keyword)}
+          </div>
+        `).join('')}
+
+      </details>
+    `;
+
+  }).join('');
+
+}
+
 document.querySelectorAll('.nav-item').forEach(button => {
   button.addEventListener('click', () => {
 

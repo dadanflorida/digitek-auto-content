@@ -1230,6 +1230,50 @@ function tampilkanJadwalPosting() {
   resultContainer.innerHTML = '';
   resultContainer.appendChild(scheduleContainer);
 
+// ===================================
+// FUNGSI SAKELAR MODE OTOMATIS
+// ===================================
+
+const autoMode = scheduleContainer.querySelector('#autoMode');
+const autoSlider = scheduleContainer.querySelector('#autoSlider');
+const autoKnob = scheduleContainer.querySelector('#autoKnob');
+const modeStatus = scheduleContainer.querySelector('#modeStatus');
+
+// Ambil pengaturan sebelumnya
+autoMode.checked =
+  localStorage.getItem('digitekAutoMode') === 'true';
+
+function perbaruiTampilanMode() {
+
+  if (autoMode.checked) {
+    autoSlider.style.background = '#147c65';
+    autoKnob.style.transform = 'translateX(24px)';
+    modeStatus.textContent = 'ON · Mode Otomatis';
+    modeStatus.style.color = '#147c65';
+  } else {
+    autoSlider.style.background = '#aab7c4';
+    autoKnob.style.transform = 'translateX(0)';
+    modeStatus.textContent = 'OFF · Mode Manual';
+    modeStatus.style.color = '#8496aa';
+  }
+
+}
+
+// Tampilkan kondisi awal
+perbaruiTampilanMode();
+
+// Simpan perubahan saat sakelar ditekan
+autoMode.addEventListener('change', () => {
+
+  localStorage.setItem(
+    'digitekAutoMode',
+    autoMode.checked
+  );
+
+  perbaruiTampilanMode();
+
+});
+  
 }
 
 document.querySelectorAll('.nav-item').forEach(button => {

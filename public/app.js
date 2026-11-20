@@ -328,6 +328,7 @@ ideaContainer.innerHTML = `
           Jenis intent utama
         </div>
       </div>
+    </div>
 
     ${contentIdeas.map((idea, index) => `
       <div style="

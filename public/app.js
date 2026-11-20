@@ -1436,6 +1436,34 @@ function tampilkanGeneratorArtikel() {
           box-sizing:border-box;
           margin:12px 0;
         "
+        
+                    <input
+        id="manualKeyword"
+        type="text"
+        placeholder="Contoh: cara membeli pulsa online"
+        style="
+          width:100%;
+          padding:13px;
+          border:1px solid #dce5ed;
+          border-radius:8px;
+          box-sizing:border-box;
+          margin:12px 0;
+        "
+      >
+
+      <input
+        id="manualSecret"
+        type="password"
+        placeholder="Masukkan kunci Generate Manual"
+        autocomplete="off"
+        style="
+          width:100%;
+          padding:13px;
+          border:1px solid #dce5ed;
+          border-radius:8px;
+          box-sizing:border-box;
+          margin:8px 0 12px;
+        "
       >
 
       <button class="primary-btn" id="generateManual">

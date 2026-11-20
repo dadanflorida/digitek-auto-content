@@ -697,6 +697,30 @@ function tampilkanRisetKeyword() {
 
   }).join('');
 
+// AKTIFKAN TOMBOL SALIN KEYWORD
+keywordList.querySelectorAll('.copy-keyword').forEach(button => {
+
+  button.addEventListener('click', async () => {
+
+    const keyword = button.dataset.keyword;
+
+    try {
+      await navigator.clipboard.writeText(keyword);
+
+      button.textContent = 'Tersalin!';
+
+      setTimeout(() => {
+        button.textContent = 'Salin';
+      }, 1500);
+
+    } catch (error) {
+      alert('Gagal menyalin keyword.');
+    }
+
+  });
+
+});
+
 }
 
 document.querySelectorAll('.nav-item').forEach(button => {

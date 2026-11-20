@@ -655,6 +655,44 @@ intentSummary.innerHTML = `
 keywordContainer.querySelector('#keywordList')
   .before(intentSummary);
 
+  // FILTER SEARCH INTENT
+const filterContainer = document.createElement('div');
+
+filterContainer.style.cssText = `
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin:15px 0;
+`;
+
+filterContainer.innerHTML = `
+  <button class="filter-intent" data-filter="Semua">
+    Semua
+  </button>
+
+  <button class="filter-intent" data-filter="Informasional">
+    Informasional
+  </button>
+
+  <button class="filter-intent" data-filter="Transaksional">
+    Transaksional
+  </button>
+`;
+
+keywordList.before(filterContainer);
+
+filterContainer.querySelectorAll('button').forEach(button => {
+  button.style.cssText = `
+    padding:9px 12px;
+    border:0;
+    border-radius:7px;
+    background:#147c65;
+    color:white;
+    font-size:11px;
+    cursor:pointer;
+  `;
+});
+
   keywordList.innerHTML = contentIdeas.map((idea, index) => {
 
     const variations = variasiKeyword.map(template =>

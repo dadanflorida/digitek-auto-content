@@ -814,6 +814,112 @@ keywordList.querySelectorAll('.copy-keyword').forEach(button => {
 
 });
 
+  // AKTIFKAN FILTER SEARCH INTENT
+filterContainer.querySelectorAll('.filter-intent').forEach(button => {
+
+  button.addEventListener('click', () => {
+
+    const filter = button.dataset.filter;
+
+    const filteredIdeas = filter === 'Semua'
+      ? contentIdeas
+      : contentIdeas.filter(idea => idea.intent === filter);
+
+    keywordList.innerHTML = '';
+
+    filteredIdeas.forEach((idea, index) => {
+
+      const details = document.createElement('details');
+
+      details.style.cssText = `
+        margin-top:12px;
+        padding:13px;
+        background:#f5f8fb;
+        border:1px solid #e7edf3;
+        border-radius:9px;
+      `;
+
+      details.innerHTML = `
+        <summary style="cursor:pointer;font-size:12px;font-weight:bold;color:#183653">
+          ${index + 1}. ${escapeHTML(idea.keyword)}
+        </summary>
+
+        <p style="font-size:11px;color:#147c65">
+          Kategori: ${escapeHTML(idea.category)}
+        </p>
+
+        <p style="font-size:11px;color:#72849a">
+          Intent: ${escapeHTML(idea.intent)}
+        </p>
+
+        <div id="filteredKeywords${index}"></div>
+      `;
+
+      keywordList.appendChild(details);
+
+      const variations = variasiKeyword.map(template =>
+        template.replace('{keyword}', idea.keyword)
+      );
+
+      const uniqueKeywords = [...new Set([
+        idea.keyword,
+        ...variations
+      ])];
+
+      const list = details.querySelector(`#filteredKeywords${index}`);
+
+      uniqueKeywords.forEach(keyword => {
+
+        const row = document.createElement('div');
+
+        row.style.cssText = `
+          display:flex;
+          justify-content:space-between;
+          align-items:center;
+          gap:8px;
+          padding:9px;
+          margin-top:6px;
+          background:white;
+          border:1px solid #e7edf3;
+          border-radius:7px;
+          font-size:11px;
+        `;
+
+        const label = document.createElement('span');
+        label.textContent = keyword;
+
+        const copy = document.createElement('button');
+        copy.textContent = 'Salin';
+        copy.style.cssText = `
+          padding:6px 10px;
+          border:0;
+          border-radius:6px;
+          background:#147c65;
+          color:white;
+          font-size:10px;
+        `;
+
+        copy.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(keyword);
+            copy.textContent = 'Tersalin!';
+            setTimeout(() => copy.textContent = 'Salin', 1500);
+          } catch (error) {
+            alert('Gagal menyalin keyword.');
+          }
+        });
+
+        row.append(label, copy);
+        list.appendChild(row);
+
+      });
+
+    });
+
+  });
+
+});
+
 }
 
 document.querySelectorAll('.nav-item').forEach(button => {

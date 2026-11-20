@@ -756,6 +756,8 @@ filterContainer.querySelectorAll('button').forEach(button => {
       ...variations
     ])];
 
+    const analisis = analisisKualitasKeyword(idea);
+
     return `
       <details style="
         margin-top:12px;

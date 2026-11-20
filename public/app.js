@@ -377,16 +377,13 @@ ideaContainer.innerHTML = `
   </strong>
 
   <div style="margin-top:8px;font-size:11px;color:#52677d">
-    Relevansi: <strong>${analisis.relevansi}/100</strong>
-  </div>
+    Relevansi: <strong>${analisisKualitasKeyword(idea).relevansi}/100</strong>
 
   <div style="margin-top:6px;font-size:11px;color:#52677d">
-    Potensi pelanggan: <strong>${analisis.potensi}/100</strong>
-  </div>
+    Potensi pelanggan: <strong>${analisisKualitasKeyword(idea).potensi}/100</strong>
 
   <div style="margin-top:6px;font-size:11px;color:#52677d">
-    Kesesuaian artikel: <strong>${analisis.kesesuaian}/100</strong>
-  </div>
+    Kesesuaian artikel: <strong>${analisisKualitasKeyword(idea).kesesuaian}/100</strong>
 </div>      
       </div>
     `).join('')}

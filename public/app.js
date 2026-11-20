@@ -1474,6 +1474,108 @@ function tampilkanGeneratorArtikel() {
     `;
   };
 
+    // PROSES GENERATE ARTIKEL MANUAL
+  const tombolGenerate = form.querySelector('#generateManual');
+
+  tombolGenerate.addEventListener('click', async () => {
+
+    const keyword = form.querySelector('#manualKeyword').value.trim();
+    const secret = form.querySelector('#manualSecret').value;
+    const hasil = form.querySelector('#generatorResult');
+
+    if (!keyword) {
+      alert('Masukkan keyword artikel terlebih dahulu.');
+      return;
+    }
+
+    if (!secret) {
+      alert('Masukkan kunci Generate Manual.');
+      return;
+    }
+
+    tombolGenerate.disabled = true;
+    tombolGenerate.textContent = '⏳ Sedang menulis artikel...';
+
+    hasil.innerHTML = `
+      <p style="color:#147c65;font-size:12px">
+        Gemini sedang menyusun artikel. Mohon tunggu...
+      </p>
+    `;
+
+    try {
+      const response = await fetch('/api/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + secret
+        },
+        body: JSON.stringify({
+          keyword: keyword
+        })
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || 'Gagal membuat artikel.');
+      }
+
+      const artikel = result.artikel;
+
+      hasil.innerHTML = `
+        <div style="
+          padding:15px;
+          margin-top:15px;
+          background:#e9f8f0;
+          border-radius:9px;
+        ">
+          <strong style="color:#147c65">
+            ✓ Artikel berhasil dibuat!
+          </strong>
+        </div>
+
+        <h3>${escapeHTML(artikel.title)}</h3>
+
+        <p style="font-size:12px;color:#72849a">
+          ${escapeHTML(artikel.meta_description)}
+        </p>
+
+        <h4>Isi Artikel (HTML)</h4>
+
+        <textarea readonly style="
+          width:100%;
+          min-height:300px;
+          padding:12px;
+          box-sizing:border-box;
+          border:1px solid #dce5ed;
+          border-radius:8px;
+          font-size:12px;
+        ">${escapeHTML(artikel.content_html)}</textarea>
+      `;
+
+      // Kosongkan kunci setelah digunakan
+      form.querySelector('#manualSecret').value = '';
+
+    } catch (error) {
+      hasil.innerHTML = `
+        <div style="
+          padding:12px;
+          background:#fff0ed;
+          color:#b44435;
+          border-radius:8px;
+          font-size:12px;
+        ">
+          <strong>Gagal membuat artikel.</strong>
+          <p>${escapeHTML(error.message)}</p>
+        </div>
+      `;
+    }
+
+    tombolGenerate.disabled = false;
+    tombolGenerate.textContent = '✨ Generate Artikel';
+
+  });
+
   // MODE OTOMATIS
   halaman.querySelector('#modeAuto').onclick = () => {
 

@@ -1340,6 +1340,9 @@ document.querySelectorAll('.nav-item').forEach(button => {
 } else if (button.dataset.menu === 'Jadwal Posting') {
   tampilkanJadwalPosting();
 
+} else if (button.dataset.menu === 'Generator Artikel') {
+  tampilkanGeneratorArtikel();
+
 } else if (button.dataset.menu === 'Dashboard') {
     } else {
       resultContainer.innerHTML = `

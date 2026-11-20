@@ -594,7 +594,7 @@ function analisisKualitasKeyword(idea) {
 
   // POTENSI KEBUTUHAN PELANGGAN
   if (
-    /membeli|membeli|top up|cek kuota|mengisi|memasukkan/i
+    /membeli|top up|cek kuota|mengisi|memasukkan/i
       .test(keyword)
   ) {
     potensi += 30;
@@ -608,10 +608,34 @@ function analisisKualitasKeyword(idea) {
     kesesuaian += 20;
   }
 
+  relevansi = Math.min(relevansi, 100);
+  potensi = Math.min(potensi, 100);
+  kesesuaian = Math.min(kesesuaian, 100);
+
+  // HITUNG SKOR RATA-RATA
+  const rataRata = Math.round(
+    (relevansi + potensi + kesesuaian) / 3
+  );
+
+  // TENTUKAN PRIORITAS
+  let prioritas;
+
+  if (rataRata >= 90) {
+    prioritas = 'Sangat Baik';
+  } else if (rataRata >= 75) {
+    prioritas = 'Baik';
+  } else if (rataRata >= 60) {
+    prioritas = 'Cukup';
+  } else {
+    prioritas = 'Perlu Evaluasi';
+  }
+
   return {
-    relevansi: Math.min(relevansi, 100),
-    potensi: Math.min(potensi, 100),
-    kesesuaian: Math.min(kesesuaian, 100)
+    relevansi,
+    potensi,
+    kesesuaian,
+    rataRata,
+    prioritas
   };
 
 }

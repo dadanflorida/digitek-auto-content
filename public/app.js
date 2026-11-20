@@ -685,11 +685,13 @@ document.querySelectorAll('.nav-item').forEach(button => {
     button.classList.add('active');
 
     if (button.dataset.menu === 'Riset Pasar') {
-      jalankanRiset();
+  jalankanRiset();
 
-    } else if (button.dataset.menu === 'Dashboard') {
-      resultContainer.innerHTML = '';
+} else if (button.dataset.menu === 'Riset Keyword') {
+  tampilkanRisetKeyword();
 
+} else if (button.dataset.menu === 'Dashboard') {
+      
     } else {
       resultContainer.innerHTML = `
         <p style="font-size:12px;color:#8496aa">

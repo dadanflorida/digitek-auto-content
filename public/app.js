@@ -1262,6 +1262,42 @@ function perbaruiTampilanMode() {
 // Tampilkan kondisi awal
 perbaruiTampilanMode();
 
+  // AMBIL PENGATURAN JADWAL SEBELUMNYA
+const jumlahArtikel = scheduleContainer.querySelector('#jumlahArtikel');
+const jamPosting = scheduleContainer.querySelector('#jamPosting');
+const statusJadwal = scheduleContainer.querySelector('#statusJadwal');
+const simpanJadwal = scheduleContainer.querySelector('#simpanJadwal');
+
+// Pulihkan pengaturan dari browser
+jumlahArtikel.value =
+  localStorage.getItem('digitekJumlahArtikel') || '1';
+
+jamPosting.value =
+  localStorage.getItem('digitekJamPosting') || '06:00';
+
+// SIMPAN PENGATURAN
+simpanJadwal.addEventListener('click', () => {
+
+  localStorage.setItem(
+    'digitekAutoMode',
+    autoMode.checked
+  );
+
+  localStorage.setItem(
+    'digitekJumlahArtikel',
+    jumlahArtikel.value
+  );
+
+  localStorage.setItem(
+    'digitekJamPosting',
+    jamPosting.value
+  );
+
+  statusJadwal.textContent =
+    '✓ Pengaturan berhasil disimpan di perangkat ini.';
+
+});
+
 // Simpan perubahan saat sakelar ditekan
 autoMode.addEventListener('change', () => {
 

@@ -328,7 +328,6 @@ ideaContainer.innerHTML = `
           Jenis intent utama
         </div>
       </div>
-    </div>
 
     ${contentIdeas.map((idea, index) => `
       <div style="
@@ -365,6 +364,29 @@ ideaContainer.innerHTML = `
         ">
           Intent: ${escapeHTML(idea.intent)}
         </div>
+
+  <div style="
+  margin-top:12px;
+  padding:12px;
+  background:#eaf4ff;
+  border-radius:8px;
+">
+  <strong style="font-size:11px;color:#183653">
+    ANALISIS KUALITAS KEYWORD
+  </strong>
+
+  <div style="margin-top:8px;font-size:11px;color:#52677d">
+    Relevansi: <strong>${analisis.relevansi}/100</strong>
+  </div>
+
+  <div style="margin-top:6px;font-size:11px;color:#52677d">
+    Potensi pelanggan: <strong>${analisis.potensi}/100</strong>
+  </div>
+
+  <div style="margin-top:6px;font-size:11px;color:#52677d">
+    Kesesuaian artikel: <strong>${analisis.kesesuaian}/100</strong>
+  </div>
+</div>      
       </div>
     `).join('')}
 

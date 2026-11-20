@@ -1415,66 +1415,51 @@ function tampilkanGeneratorArtikel() {
   const form = halaman.querySelector('#generatorForm');
 
   // MODE MANUAL
-  halaman.querySelector('#modeManual').onclick = () => {
+ halaman.querySelector('#modeManual').onclick = () => {
 
-    form.innerHTML = `
-      <h3>Generate Manual</h3>
+  form.innerHTML = `
+    <h3>Generate Manual</h3>
 
-      <p class="muted">
-        Masukkan keyword artikel yang ingin dibuat.
-      </p>
+    <p class="muted">
+      Masukkan keyword artikel yang ingin dibuat.
+    </p>
 
-      <input
-        id="manualKeyword"
-        type="text"
-        placeholder="Contoh: cara membeli pulsa online"
-        style="
-          width:100%;
-          padding:13px;
-          border:1px solid #dce5ed;
-          border-radius:8px;
-          box-sizing:border-box;
-          margin:12px 0;
-        "
-        
-                    <input
-        id="manualKeyword"
-        type="text"
-        placeholder="Contoh: cara membeli pulsa online"
-        style="
-          width:100%;
-          padding:13px;
-          border:1px solid #dce5ed;
-          border-radius:8px;
-          box-sizing:border-box;
-          margin:12px 0;
-        "
-      >
+    <input
+      id="manualKeyword"
+      type="text"
+      placeholder="Contoh: cara membeli pulsa online"
+      style="
+        width:100%;
+        padding:13px;
+        border:1px solid #dce5ed;
+        border-radius:8px;
+        box-sizing:border-box;
+        margin:12px 0;
+      "
+    >
 
-      <input
-        id="manualSecret"
-        type="password"
-        placeholder="Masukkan kunci Generate Manual"
-        autocomplete="off"
-        style="
-          width:100%;
-          padding:13px;
-          border:1px solid #dce5ed;
-          border-radius:8px;
-          box-sizing:border-box;
-          margin:8px 0 12px;
-        "
-      >
+    <input
+      id="manualSecret"
+      type="password"
+      placeholder="Masukkan kunci Generate Manual"
+      autocomplete="off"
+      style="
+        width:100%;
+        padding:13px;
+        border:1px solid #dce5ed;
+        border-radius:8px;
+        box-sizing:border-box;
+        margin:8px 0 12px;
+      "
+    >
 
-      <button class="primary-btn" id="generateManual">
-        ✨ Generate Artikel
-      </button>
+    <button class="primary-btn" id="generateManual">
+      ✨ Generate Artikel
+    </button>
 
-      <div id="generatorResult"></div>
-    `;
-  };
+    <div id="generatorResult"></div>
+  `;
 
-    // PROSES GENERATE ARTIKEL MANUAL
   const tombolGenerate = form.querySelector('#generateManual');
 
   tombolGenerate.addEventListener('click', async () => {
@@ -1496,11 +1481,7 @@ function tampilkanGeneratorArtikel() {
     tombolGenerate.disabled = true;
     tombolGenerate.textContent = '⏳ Sedang menulis artikel...';
 
-    hasil.innerHTML = `
-      <p style="color:#147c65;font-size:12px">
-        Gemini sedang menyusun artikel. Mohon tunggu...
-      </p>
-    `;
+    hasil.textContent = 'Gemini sedang menyusun artikel...';
 
     try {
       const response = await fetch('/api/generate', {
@@ -1509,9 +1490,7 @@ function tampilkanGeneratorArtikel() {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ' + secret
         },
-        body: JSON.stringify({
-          keyword: keyword
-        })
+        body: JSON.stringify({ keyword })
       });
 
       const result = await response.json();
@@ -1523,12 +1502,7 @@ function tampilkanGeneratorArtikel() {
       const artikel = result.artikel;
 
       hasil.innerHTML = `
-        <div style="
-          padding:15px;
-          margin-top:15px;
-          background:#e9f8f0;
-          border-radius:9px;
-        ">
+        <div style="padding:15px;background:#e9f8f0;border-radius:9px">
           <strong style="color:#147c65">
             ✓ Artikel berhasil dibuat!
           </strong>
@@ -1536,9 +1510,7 @@ function tampilkanGeneratorArtikel() {
 
         <h3>${escapeHTML(artikel.title)}</h3>
 
-        <p style="font-size:12px;color:#72849a">
-          ${escapeHTML(artikel.meta_description)}
-        </p>
+        <p>${escapeHTML(artikel.meta_description)}</p>
 
         <h4>Isi Artikel (HTML)</h4>
 
@@ -1547,35 +1519,19 @@ function tampilkanGeneratorArtikel() {
           min-height:300px;
           padding:12px;
           box-sizing:border-box;
-          border:1px solid #dce5ed;
-          border-radius:8px;
-          font-size:12px;
         ">${escapeHTML(artikel.content_html)}</textarea>
       `;
 
-      // Kosongkan kunci setelah digunakan
       form.querySelector('#manualSecret').value = '';
 
     } catch (error) {
-      hasil.innerHTML = `
-        <div style="
-          padding:12px;
-          background:#fff0ed;
-          color:#b44435;
-          border-radius:8px;
-          font-size:12px;
-        ">
-          <strong>Gagal membuat artikel.</strong>
-          <p>${escapeHTML(error.message)}</p>
-        </div>
-      `;
+      hasil.textContent = 'Gagal membuat artikel: ' + error.message;
     }
 
     tombolGenerate.disabled = false;
     tombolGenerate.textContent = '✨ Generate Artikel';
-
   });
-
+}; 
   // MODE OTOMATIS
   halaman.querySelector('#modeAuto').onclick = () => {
 

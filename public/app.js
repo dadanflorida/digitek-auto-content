@@ -655,18 +655,42 @@ function tampilkanRisetKeyword() {
         </div>
 
         ${uniqueKeywords.map(keyword => `
-          <div style="
-            padding:9px;
-            margin-top:6px;
-            background:white;
-            border:1px solid #e7edf3;
-            border-radius:7px;
-            font-size:11px;
-            color:#52677d;
-          ">
-            ${escapeHTML(keyword)}
-          </div>
-        `).join('')}
+  <div style="
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    padding:9px;
+    margin-top:6px;
+    background:white;
+    border:1px solid #e7edf3;
+    border-radius:7px;
+  ">
+    <span style="
+      font-size:11px;
+      color:#52677d;
+    ">
+      ${escapeHTML(keyword)}
+    </span>
+
+    <button
+      class="copy-keyword"
+      data-keyword="${escapeHTML(keyword)}"
+      style="
+        padding:6px 10px;
+        border:0;
+        border-radius:6px;
+        background:#147c65;
+        color:white;
+        font-size:10px;
+        cursor:pointer;
+        white-space:nowrap;
+      "
+    >
+      Salin
+    </button>
+  </div>
+`).join('')}
 
       </details>
     `;

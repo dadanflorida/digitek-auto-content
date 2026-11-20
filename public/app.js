@@ -384,6 +384,22 @@ ideaContainer.innerHTML = `
 
   <div style="margin-top:6px;font-size:11px;color:#52677d">
     Kesesuaian artikel: <strong>${analisisKualitasKeyword(idea).kesesuaian}/100</strong>
+<div style="
+  margin-top:10px;
+  padding:9px;
+  background:#e9f8f0;
+  border-radius:7px;
+  font-size:11px;
+  color:#147c65;
+">
+  <strong>SKOR RATA-RATA:</strong>
+  ${analisisKualitasKeyword(idea).rataRata}/100
+
+  <br>
+
+  <strong>PRIORITAS:</strong>
+  ${escapeHTML(analisisKualitasKeyword(idea).prioritas)}
+</div>
 </div>      
       </div>
     `).join('')}

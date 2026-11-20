@@ -1073,8 +1073,7 @@ filterContainer.querySelectorAll('.filter-intent').forEach(button => {
 // ===================================
 // MODUL JADWAL POSTING DIGITEK STORE
 // ===================================
-
-function tampilkanJadwalPosting() {
+async function tampilkanJadwalPosting() {
 
   const scheduleContainer = document.createElement('div');
 
@@ -1086,85 +1085,71 @@ function tampilkanJadwalPosting() {
       border-radius:12px;
     ">
 
-      <span style="
-        font-size:10px;
-        color:#147c65;
-        font-weight:bold;
-      ">
+      <span style="font-size:10px;color:#147c65;font-weight:bold">
         CONTENT AUTOMATION SYSTEM
       </span>
 
-      <h3 style="margin:8px 0">
-        Pengaturan Jadwal Posting
-      </h3>
+      <h3 style="margin:8px 0">Pengaturan Jadwal Posting</h3>
 
-        <p style="font-size:11px;color:#8496aa">
+      <p style="font-size:11px;color:#8496aa">
         Tentukan cara DIGITEK AUTO CONTENT ENGINE
         memproduksi dan menerbitkan artikel.
       </p>
 
       <div style="
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:15px;
-  margin-top:18px;
-  background:#f1f7f5;
-  border:1px solid #dcebe5;
-  border-radius:10px;
-">
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        padding:15px;
+        margin-top:18px;
+        background:#f1f7f5;
+        border:1px solid #dcebe5;
+        border-radius:10px;
+      ">
 
-  <div>
-    <strong style="font-size:13px;color:#183653">
-      Mesin Otomatis
-    </strong>
+        <div>
+          <strong style="font-size:13px;color:#183653">
+            Mesin Otomatis
+          </strong>
 
-    <p id="modeStatus" style="
-      margin:5px 0 0;
-      font-size:11px;
-      color:#147c65;
-    ">
-      OFF · Mode Manual
-    </p>
-  </div>
+          <p id="modeStatus" style="
+            margin:5px 0 0;
+            font-size:11px;
+            color:#8496aa;
+          ">Memuat pengaturan...</p>
+        </div>
 
-  <label style="
-    position:relative;
-    display:inline-block;
-    width:52px;
-    height:28px;
-  ">
+        <label style="
+          position:relative;
+          display:inline-block;
+          width:52px;
+          height:28px;
+        ">
+          <input type="checkbox" id="autoMode"
+            disabled
+            style="opacity:0;width:0;height:0">
 
-    <input
-      type="checkbox"
-      id="autoMode"
-      style="opacity:0;width:0;height:0"
-    >
+          <span id="autoSlider" style="
+            position:absolute;
+            inset:0;
+            background:#aab7c4;
+            border-radius:30px;
+          "></span>
 
-    <span id="autoSlider" style="
-      position:absolute;
-      inset:0;
-      cursor:pointer;
-      background:#aab7c4;
-      border-radius:30px;
-      transition:.3s;
-    "></span>
+          <span id="autoKnob" style="
+            position:absolute;
+            left:3px;
+            top:3px;
+            width:22px;
+            height:22px;
+            background:white;
+            border-radius:50%;
+            transition:.3s;
+            pointer-events:none;
+          "></span>
+        </label>
 
-    <span id="autoKnob" style="
-      position:absolute;
-      left:3px;
-      top:3px;
-      width:22px;
-      height:22px;
-      background:white;
-      border-radius:50%;
-      transition:.3s;
-      pointer-events:none;
-    "></span>
-
-  </label>
-
-</div>
+      </div>
 
       <div style="margin-top:18px">
 
@@ -1172,7 +1157,7 @@ function tampilkanJadwalPosting() {
           Jumlah artikel per hari
         </label>
 
-        <select id="jumlahArtikel" style="
+        <select id="jumlahArtikel" disabled style="
           width:100%;
           padding:11px;
           margin-top:7px;
@@ -1189,13 +1174,11 @@ function tampilkanJadwalPosting() {
           margin-top:15px;
           font-size:12px;
           font-weight:bold;
-        ">
-          Jam publikasi
-        </label>
+        ">Jam publikasi</label>
 
-        <input type="time"
-          id="jamPosting"
+        <input type="time" id="jamPosting"
           value="06:00"
+          disabled
           style="
             width:100%;
             padding:11px;
@@ -1204,112 +1187,139 @@ function tampilkanJadwalPosting() {
             border-radius:7px;
           ">
 
-        <button id="simpanJadwal" style="
+        <button id="simpanJadwal" disabled style="
           width:100%;
           margin-top:20px;
           padding:12px;
           border:0;
           border-radius:8px;
-          background:#147c65;
+          background:#aab7c4;
           color:white;
           font-weight:bold;
           cursor:pointer;
-        ">
-          Simpan Pengaturan
-        </button>
+        ">Memuat...</button>
 
         <p id="statusJadwal"
           style="font-size:11px;color:#147c65;margin-top:12px">
         </p>
 
       </div>
-
     </div>
   `;
 
   resultContainer.innerHTML = '';
   resultContainer.appendChild(scheduleContainer);
 
-// ===================================
-// FUNGSI SAKELAR MODE OTOMATIS
-// ===================================
+  const autoMode = scheduleContainer.querySelector('#autoMode');
+  const autoSlider = scheduleContainer.querySelector('#autoSlider');
+  const autoKnob = scheduleContainer.querySelector('#autoKnob');
+  const modeStatus = scheduleContainer.querySelector('#modeStatus');
+  const jumlahArtikel = scheduleContainer.querySelector('#jumlahArtikel');
+  const jamPosting = scheduleContainer.querySelector('#jamPosting');
+  const statusJadwal = scheduleContainer.querySelector('#statusJadwal');
+  const simpanJadwal = scheduleContainer.querySelector('#simpanJadwal');
 
-const autoMode = scheduleContainer.querySelector('#autoMode');
-const autoSlider = scheduleContainer.querySelector('#autoSlider');
-const autoKnob = scheduleContainer.querySelector('#autoKnob');
-const modeStatus = scheduleContainer.querySelector('#modeStatus');
-
-// Ambil pengaturan sebelumnya
-autoMode.checked =
-  localStorage.getItem('digitekAutoMode') === 'true';
-
-function perbaruiTampilanMode() {
-
-  if (autoMode.checked) {
-    autoSlider.style.background = '#147c65';
-    autoKnob.style.transform = 'translateX(24px)';
-    modeStatus.textContent = 'ON · Mode Otomatis';
-    modeStatus.style.color = '#147c65';
-  } else {
-    autoSlider.style.background = '#aab7c4';
-    autoKnob.style.transform = 'translateX(0)';
-    modeStatus.textContent = 'OFF · Mode Manual';
-    modeStatus.style.color = '#8496aa';
+  function perbaruiTampilanMode() {
+    if (autoMode.checked) {
+      autoSlider.style.background = '#147c65';
+      autoKnob.style.transform = 'translateX(24px)';
+      modeStatus.textContent = 'ON · Mode Otomatis';
+      modeStatus.style.color = '#147c65';
+    } else {
+      autoSlider.style.background = '#aab7c4';
+      autoKnob.style.transform = 'translateX(0)';
+      modeStatus.textContent = 'OFF · Mode Manual';
+      modeStatus.style.color = '#8496aa';
+    }
   }
 
-}
+  // AMBIL PENGATURAN DARI SUPABASE
+  try {
+    const response = await fetch('/api/settings', {
+      method: 'GET',
+      cache: 'no-store'
+    });
 
-// Tampilkan kondisi awal
-perbaruiTampilanMode();
+    const result = await response.json();
 
-  // AMBIL PENGATURAN JADWAL SEBELUMNYA
-const jumlahArtikel = scheduleContainer.querySelector('#jumlahArtikel');
-const jamPosting = scheduleContainer.querySelector('#jamPosting');
-const statusJadwal = scheduleContainer.querySelector('#statusJadwal');
-const simpanJadwal = scheduleContainer.querySelector('#simpanJadwal');
+    if (!response.ok || !result.success) {
+      throw new Error(result.message || 'Gagal mengambil pengaturan.');
+    }
 
-// Pulihkan pengaturan dari browser
-jumlahArtikel.value =
-  localStorage.getItem('digitekJumlahArtikel') || '1';
+    const settings = result.settings;
 
-jamPosting.value =
-  localStorage.getItem('digitekJamPosting') || '06:00';
+    autoMode.checked = settings.auto_mode;
+    jumlahArtikel.value = String(settings.articles_per_day);
+    jamPosting.value = String(settings.posting_time).slice(0, 5);
 
-// SIMPAN PENGATURAN
-simpanJadwal.addEventListener('click', () => {
+    perbaruiTampilanMode();
 
-  localStorage.setItem(
-    'digitekAutoMode',
-    autoMode.checked
-  );
+    autoMode.disabled = false;
+    jumlahArtikel.disabled = false;
+    jamPosting.disabled = false;
 
-  localStorage.setItem(
-    'digitekJumlahArtikel',
-    jumlahArtikel.value
-  );
+    simpanJadwal.disabled = false;
+    simpanJadwal.textContent = 'Simpan Pengaturan';
+    simpanJadwal.style.background = '#147c65';
 
-  localStorage.setItem(
-    'digitekJamPosting',
-    jamPosting.value
-  );
+    statusJadwal.textContent =
+      '✓ Pengaturan berhasil dimuat dari database.';
 
-  statusJadwal.textContent =
-    '✓ Pengaturan berhasil disimpan di perangkat ini.';
+  } catch (error) {
+    statusJadwal.textContent =
+      'Gagal memuat pengaturan: ' + error.message;
 
-});
+    simpanJadwal.textContent = 'Gagal Memuat';
+    return;
+  }
 
-// Simpan perubahan saat sakelar ditekan
-autoMode.addEventListener('change', () => {
+  // SIMPAN PENGATURAN KE SUPABASE
+  simpanJadwal.addEventListener('click', async () => {
 
-  localStorage.setItem(
-    'digitekAutoMode',
-    autoMode.checked
-  );
+    simpanJadwal.disabled = true;
+    simpanJadwal.textContent = 'Menyimpan...';
+    statusJadwal.textContent = '';
 
-  perbaruiTampilanMode();
+    try {
+      const response = await fetch('/api/settings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          auto_mode: autoMode.checked,
+          articles_per_day: Number(jumlahArtikel.value),
+          posting_time: jamPosting.value
+        })
+      });
 
-});
-  
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || 'Gagal menyimpan pengaturan.');
+      }
+
+      statusJadwal.textContent =
+        '✓ Pengaturan berhasil disimpan ke database.';
+
+    } catch (error) {
+      statusJadwal.textContent =
+        'Gagal menyimpan: ' + error.message;
+
+    } finally {
+      simpanJadwal.disabled = false;
+      simpanJadwal.textContent = 'Simpan Pengaturan';
+    }
+
+  });
+
+  // PERBARUI TAMPILAN SWITCH
+  autoMode.addEventListener('change', () => {
+    perbaruiTampilanMode();
+    statusJadwal.textContent =
+      'Perubahan belum disimpan. Tekan Simpan Pengaturan.';
+  });
+
 }
 
 document.querySelectorAll('.nav-item').forEach(button => {

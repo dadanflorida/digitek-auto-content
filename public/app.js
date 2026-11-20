@@ -377,30 +377,38 @@ ideaContainer.innerHTML = `
   </strong>
 
   <div style="margin-top:8px;font-size:11px;color:#52677d">
-    Relevansi: <strong>${analisisKualitasKeyword(idea).relevansi}/100</strong>
+    Relevansi:
+    <strong>${analisisKualitasKeyword(idea).relevansi}/100</strong>
+  </div>
 
   <div style="margin-top:6px;font-size:11px;color:#52677d">
-    Potensi pelanggan: <strong>${analisisKualitasKeyword(idea).potensi}/100</strong>
+    Potensi pelanggan:
+    <strong>${analisisKualitasKeyword(idea).potensi}/100</strong>
+  </div>
 
   <div style="margin-top:6px;font-size:11px;color:#52677d">
-    Kesesuaian artikel: <strong>${analisisKualitasKeyword(idea).kesesuaian}/100</strong>
-<div style="
-  margin-top:10px;
-  padding:9px;
-  background:#e9f8f0;
-  border-radius:7px;
-  font-size:11px;
-  color:#147c65;
-">
-  <strong>SKOR RATA-RATA:</strong>
-  ${analisisKualitasKeyword(idea).rataRata}/100
+    Kesesuaian artikel:
+    <strong>${analisisKualitasKeyword(idea).kesesuaian}/100</strong>
+  </div>
 
-  <br>
+  <div style="
+    margin-top:10px;
+    padding:9px;
+    background:#e9f8f0;
+    border-radius:7px;
+    font-size:11px;
+    color:#147c65;
+  ">
+    <strong>SKOR RATA-RATA:</strong>
+    ${analisisKualitasKeyword(idea).rataRata}/100
 
-  <strong>PRIORITAS:</strong>
-  ${escapeHTML(analisisKualitasKeyword(idea).prioritas)}
+    <br>
+
+    <strong>PRIORITAS:</strong>
+    ${escapeHTML(analisisKualitasKeyword(idea).prioritas)}
+  </div>
+
 </div>
-</div>      
       </div>
     `).join('')}
 

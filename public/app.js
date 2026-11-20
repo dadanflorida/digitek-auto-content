@@ -1355,5 +1355,124 @@ document.querySelectorAll('.nav-item').forEach(button => {
   });
 });
 
+// ===================================
+// HALAMAN GENERATOR ARTIKEL
+// ===================================
+
+function tampilkanGeneratorArtikel() {
+  const main = document.querySelector('.main');
+
+  // Sembunyikan konten dashboard
+  main.querySelectorAll(
+    '.welcome, .stats, .content-grid, footer'
+  ).forEach(el => {
+    el.style.display = 'none';
+  });
+
+  let halaman = document.querySelector('#generatorView');
+
+  if (!halaman) {
+    halaman = document.createElement('section');
+    halaman.id = 'generatorView';
+    main.appendChild(halaman);
+  }
+
+  halaman.style.display = 'block';
+
+  halaman.innerHTML = `
+    <div class="panel" style="margin-top:20px">
+
+      <span class="eyebrow">AI CONTENT GENERATOR</span>
+
+      <h2>Generator Artikel</h2>
+
+      <p class="muted">
+        Buat artikel SEO Digitek Store menggunakan Gemini AI.
+      </p>
+
+      <div style="
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:10px;
+        margin:20px 0;
+      ">
+
+        <button id="modeManual" class="primary-btn">
+          ✎ Generate Manual
+        </button>
+
+        <button id="modeAuto" class="primary-btn">
+          🤖 Generate Otomatis
+        </button>
+
+      </div>
+
+      <div id="generatorForm"></div>
+
+    </div>
+  `;
+
+  const form = halaman.querySelector('#generatorForm');
+
+  // MODE MANUAL
+  halaman.querySelector('#modeManual').onclick = () => {
+
+    form.innerHTML = `
+      <h3>Generate Manual</h3>
+
+      <p class="muted">
+        Masukkan keyword artikel yang ingin dibuat.
+      </p>
+
+      <input
+        id="manualKeyword"
+        type="text"
+        placeholder="Contoh: cara membeli pulsa online"
+        style="
+          width:100%;
+          padding:13px;
+          border:1px solid #dce5ed;
+          border-radius:8px;
+          box-sizing:border-box;
+          margin:12px 0;
+        "
+      >
+
+      <button class="primary-btn" id="generateManual">
+        ✨ Generate Artikel
+      </button>
+
+      <div id="generatorResult"></div>
+    `;
+  };
+
+  // MODE OTOMATIS
+  halaman.querySelector('#modeAuto').onclick = () => {
+
+    form.innerHTML = `
+      <h3>Generate Otomatis</h3>
+
+      <p class="muted">
+        Sistem akan memilih keyword dari hasil riset
+        dan membuat artikel sesuai jadwal.
+      </p>
+
+      <div style="
+        padding:15px;
+        background:#eaf4ff;
+        border-radius:9px;
+        font-size:12px;
+        line-height:1.8;
+      ">
+        <strong>Status:</strong> Menunggu integrasi otomatis.
+        <br>
+        <strong>Penjadwalan:</strong> cron-job.org.
+        <br>
+        <strong>Penyimpanan:</strong> Supabase.
+      </div>
+    `;
+  };
+}
+
 document.querySelector('#researchBtn')
   .addEventListener('click', jalankanRiset);

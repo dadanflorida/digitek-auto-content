@@ -600,6 +600,61 @@ function tampilkanRisetKeyword() {
 
   const keywordList = keywordContainer.querySelector('#keywordList');
 
+  // HITUNG SEARCH INTENT
+const totalInformasional = contentIdeas.filter(
+  idea => idea.intent === 'Informasional'
+).length;
+
+const totalTransaksional = contentIdeas.filter(
+  idea => idea.intent === 'Transaksional'
+).length;
+
+const intentSummary = document.createElement('div');
+
+intentSummary.style.cssText = `
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+  margin:15px 0;
+`;
+
+intentSummary.innerHTML = `
+  <div style="
+    padding:13px;
+    background:#eaf4ff;
+    border-radius:9px;
+  ">
+    <div style="font-size:10px;color:#52718f">
+      INFORMATIONAL
+    </div>
+    <strong style="font-size:22px;color:#245b91">
+      ${totalInformasional}
+    </strong>
+    <div style="font-size:10px;color:#52718f">
+      Keyword informasi
+    </div>
+  </div>
+
+  <div style="
+    padding:13px;
+    background:#e9f8f0;
+    border-radius:9px;
+  ">
+    <div style="font-size:10px;color:#147c65">
+      TRANSACTIONAL
+    </div>
+    <strong style="font-size:22px;color:#147c65">
+      ${totalTransaksional}
+    </strong>
+    <div style="font-size:10px;color:#147c65">
+      Keyword transaksi
+    </div>
+  </div>
+`;
+
+keywordContainer.querySelector('#keywordList')
+  .before(intentSummary);
+
   keywordList.innerHTML = contentIdeas.map((idea, index) => {
 
     const variations = variasiKeyword.map(template =>

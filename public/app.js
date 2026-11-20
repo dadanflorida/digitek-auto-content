@@ -813,8 +813,12 @@ filterContainer.querySelectorAll('button').forEach(button => {
   `;
 });
 
-  keywordList.innerHTML = contentIdeas.map((idea, index) => {
-
+  keywordList.innerHTML = [...contentIdeas]
+  .sort((a, b) =>
+    analisisKualitasKeyword(b).rataRata -
+    analisisKualitasKeyword(a).rataRata
+  )
+  .map((idea, index) => {
     const variations = variasiKeyword.map(template =>
       template.replace('{keyword}', idea.keyword)
     );

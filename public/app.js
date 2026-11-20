@@ -545,6 +545,58 @@ async function jalankanRiset() {
 }
 
 // ===================================
+// ANALISIS KUALITAS KEYWORD
+// ===================================
+
+function analisisKualitasKeyword(idea) {
+
+  const keyword = idea.keyword.toLowerCase();
+  const kategori = idea.category.toLowerCase();
+
+  let relevansi = 60;
+  let potensi = 50;
+  let kesesuaian = 60;
+
+  // RELEVANSI LAYANAN
+  if (
+    /pulsa|paket data|token listrik|top up|voucher game|ewallet/i
+      .test(keyword)
+  ) {
+    relevansi += 30;
+  }
+
+  if (
+    /pulsa|paket data|token pln|e-wallet|voucher game/i
+      .test(kategori)
+  ) {
+    relevansi += 10;
+  }
+
+  // POTENSI KEBUTUHAN PELANGGAN
+  if (
+    /membeli|membeli|top up|cek kuota|mengisi|memasukkan/i
+      .test(keyword)
+  ) {
+    potensi += 30;
+  }
+
+  if (idea.intent === 'Transaksional') {
+    potensi += 20;
+    kesesuaian += 30;
+  } else {
+    potensi += 10;
+    kesesuaian += 20;
+  }
+
+  return {
+    relevansi: Math.min(relevansi, 100),
+    potensi: Math.min(potensi, 100),
+    kesesuaian: Math.min(kesesuaian, 100)
+  };
+
+}
+
+// ===================================
 // MODUL RISET KEYWORD DIGITEK STORE
 // ===================================
 

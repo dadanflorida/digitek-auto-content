@@ -456,7 +456,17 @@ async function jalankanRiset() {
 
   try {
     const response = await fetch('/api/research');
-    const result = await response.json();
+    const raw = await response.text();
+
+let result;
+
+try {
+  result = JSON.parse(raw);
+} catch (error) {
+  throw new Error(
+    `Respons server bukan JSON (HTTP ${response.status}): ${raw.slice(0, 300)}`
+  );
+}
 
     if (!response.ok || !result.success) {
       throw new Error(result.message || 'Gagal mengambil data riset');

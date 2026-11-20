@@ -408,6 +408,28 @@ ideaContainer.innerHTML = `
     ${escapeHTML(analisisKualitasKeyword(idea).prioritas)}
   </div>
 
+<button
+  class="buat-artikel"
+  data-title="${escapeHTML(idea.title)}"
+  data-keyword="${escapeHTML(idea.keyword)}"
+  data-category="${escapeHTML(idea.category)}"
+  data-intent="${escapeHTML(idea.intent)}"
+  style="
+    width:100%;
+    margin-top:12px;
+    padding:11px;
+    border:0;
+    border-radius:8px;
+    background:#147c65;
+    color:white;
+    font-size:12px;
+    font-weight:bold;
+    cursor:pointer;
+  "
+>
+  ✎ Buat Artikel
+</button>
+
 </div>
       </div>
     `).join('')}

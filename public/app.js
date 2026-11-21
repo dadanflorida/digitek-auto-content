@@ -1,4 +1,24 @@
 import './style.css';
+// ===================================
+// SESI KUNCI GENERATE MANUAL
+// ===================================
+
+let manualGenerateSecret = '';
+
+function dapatkanKunciGenerate() {
+
+  if (manualGenerateSecret) {
+    return manualGenerateSecret;
+  }
+
+  const secret = prompt('Masukkan kunci Generate Manual:');
+
+  if (!secret) return '';
+
+  manualGenerateSecret = secret;
+
+  return manualGenerateSecret;
+}
 
 const menu = [
 ['⌂', 'Dashboard'],

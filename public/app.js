@@ -458,22 +458,23 @@ async function jalankanRiset() {
     const response = await fetch('/api/research');
     const raw = await response.text();
 
-let saveResult;
+let result;
+
 try {
-  saveResult = JSON.parse(raw);
+  result = JSON.parse(raw);
 } catch (error) {
   throw new Error(
     `Respons server bukan JSON (HTTP ${response.status}): ${raw.slice(0, 300)}`
   );
 }
 
-    if (!response.ok || !result.success) {
-      throw new Error(result.message || 'Gagal mengambil data riset');
-    }
+if (!response.ok || !result.success) {
+  throw new Error(result.message || 'Gagal mengambil data riset');
+}
 
-    if (!result.trends || result.trends.length === 0) {
-      throw new Error('Belum ada topik yang ditemukan.');
-    }
+if (!result.trends || result.trends.length === 0) {
+  throw new Error('Belum ada topik yang ditemukan.');
+}
 
         // KELOMPOKKAN HASIL RISET
     const relevant = result.trends.filter(

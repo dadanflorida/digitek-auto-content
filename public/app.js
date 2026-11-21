@@ -1462,7 +1462,8 @@ function tampilkanArtikelTersimpan() {
 
 
 // AMBIL DAFTAR ARTIKEL DARI SUPABASE
-async function muatDaftarArtikel() {
+
+async function muatDaftarArtikel(status) {
 
   const daftar = document.querySelector('#daftarArtikel');
 
@@ -1477,12 +1478,15 @@ async function muatDaftarArtikel() {
 
   try {
 
-    const response = await fetch('/api/list-articles', {
-      method: 'GET',
-      headers: {
-        'Authorization': 'Bearer ' + secret
+    const response = await fetch(
+      '/api/list-articles?status=' + encodeURIComponent(status),
+      {
+        method: 'GET',
+        headers: {
+          'Authorization': 'Bearer ' + secret
+        }
       }
-    });
+    );
 
     const result = await response.json();
 
@@ -1491,7 +1495,11 @@ async function muatDaftarArtikel() {
     }
 
     if (!result.articles.length) {
-      daftar.innerHTML = '<p>Belum ada artikel tersimpan.</p>';
+      daftar.innerHTML = `
+        <p>Belum ada artikel ${
+          status === 'draft' ? 'Draft' : 'yang diterbitkan'
+        }.</p>
+      `;
       return;
     }
 
@@ -1529,6 +1537,7 @@ async function muatDaftarArtikel() {
 
   }
 }
+
 
 // ===================================
 // HALAMAN GENERATOR ARTIKEL

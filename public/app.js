@@ -1567,9 +1567,9 @@ tombolSimpan.addEventListener('click', async () => {
       throw new Error('Respons server tidak valid: ' + raw.slice(0, 200));
     }
 
-    if (!response.ok || !result.success) {
-      throw new Error(result.message || 'Gagal menyimpan draft.');
-    }
+    if (!response.ok || !saveResult.success) {
+  throw new Error(saveResult.message || 'Gagal menyimpan draft.');
+}
 
     status.innerHTML = `
       <div style="

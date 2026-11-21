@@ -8,13 +8,13 @@ export default async function handler(req, res) {
     });
   }
 
-  // Keamanan API
+  // KEAMANAN API
   const auth = req.headers.authorization;
 
   if (
-  !process.env.MANUAL_GENERATE_SECRET ||
-  auth !== `Bearer ${process.env.MANUAL_GENERATE_SECRET}`
-) {
+    !process.env.MANUAL_GENERATE_SECRET ||
+    auth !== `Bearer ${process.env.MANUAL_GENERATE_SECRET}`
+  ) {
     return res.status(401).json({
       success: false,
       message: 'Akses ditolak.'
@@ -86,31 +86,56 @@ Kembalikan hasil hanya dalam format JSON dengan struktur:
 }
 `;
 
-    const response = await fetch(
-      'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-goog-api-key': process.env.GEMINI_API_KEY
-        },
-        body: JSON.stringify({
-          contents: [
-            {
-              parts: [
-                { text: prompt }
-              ]
-            }
-          ],
-          generationConfig: {
-            responseMimeType: 'application/json',
-            temperature: 0.7
-          }
-        })
-      }
-    );
+    // BATAS WAKTU GEMINI: 90 DETIK
+    const controller = new AbortController();
 
-    const result = await response.json();
+    const timeout = setTimeout(() => {
+      controller.abort();
+    }, 90000);
+
+    let response;
+
+    try {
+      response = await fetch(
+        'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-goog-api-key': process.env.GEMINI_API_KEY
+          },
+          body: JSON.stringify({
+            contents: [
+              {
+                parts: [
+                  { text: prompt }
+                ]
+              }
+            ],
+            generationConfig: {
+              responseMimeType: 'application/json',
+              temperature: 0.7,
+              maxOutputTokens: 4096
+            }
+          }),
+          signal: controller.signal
+        }
+      );
+    } finally {
+      clearTimeout(timeout);
+    }
+
+    const raw = await response.text();
+
+    let result;
+
+    try {
+      result = JSON.parse(raw);
+    } catch {
+      throw new Error(
+        'Respons Gemini bukan JSON yang valid.'
+      );
+    }
 
     if (!response.ok) {
       return res.status(502).json({
@@ -126,13 +151,25 @@ Kembalikan hasil hanya dalam format JSON dengan struktur:
         .join('');
 
     if (!teks) {
-      throw new Error('Gemini tidak menghasilkan artikel.');
+      throw new Error(
+        'Gemini tidak menghasilkan artikel.'
+      );
     }
 
     const artikel = JSON.parse(teks);
 
-    // TAMBAHKAN TOMBOL PPOB DIGITEK STORE
-artikel.content_html += `
+    if (
+      !artikel.title ||
+      !artikel.content_html ||
+      !artikel.meta_description
+    ) {
+      throw new Error(
+        'Struktur artikel tidak lengkap.'
+      );
+    }
+
+    // TOMBOL PPOB DIGITEK STORE
+    artikel.content_html += `
 
 <div style="
   margin:30px 0;
@@ -175,10 +212,19 @@ artikel.content_html += `
     });
 
   } catch (error) {
+    console.error('GENERATE ERROR:', error);
+
+    if (error.name === 'AbortError') {
+      return res.status(504).json({
+        success: false,
+        message: 'Gemini terlalu lama merespons. Silakan coba kembali.'
+      });
+    }
+
     return res.status(500).json({
       success: false,
       message: 'Gagal membuat artikel.',
       error: error.message
     });
   }
-}
+      }

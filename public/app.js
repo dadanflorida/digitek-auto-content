@@ -1649,6 +1649,183 @@ preview.querySelector('#kembaliDraft').onclick = () => {
   }
 };
 // ===================================
+// EDIT DRAFT ARTIKEL
+// ===================================
+
+window.editDraftArtikel = async function(id) {
+
+  const secret = prompt('Masukkan kunci Generate Manual:');
+
+  if (!secret) return;
+
+  const daftarView = document.querySelector('#artikelTersimpanView');
+
+  try {
+
+    const response = await fetch(
+      '/api/list-articles?status=draft',
+      {
+        headers: {
+          'Authorization': 'Bearer ' + secret
+        }
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.message || 'Gagal mengambil artikel.');
+    }
+
+    const artikel = result.articles.find(item => item.id === id);
+
+    if (!artikel) {
+      throw new Error('Draft tidak ditemukan.');
+    }
+
+    const main = document.querySelector('.main');
+
+    let halaman = document.querySelector('#editDraftView');
+
+    if (!halaman) {
+      halaman = document.createElement('section');
+      halaman.id = 'editDraftView';
+      main.appendChild(halaman);
+    }
+
+    daftarView.style.display = 'none';
+
+    halaman.style.display = 'block';
+
+    halaman.innerHTML = `
+      <div style="
+        background:white;
+        padding:20px;
+        border-radius:12px;
+        margin-top:20px;
+      ">
+
+        <h2>✏️ Edit Draft Artikel</h2>
+
+        <label>Judul Artikel</label>
+        <input id="editTitle"
+          value="${escapeHTML(artikel.title)}"
+          style="width:100%;padding:12px;box-sizing:border-box;margin:8px 0 15px">
+
+        <label>Slug Artikel</label>
+        <input id="editSlug"
+          value="${escapeHTML(artikel.slug || '')}"
+          style="width:100%;padding:12px;box-sizing:border-box;margin:8px 0 15px">
+
+        <label>Deskripsi SEO</label>
+        <textarea id="editMeta"
+          style="width:100%;min-height:90px;padding:12px;box-sizing:border-box;margin:8px 0 15px">${escapeHTML(artikel.meta_description || '')}</textarea>
+
+        <label>Ringkasan Artikel</label>
+        <textarea id="editExcerpt"
+          style="width:100%;min-height:90px;padding:12px;box-sizing:border-box;margin:8px 0 15px">${escapeHTML(artikel.excerpt || '')}</textarea>
+
+        <label>Isi Artikel HTML</label>
+        <textarea id="editContent"
+          style="width:100%;min-height:400px;padding:12px;box-sizing:border-box;margin:8px 0 15px;font-family:monospace">${escapeHTML(artikel.content_html || '')}</textarea>
+
+        <button id="simpanEditDraft" class="primary-btn">
+          💾 Simpan Perubahan
+        </button>
+
+        <button id="batalEditDraft" class="primary-btn"
+          style="background:#8496aa;margin-left:5px">
+          ← Kembali
+        </button>
+
+        <div id="editStatus" style="margin-top:15px"></div>
+
+      </div>
+    `;
+
+    halaman.querySelector('#batalEditDraft').onclick = () => {
+      halaman.style.display = 'none';
+      daftarView.style.display = 'block';
+    };
+
+    halaman.querySelector('#simpanEditDraft').onclick = async () => {
+
+      const tombol = halaman.querySelector('#simpanEditDraft');
+      const status = halaman.querySelector('#editStatus');
+
+      const dataArtikel = {
+        id: artikel.id,
+        title: halaman.querySelector('#editTitle').value.trim(),
+        slug: halaman.querySelector('#editSlug').value.trim(),
+        meta_description: halaman.querySelector('#editMeta').value.trim(),
+        excerpt: halaman.querySelector('#editExcerpt').value.trim(),
+        content_html: halaman.querySelector('#editContent').value,
+        keywords: artikel.keywords || [],
+        labels: artikel.labels || [],
+        faq: artikel.faq || []
+      };
+
+      if (
+        !dataArtikel.title ||
+        !dataArtikel.meta_description ||
+        !dataArtikel.content_html.trim()
+      ) {
+        alert('Judul, deskripsi SEO, dan isi artikel wajib diisi.');
+        return;
+      }
+
+      tombol.disabled = true;
+      tombol.textContent = '⏳ Menyimpan...';
+
+      try {
+
+        const simpan = await fetch('/api/update-article', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + secret
+          },
+          body: JSON.stringify(dataArtikel)
+        });
+
+        const hasil = await simpan.json();
+
+        if (!simpan.ok || !hasil.success) {
+          throw new Error(
+            hasil.message || 'Gagal memperbarui Draft.'
+          );
+        }
+
+        status.innerHTML = `
+          <div style="
+            padding:12px;
+            background:#e9f8f0;
+            color:#147c65;
+            border-radius:8px;
+          ">
+            ✓ Draft berhasil diperbarui!
+          </div>
+        `;
+
+        tombol.textContent = '✓ Berhasil Disimpan';
+
+      } catch (error) {
+
+        status.textContent = 'Gagal menyimpan: ' + error.message;
+
+        tombol.disabled = false;
+        tombol.textContent = '💾 Simpan Perubahan';
+
+      }
+    };
+
+  } catch (error) {
+
+    alert('Gagal membuka Edit Draft: ' + error.message);
+
+  }
+};
+// ===================================
 // HALAMAN GENERATOR ARTIKEL
 // ===================================
 

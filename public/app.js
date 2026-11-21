@@ -1592,8 +1592,7 @@ async function muatDaftarArtikel(status) {
 // PRATINJAU ARTIKEL
 window.pratinjauArtikel = async function(id) {
 
-  const secret = prompt('Masukkan kunci Generate Manual:');
-
+  const secret = dapatkanKunciGenerate();
   if (!secret) return;
 
   try {

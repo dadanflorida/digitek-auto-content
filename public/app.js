@@ -1558,17 +1558,21 @@ tombolSimpan.addEventListener('click', async () => {
     });
 
     const raw = await response.text();
-    let result;
+let saveResult;
 
-    try {
-      result = JSON.parse(raw);
-      
-    } catch {
-      throw new Error('Respons server tidak valid: ' + raw.slice(0, 200));
-    }
+try {
+  saveResult = JSON.parse(raw);
 
-    if (!response.ok || !saveResult.success) {
-  throw new Error(saveResult.message || 'Gagal menyimpan draft.');
+} catch {
+  throw new Error(
+    'Respons server tidak valid: ' + raw.slice(0, 200)
+  );
+}
+
+if (!response.ok || !saveResult.success) {
+  throw new Error(
+    saveResult.message || 'Gagal menyimpan draft.'
+  );
 }
 
     status.innerHTML = `

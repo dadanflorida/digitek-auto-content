@@ -1352,6 +1352,9 @@ document.querySelectorAll('.nav-item').forEach(button => {
 } else if (button.dataset.menu === 'Generator Artikel') {
   tampilkanGeneratorArtikel();
 
+} else if (button.dataset.menu === 'Artikel Terbit') {
+  tampilkanArtikelTersimpan();
+
 } else if (button.dataset.menu === 'Dashboard') {
     } else {
       resultContainer.innerHTML = `
@@ -1361,8 +1364,119 @@ document.querySelectorAll('.nav-item').forEach(button => {
         </p>
       `;
     }
-  });
+
+ });
 });
+    
+// HALAMAN ARTIKEL TERSIMPAN
+function tampilkanArtikelTersimpan() {
+
+  const main = document.querySelector('.main');
+
+  document.querySelectorAll(
+    '.welcome, .stats, .content-grid, footer'
+  ).forEach(el => {
+    el.style.display = 'none';
+  });
+
+  let halaman = document.querySelector('#artikelTersimpanView');
+
+  if (!halaman) {
+    halaman = document.createElement('div');
+    halaman.id = 'artikelTersimpanView';
+    main.appendChild(halaman);
+  }
+
+  halaman.style.display = 'block';
+
+  halaman.innerHTML = `
+    <div style="padding:20px;background:white;border-radius:12px">
+
+      <h2>📚 Artikel Tersimpan</h2>
+
+      <p style="color:#8496aa;font-size:13px">
+        Daftar artikel yang tersimpan di Supabase.
+      </p>
+
+      <div id="daftarArtikel">
+        Memuat artikel...
+      </div>
+
+    </div>
+  `;
+
+  muatDaftarArtikel();
+}
+
+
+// AMBIL DAFTAR ARTIKEL DARI SUPABASE
+async function muatDaftarArtikel() {
+
+  const daftar = document.querySelector('#daftarArtikel');
+
+  if (!daftar) return;
+
+  const secret = prompt('Masukkan kunci Generate Manual:');
+
+  if (!secret) {
+    daftar.textContent = 'Akses dibatalkan.';
+    return;
+  }
+
+  try {
+
+    const response = await fetch('/api/list-articles', {
+      method: 'GET',
+      headers: {
+        'Authorization': 'Bearer ' + secret
+      }
+    });
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.message || 'Gagal mengambil artikel.');
+    }
+
+    if (!result.articles.length) {
+      daftar.innerHTML = '<p>Belum ada artikel tersimpan.</p>';
+      return;
+    }
+
+    daftar.innerHTML = result.articles.map(artikel => `
+      <div style="
+        padding:15px;
+        margin:12px 0;
+        border:1px solid #e1e8ef;
+        border-radius:9px;
+      ">
+
+        <h3>${escapeHTML(artikel.title)}</h3>
+
+        <p style="font-size:12px;color:#8496aa">
+          ${escapeHTML(artikel.created_at || '')}
+        </p>
+
+        <span style="
+          padding:5px 10px;
+          background:#e9f8f0;
+          color:#147c65;
+          border-radius:6px;
+          font-size:11px;
+        ">
+          ${escapeHTML(artikel.status)}
+        </span>
+
+      </div>
+    `).join('');
+
+  } catch (error) {
+
+    daftar.textContent =
+      'Gagal memuat artikel: ' + error.message;
+
+  }
+}
 
 // ===================================
 // HALAMAN GENERATOR ARTIKEL

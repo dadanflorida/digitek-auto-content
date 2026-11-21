@@ -1632,8 +1632,11 @@ function tampilkanGeneratorArtikel() {
       const result = await response.json();
 
       if (!response.ok || !result.success) {
-        throw new Error(result.message || 'Gagal membuat artikel.');
-      }
+  throw new Error(
+    (result.message || 'Gagal membuat artikel.') +
+    (result.error ? ' Detail: ' + result.error : '')
+  );
+}
 
       const artikel = result.artikel;
 

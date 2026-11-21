@@ -1405,8 +1405,8 @@ document.querySelectorAll(
   tampilkanArtikelTersimpan('draft'); 
 
 } else if (button.dataset.menu === 'Artikel Terbit') {
-  tampilkanArtikelTersimpan();
-
+  tampilkanArtikelTersimpan('published');
+      
 } else if (button.dataset.menu === 'Dashboard') {
     } else {
       resultContainer.innerHTML = `

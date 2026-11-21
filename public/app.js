@@ -1833,6 +1833,69 @@ window.editDraftArtikel = async function(id) {
   }
 };
 // ===================================
+// HAPUS DRAFT ARTIKEL
+// ===================================
+
+window.hapusDraftArtikel = async function(id) {
+
+  const konfirmasi = confirm(
+    'Apakah Anda yakin ingin menghapus Draft ini?\n\nArtikel yang dihapus tidak dapat dikembalikan.'
+  );
+
+  if (!konfirmasi) return;
+
+  const secret = prompt('Masukkan kunci Generate Manual:');
+
+  if (!secret) return;
+
+  try {
+
+    const response = await fetch('/api/delete-article', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + secret
+      },
+      body: JSON.stringify({ id })
+    });
+
+    const raw = await response.text();
+
+    let result;
+
+    try {
+      result = JSON.parse(raw);
+    } catch {
+      throw new Error(
+        'Respons server tidak valid: ' + raw.slice(0, 200)
+      );
+    }
+
+    if (!response.ok || !result.success) {
+      throw new Error(
+        result.message || 'Gagal menghapus Draft.'
+      );
+    }
+
+    alert('✓ Draft berhasil dihapus.');
+
+    // MUAT ULANG DAFTAR DRAFT
+    const daftarView = document.querySelector('#artikelTersimpanView');
+    const preview = document.querySelector('#previewArtikelView');
+
+    if (preview) preview.style.display = 'none';
+
+    if (daftarView) daftarView.style.display = 'block';
+
+    muatDaftarArtikel('draft');
+
+  } catch (error) {
+
+    alert('Gagal menghapus Draft: ' + error.message);
+
+  }
+};
+// ===================================
 // HALAMAN GENERATOR ARTIKEL
 // ===================================
 

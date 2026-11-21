@@ -5,7 +5,8 @@ const menu = [
 ['⌕', 'Riset Pasar'],
 ['⌗', 'Riset Keyword'],
 ['✎', 'Generator Artikel'],
-['▦', 'Jadwal Posting'],
+['▦', 'Jadwal Posting'], 
+['📝', 'Draft Artikel'],
 ['▤', 'Artikel Terbit'],
 ['↗', 'Analitik SEO']
 ];

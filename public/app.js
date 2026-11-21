@@ -458,8 +458,7 @@ async function jalankanRiset() {
     const response = await fetch('/api/research');
     const raw = await response.text();
 
-let result;
-
+let saveResult;
 try {
   result = JSON.parse(raw);
 } catch (error) {

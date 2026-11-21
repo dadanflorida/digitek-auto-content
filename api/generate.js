@@ -131,13 +131,42 @@ Kembalikan hasil hanya dalam format JSON dengan struktur:
 
     const artikel = JSON.parse(teks);
 
-    if (
-      !artikel.title ||
-      !artikel.content_html ||
-      !artikel.meta_description
-    ) {
-      throw new Error('Struktur artikel tidak lengkap.');
-    }
+    // TAMBAHKAN TOMBOL PPOB DIGITEK STORE
+artikel.content_html += `
+
+<div style="
+  margin:30px 0;
+  padding:22px;
+  background:#eef6ff;
+  border:1px solid #cfe3ff;
+  border-radius:12px;
+  text-align:center;
+">
+  <h3 style="color:#1557a0;margin-top:0;">
+    Butuh Pulsa, Paket Data atau Token Listrik?
+  </h3>
+
+  <p>
+    Penuhi kebutuhan transaksi digital Anda
+    melalui layanan PPOB Digitek Store.
+  </p>
+
+  <a href="https://digitekstore.blogspot.com/2026/11/layananppob.html"
+     target="_blank"
+     rel="noopener"
+     style="
+       display:inline-block;
+       padding:13px 24px;
+       background:#0879e8;
+       color:white;
+       text-decoration:none;
+       border-radius:8px;
+       font-weight:bold;
+     ">
+     🛒 BUKA LAYANAN PPOB
+  </a>
+</div>
+`;
 
     return res.status(200).json({
       success: true,
@@ -152,4 +181,4 @@ Kembalikan hasil hanya dalam format JSON dengan struktur:
       error: error.message
     });
   }
-      }
+}

@@ -1353,6 +1353,23 @@ document.querySelectorAll('.nav-item').forEach(button => {
 
     button.classList.add('active');
 
+    // SEMBUNYIKAN HALAMAN DINAMIS
+[
+  '#generatorView',
+  '#artikelTersimpanView',
+  '#jadwalPostingView'
+].forEach(selector => {
+  const halaman = document.querySelector(selector);
+  if (halaman) halaman.style.display = 'none';
+});
+
+// PULIHKAN TAMPILAN DASHBOARD
+document.querySelectorAll(
+  '.welcome, .stats, .content-grid, footer'
+).forEach(el => {
+  el.style.display = '';
+});
+
     if (button.dataset.menu === 'Riset Pasar') {
   jalankanRiset();
 

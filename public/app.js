@@ -1457,7 +1457,7 @@ function tampilkanArtikelTersimpan(status = 'draft') {
     </div>
   `;
 
-  muatDaftarArtikel();
+  muatDaftarArtikel(status);
 }
 
 

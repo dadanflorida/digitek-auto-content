@@ -1526,13 +1526,30 @@ async function muatDaftarArtikel(status) {
         ">
           ${escapeHTML(artikel.status)}
         </span>
-<div style="margin-top:15px">
+
+  <div style="
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:15px;
+">
+
   <button
     class="primary-btn"
     onclick="pratinjauArtikel('${artikel.id}')"
   >
     👁️ Pratinjau
   </button>
+
+  <button
+    class="primary-btn"
+    style="background:#e99b20"
+    onclick="editDraftArtikel('${artikel.id}')"
+  >
+    ✏️ Edit Draft
+  </button>
+
+</div>
 </div>
       </div>
     `).join('');

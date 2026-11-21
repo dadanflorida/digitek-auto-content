@@ -1421,7 +1421,7 @@ document.querySelectorAll(
 });
     
 // HALAMAN ARTIKEL TERSIMPAN
-function tampilkanArtikelTersimpan() {
+function tampilkanArtikelTersimpan(status = 'draft') {
 
   const main = document.querySelector('.main');
 

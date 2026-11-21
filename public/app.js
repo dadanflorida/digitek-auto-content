@@ -1526,7 +1526,14 @@ async function muatDaftarArtikel(status) {
         ">
           ${escapeHTML(artikel.status)}
         </span>
-
+<div style="margin-top:15px">
+  <button
+    class="primary-btn"
+    onclick="pratinjauArtikel('${artikel.id}')"
+  >
+    👁️ Pratinjau
+  </button>
+</div>
       </div>
     `).join('');
 

@@ -460,7 +460,7 @@ async function jalankanRiset() {
 
 let saveResult;
 try {
-  result = JSON.parse(raw);
+  saveResult = JSON.parse(raw);
 } catch (error) {
   throw new Error(
     `Respons server bukan JSON (HTTP ${response.status}): ${raw.slice(0, 300)}`

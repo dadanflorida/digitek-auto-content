@@ -1401,6 +1401,9 @@ document.querySelectorAll(
 } else if (button.dataset.menu === 'Generator Artikel') {
   tampilkanGeneratorArtikel();
 
+} else if (button.dataset.menu === 'Draft Artikel') {
+  tampilkanArtikelTersimpan('draft'); 
+
 } else if (button.dataset.menu === 'Artikel Terbit') {
   tampilkanArtikelTersimpan();
 

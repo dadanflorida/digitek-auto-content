@@ -1575,40 +1575,57 @@ window.pratinjauArtikel = async function(id) {
       throw new Error('Artikel tidak ditemukan.');
     }
 
-    const jendela = window.open('', '_blank');
+    // TAMPILKAN PRATINJAU DI HALAMAN UTAMA
+const main = document.querySelector('.main');
+const daftarView = document.querySelector('#artikelTersimpanView');
 
-    if (!jendela) {
-      throw new Error('Izinkan popup untuk membuka pratinjau.');
-    }
+let preview = document.querySelector('#previewArtikelView');
 
-    jendela.document.write(`
-      <!DOCTYPE html>
-      <html lang="id">
-      <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>${escapeHTML(artikel.title)}</title>
-        <style>
-          body {
-            max-width: 800px;
-            margin: 30px auto;
-            padding: 20px;
-            font-family: Arial, sans-serif;
-            line-height: 1.8;
-            color: #263445;
-          }
-          h1 { line-height: 1.3; }
-          img { max-width: 100%; height: auto; }
-        </style>
-      </head>
-      <body>
-        <h1>${escapeHTML(artikel.title)}</h1>
-        ${artikel.content_html}
-      </body>
-      </html>
-    `);
+if (!preview) {
+  preview = document.createElement('section');
+  preview.id = 'previewArtikelView';
+  main.appendChild(preview);
+}
 
-    jendela.document.close();
+preview.innerHTML = `
+  <div style="
+    background:white;
+    padding:22px;
+    border-radius:12px;
+    max-width:850px;
+    margin:20px auto;
+    line-height:1.8;
+    color:#263445;
+  ">
+
+    <button id="kembaliDraft" class="primary-btn">
+      ← Kembali ke Draft
+    </button>
+
+    <h1 style="line-height:1.4;margin-top:25px">
+      ${escapeHTML(artikel.title)}
+    </h1>
+
+    <p style="color:#8496aa;font-size:13px">
+      ${escapeHTML(artikel.meta_description || '')}
+    </p>
+
+    <hr style="border:0;border-top:1px solid #eee;margin:20px 0">
+
+    <div class="isiPratinjau">
+      ${artikel.content_html}
+    </div>
+
+  </div>
+`;
+
+daftarView.style.display = 'none';
+preview.style.display = 'block';
+
+preview.querySelector('#kembaliDraft').onclick = () => {
+  preview.style.display = 'none';
+  daftarView.style.display = 'block';
+};
 
   } catch (error) {
     alert('Gagal membuka pratinjau: ' + error.message);

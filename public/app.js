@@ -1353,6 +1353,23 @@ document.querySelectorAll('.nav-item').forEach(button => {
 
     button.classList.add('active');
 
+    // RESET HALAMAN DINAMIS SAAT PINDAH MENU
+[
+  '#generatorView',
+  '#artikelTersimpanView',
+  '#jadwalPostingView'
+].forEach(selector => {
+  const halaman = document.querySelector(selector);
+  if (halaman) halaman.remove();
+});
+
+// PULIHKAN KONTEN DASHBOARD
+document.querySelectorAll(
+  '.welcome, .stats, .content-grid, footer'
+).forEach(el => {
+  el.style.display = '';
+});
+
     // SEMBUNYIKAN HALAMAN DINAMIS
 [
   '#generatorView',

@@ -44,13 +44,18 @@ export default async function handler(req, res) {
     let query = supabase
       .from('articles')
       .select(`
-        id,
-        title,
-        slug,
-        meta_description,
-        status,
-        created_at
-      `)
+  id,
+  title,
+  slug,
+  meta_description,
+  excerpt,
+  content_html,
+  keywords,
+  labels,
+  faq,
+  status,
+  created_at
+`)
       .order('created_at', { ascending: false })
       .limit(100);
 

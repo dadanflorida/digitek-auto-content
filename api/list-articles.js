@@ -23,13 +23,25 @@ export default async function handler(req, res) {
     });
   }
 
+  // FILTER STATUS
+  const status = req.query.status;
+
+  const statusValid = ['draft', 'published', 'archived'];
+
+  if (status && !statusValid.includes(status)) {
+    return res.status(400).json({
+      success: false,
+      message: 'Status artikel tidak valid.'
+    });
+  }
+
   try {
     const supabase = createClient(
       process.env.SUPABASE_URL,
       process.env.SUPABASE_SERVICE_ROLE_KEY
     );
 
-    const { data, error } = await supabase
+    let query = supabase
       .from('articles')
       .select(`
         id,
@@ -42,9 +54,13 @@ export default async function handler(req, res) {
       .order('created_at', { ascending: false })
       .limit(100);
 
-    if (error) {
-      throw error;
+    if (status) {
+      query = query.eq('status', status);
     }
+
+    const { data, error } = await query;
+
+    if (error) throw error;
 
     return res.status(200).json({
       success: true,
@@ -53,10 +69,12 @@ export default async function handler(req, res) {
     });
 
   } catch (error) {
+    console.error('LIST ARTICLES ERROR:', error);
+
     return res.status(500).json({
       success: false,
       message: 'Gagal mengambil daftar artikel.',
       error: error.message
     });
   }
-}
+      }

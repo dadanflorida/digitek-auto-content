@@ -1249,7 +1249,20 @@ async function tampilkanJadwalPosting() {
       cache: 'no-store'
     });
 
-    const result = await response.json();
+    const raw = await response.text();
+
+let result;
+
+try {
+  result = JSON.parse(raw);
+} catch {
+  throw new Error(
+    'Respons API Generate (HTTP ' +
+    response.status +
+    '): ' +
+    raw.slice(0, 500)
+  );
+}
 
     if (!response.ok || !result.success) {
       throw new Error(result.message || 'Gagal mengambil pengaturan.');

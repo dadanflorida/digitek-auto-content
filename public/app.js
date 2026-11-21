@@ -1511,29 +1511,89 @@ function tampilkanGeneratorArtikel() {
 
       const artikel = result.artikel;
 
-      hasil.innerHTML = `
-        <div style="padding:15px;background:#e9f8f0;border-radius:9px">
-          <strong style="color:#147c65">
-            ✓ Artikel berhasil dibuat!
-          </strong>
-        </div>
+hasil.innerHTML = `
+  <div style="padding:15px;background:#e9f8f0;border-radius:9px">
+    <strong style="color:#147c65">
+      ✓ Artikel berhasil dibuat!
+    </strong>
+  </div>
 
-        <h3>${escapeHTML(artikel.title)}</h3>
+  <h3>${escapeHTML(artikel.title)}</h3>
 
-        <p>${escapeHTML(artikel.meta_description)}</p>
+  <p>${escapeHTML(artikel.meta_description)}</p>
 
-        <h4>Isi Artikel (HTML)</h4>
+  <h4>Isi Artikel (HTML)</h4>
 
-        <textarea readonly style="
-          width:100%;
-          min-height:300px;
-          padding:12px;
-          box-sizing:border-box;
-        ">${escapeHTML(artikel.content_html)}</textarea>
-      `;
+  <textarea readonly style="
+    width:100%;
+    min-height:300px;
+    padding:12px;
+    box-sizing:border-box;
+  ">${escapeHTML(artikel.content_html)}</textarea>
 
-      form.querySelector('#manualSecret').value = '';
+  <button id="saveDraft" class="primary-btn"
+    style="margin-top:15px;background:#147c65">
+    💾 Simpan sebagai Draft
+  </button>
 
+  <div id="saveStatus" style="margin-top:10px"></div>
+`;
+
+const tombolSimpan = hasil.querySelector('#saveDraft');
+
+tombolSimpan.addEventListener('click', async () => {
+
+  const status = hasil.querySelector('#saveStatus');
+
+  tombolSimpan.disabled = true;
+  tombolSimpan.textContent = '⏳ Menyimpan...';
+
+  try {
+    const response = await fetch('/api/save-article', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + secret
+      },
+      body: JSON.stringify(artikel)
+    });
+
+    const raw = await response.text();
+    let result;
+
+    try {
+      result = JSON.parse(raw);
+      
+    } catch {
+      throw new Error('Respons server tidak valid: ' + raw.slice(0, 200));
+    }
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.message || 'Gagal menyimpan draft.');
+    }
+
+    status.innerHTML = `
+      <div style="
+        padding:12px;
+        background:#e9f8f0;
+        color:#147c65;
+        border-radius:8px;
+      ">
+        ✓ Artikel berhasil disimpan sebagai Draft!
+      </div>
+    `;
+
+    tombolSimpan.textContent = '✓ Draft Tersimpan';
+
+  } catch (error) {
+    status.textContent = 'Gagal menyimpan: ' + error.message;
+    tombolSimpan.disabled = false;
+    tombolSimpan.textContent = '💾 Simpan sebagai Draft';
+  }
+});
+
+form.querySelector('#manualSecret').value = '';
+      
     } catch (error) {
       hasil.textContent = 'Gagal membuat artikel: ' + error.message;
     }

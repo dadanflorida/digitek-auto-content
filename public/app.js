@@ -1548,7 +1548,14 @@ async function muatDaftarArtikel(status) {
   >
     ✏️ Edit Draft
   </button>
-
+  
+<button
+  class="primary-btn"
+  style="background:#dc3545"
+  onclick="hapusDraftArtikel('${artikel.id}')"
+>
+  🗑️ Hapus Draft
+</button>
 </div>
 </div>
       </div>

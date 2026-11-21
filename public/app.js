@@ -1546,7 +1546,7 @@ async function muatDaftarArtikel(status) {
 }
 
 // PRATINJAU ARTIKEL
-async function pratinjauArtikel(id) {
+window.pratinjauArtikel = async function(id) {
 
   const secret = prompt('Masukkan kunci Generate Manual:');
 
@@ -1613,7 +1613,7 @@ async function pratinjauArtikel(id) {
   } catch (error) {
     alert('Gagal membuka pratinjau: ' + error.message);
   }
-}
+};
 // ===================================
 // HALAMAN GENERATOR ARTIKEL
 // ===================================

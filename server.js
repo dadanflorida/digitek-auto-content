@@ -1,10 +1,43 @@
 import express from 'express';
+import path from 'path';
+
+import bloggerBlogs from './api/blogger-blogs.js';
+import bloggerCallback from './api/blogger-callback.js';
+import bloggerLogin from './api/blogger-login.js';
+import cron from './api/cron.js';
+import deleteArticle from './api/delete-article.js';
+import generate from './api/generate.js';
+import listArticles from './api/list-articles.js';
+import research from './api/research.js';
+import saveArticle from './api/save-article.js';
+import settings from './api/settings.js';
+import updateArticle from './api/update-article.js';
 
 const app = express();
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// Tes koneksi Express
+// ==================================
+// API ROUTES
+// ==================================
+
+app.all('/api/blogger-blogs', bloggerBlogs);
+app.all('/api/blogger-callback', bloggerCallback);
+app.all('/api/blogger-login', bloggerLogin);
+app.all('/api/cron', cron);
+app.all('/api/delete-article', deleteArticle);
+app.all('/api/generate', generate);
+app.all('/api/list-articles', listArticles);
+app.all('/api/research', research);
+app.all('/api/save-article', saveArticle);
+app.all('/api/settings', settings);
+app.all('/api/update-article', updateArticle);
+
+// ==================================
+// TES EXPRESS
+// ==================================
+
 app.get('/api/express-test', (req, res) => {
   res.json({
     success: true,
@@ -12,5 +45,20 @@ app.get('/api/express-test', (req, res) => {
   });
 });
 
-// Export untuk Vercel
+// ==================================
+// FRONTEND VITE
+// ==================================
+
+const distPath = path.resolve('dist');
+
+app.use(express.static(distPath));
+
+app.get('/{*splat}', (req, res) => {
+  res.sendFile(path.join(distPath, 'index.html'));
+});
+
+// ==================================
+// EXPORT UNTUK VERCEL
+// ==================================
+
 export default app;

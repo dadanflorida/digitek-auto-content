@@ -73,6 +73,7 @@ export default async function handler(req, res) {
     });
   }
 
+let tahap = 'Memulai generator';  
   try {
     const supabase = createClient(
       process.env.SUPABASE_URL,

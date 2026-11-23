@@ -349,7 +349,15 @@ Kembalikan hanya JSON:
     });
 
   } catch (error) {
-    console.error('CRON GENERATE ERROR:', error);
+    console.error('CRON GENERATE ERROR:', {
+      tahap,
+      name: error?.name,
+      message: error?.message,
+      details: error?.details,
+      hint: error?.hint,
+      code: error?.code,
+      stack: error?.stack
+    });
 
     if (error.name === 'AbortError') {
       return res.status(504).json({

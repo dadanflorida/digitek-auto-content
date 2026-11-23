@@ -12,3 +12,7 @@ Import repository GitHub ini ke Vercel. Framework akan terdeteksi sebagai Vite.
 
 ## Status
 Versi 1: dashboard prototype. Belum terhubung ke Gemini API, sumber riset keyword, Blogger API, atau Google Search Console.
+
+## Catatan Migrasi Express
+
+Pengujian migrasi backend Express dilakukan pada branch express-migration-test.

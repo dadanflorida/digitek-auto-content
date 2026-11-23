@@ -1,5 +1,4 @@
 import express from 'express';
-import path from 'path';
 
 import bloggerBlogs from './api/blogger-blogs.js';
 import bloggerCallback from './api/blogger-callback.js';
@@ -43,18 +42,6 @@ app.get('/api/express-test', (req, res) => {
     success: true,
     message: 'Express DIGITEK AUTO CONTENT ENGINE aktif.'
   });
-});
-
-// ==================================
-// FRONTEND VITE
-// ==================================
-
-const distPath = path.resolve('dist');
-
-app.use(express.static(distPath));
-
-app.get('/{*splat}', (req, res) => {
-  res.sendFile(path.join(distPath, 'index.html'));
 });
 
 // ==================================

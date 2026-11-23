@@ -1,5 +1,3 @@
-import cron from './cron.js';
-
 export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
 
@@ -31,10 +29,13 @@ export default async function handler(req, res) {
 
   const cronRequest = {
     method: 'GET',
+    manualRun: true,
     headers: {
       authorization: `Bearer ${process.env.CRON_SECRET}`
     }
   };
+
+  const cron = (await import('./cron.js')).default;
 
   return cron(cronRequest, res);
 }

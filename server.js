@@ -4,6 +4,7 @@ import bloggerBlogs from './handlers/blogger-blogs.js';
 import bloggerCallback from './handlers/blogger-callback.js';
 import bloggerLogin from './handlers/blogger-login.js';
 import cron from './handlers/cron.js';
+import cronManual from './handlers/cron-manual.js';
 import deleteArticle from './handlers/delete-article.js';
 import generate from './handlers/generate.js';
 import listArticles from './handlers/list-articles.js';

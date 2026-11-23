@@ -2271,5 +2271,8 @@ halaman.querySelector('#modeAuto').onclick = () => {
   };
 };
 
+// PENUTUP FUNGSI GENERATOR ARTIKEL
+}
+
 document.querySelector('#researchBtn')
   .addEventListener('click', jalankanRiset);

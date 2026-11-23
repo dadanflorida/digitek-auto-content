@@ -1,25 +1,23 @@
 import express from 'express';
 
-import bloggerBlogs from './api/blogger-blogs.js';
-import bloggerCallback from './api/blogger-callback.js';
-import bloggerLogin from './api/blogger-login.js';
-import cron from './api/cron.js';
-import deleteArticle from './api/delete-article.js';
-import generate from './api/generate.js';
-import listArticles from './api/list-articles.js';
-import research from './api/research.js';
-import saveArticle from './api/save-article.js';
-import settings from './api/settings.js';
-import updateArticle from './api/update-article.js';
+import bloggerBlogs from './handlers/blogger-blogs.js';
+import bloggerCallback from './handlers/blogger-callback.js';
+import bloggerLogin from './handlers/blogger-login.js';
+import cron from './handlers/cron.js';
+import deleteArticle from './handlers/delete-article.js';
+import generate from './handlers/generate.js';
+import listArticles from './handlers/list-articles.js';
+import research from './handlers/research.js';
+import saveArticle from './handlers/save-article.js';
+import settings from './handlers/settings.js';
+import updateArticle from './handlers/update-article.js';
 
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ==================================
 // API ROUTES
-// ==================================
 
 app.all('/api/blogger-blogs', bloggerBlogs);
 app.all('/api/blogger-callback', bloggerCallback);
@@ -33,9 +31,7 @@ app.all('/api/save-article', saveArticle);
 app.all('/api/settings', settings);
 app.all('/api/update-article', updateArticle);
 
-// ==================================
 // TES EXPRESS
-// ==================================
 
 app.get('/api/express-test', (req, res) => {
   res.json({
@@ -43,9 +39,5 @@ app.get('/api/express-test', (req, res) => {
     message: 'Express DIGITEK AUTO CONTENT ENGINE aktif.'
   });
 });
-
-// ==================================
-// EXPORT UNTUK VERCEL
-// ==================================
 
 export default app;

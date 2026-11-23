@@ -2156,33 +2156,120 @@ form.querySelector('#manualSecret').value = '';
     tombolGenerate.textContent = '✨ Generate Artikel';
   });
 }; 
+  
   // MODE OTOMATIS
-  halaman.querySelector('#modeAuto').onclick = () => {
+halaman.querySelector('#modeAuto').onclick = () => {
 
-    form.innerHTML = `
-      <h3>Generate Otomatis</h3>
+  form.innerHTML = `
+    <h3>Generate Otomatis</h3>
 
-      <p class="muted">
-        Sistem akan memilih keyword dari hasil riset
-        dan membuat artikel sesuai jadwal.
-      </p>
+    <p class="muted">
+      Sistem memilih topik dari katalog internal,
+      membuat artikel dengan Gemini, lalu menyimpannya
+      sebagai Draft di Supabase.
+    </p>
 
-      <div style="
-        padding:15px;
-        background:#eaf4ff;
-        border-radius:9px;
-        font-size:12px;
-        line-height:1.8;
-      ">
-        <strong>Status:</strong> Menunggu integrasi otomatis.
-        <br>
-        <strong>Penjadwalan:</strong> cron-job.org.
-        <br>
-        <strong>Penyimpanan:</strong> Supabase.
-      </div>
-    `;
+    <div style="
+      padding:15px;
+      background:#eaf4ff;
+      border-radius:9px;
+      font-size:13px;
+      line-height:1.8;
+      margin-bottom:15px;
+    ">
+      <strong>Status:</strong> Siap diuji.
+      <br>
+      <strong>Penjadwalan:</strong> cron-job.org.
+      <br>
+      <strong>Penyimpanan:</strong> Supabase.
+      <br>
+      <strong>Publikasi Blogger:</strong> Belum otomatis.
+    </div>
+
+    <button id="tesCron" class="btn-primary">
+      ▶ TES GENERATOR OTOMATIS
+    </button>
+
+    <div id="hasilCron" style="
+      margin-top:15px;
+      font-size:13px;
+      line-height:1.7;
+    "></div>
+  `;
+
+  const tombol = form.querySelector('#tesCron');
+  const hasil = form.querySelector('#hasilCron');
+
+  tombol.onclick = async () => {
+
+    const secret = dapatkanKunciGenerate();
+
+    if (!secret) return;
+
+    tombol.disabled = true;
+    tombol.textContent = '⏳ Sedang membuat artikel...';
+
+    hasil.innerHTML = 'Gemini sedang memproses topik...';
+
+    try {
+
+      const response = await fetch('/api/cron-manual', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer ' + secret,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(
+          data.message || data.error || 'Generator gagal dijalankan.'
+        );
+      }
+
+      hasil.innerHTML = `
+        <div style="
+          padding:15px;
+          background:#e9f8f0;
+          color:#147c65;
+          border-radius:9px;
+        ">
+          <strong>✓ Generator berhasil dijalankan!</strong>
+          <br><br>
+          Pesan: ${data.message}
+          <br>
+          Topik: ${data.topik || '-'}
+          <br>
+          Judul: ${data.artikel?.title || '-'}
+          <br>
+          Status: ${data.artikel?.status || '-'}
+        </div>
+      `;
+
+    } catch (error) {
+
+      hasil.innerHTML = `
+        <div style="
+          padding:15px;
+          background:#fff0f0;
+          color:#b42318;
+          border-radius:9px;
+        ">
+          <strong>✕ Pengujian gagal</strong>
+          <br>${error.message}
+        </div>
+      `;
+
+    } finally {
+
+      tombol.disabled = false;
+      tombol.textContent = '▶ TES GENERATOR OTOMATIS';
+
+    }
   };
-}
+};
 
 document.querySelector('#researchBtn')
   .addEventListener('click', jalankanRiset);

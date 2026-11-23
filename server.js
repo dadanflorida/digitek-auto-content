@@ -29,6 +29,7 @@ app.all('/api/blogger-blogs', bloggerBlogs);
 app.all('/api/blogger-callback', bloggerCallback);
 app.all('/api/blogger-login', bloggerLogin);
 app.all('/api/cron', cron);
+app.all('/api/cron-manual', cronManual);
 app.all('/api/delete-article', deleteArticle);
 app.all('/api/generate', generate);
 app.all('/api/list-articles', listArticles);

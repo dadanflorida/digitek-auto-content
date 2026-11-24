@@ -2254,10 +2254,15 @@ halaman.querySelector('#modeAuto').onclick = () => {
       const data = await response.json();
 
       if (!response.ok || !data.success) {
-        throw new Error(
-          data.message || data.error || 'Generator gagal dijalankan.'
-        );
-      }
+  const detail = {
+    status_http: response.status,
+    tahap: data.tahap || '-',
+    pesan: data.message || '-',
+    error: data.error || '-'
+  };
+
+  throw new Error(JSON.stringify(detail, null, 2));
+}
 
       hasil.innerHTML = `
         <div style="

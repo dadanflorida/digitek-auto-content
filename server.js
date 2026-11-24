@@ -36,6 +36,7 @@ app.all('/api/delete-article', deleteArticle);
 app.all('/api/generate', generate);
 app.all('/api/list-articles', listArticles);
 app.all('/api/research', research);
+app.all('/api/keyword-pool', keywordPool);
 app.all('/api/save-article', saveArticle);
 app.all('/api/settings', settings);
 app.all('/api/update-article', updateArticle);

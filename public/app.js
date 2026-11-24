@@ -2132,7 +2132,10 @@ tombolSimpan.addEventListener('click', async () => {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + secret
       },
-      body: JSON.stringify(artikel)
+      body: JSON.stringify({
+  ...artikel,
+  source_keyword: keyword
+})
     });
 
     const raw = await response.text();

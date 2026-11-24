@@ -260,11 +260,13 @@ Kembalikan hanya JSON:
 }
 `;
 
-    const controller = new AbortController();
-    const timeout = setTimeout(
-      () => controller.abort(),
-      90000
-    );
+    tahap = 'Meminta Gemini membuat artikel';
+
+const controller = new AbortController();
+const timeout = setTimeout(
+  () => controller.abort(),
+  90000
+);
 
     let response;
 

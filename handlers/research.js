@@ -1,9 +1,10 @@
+import { createClient } from '@supabase/supabase-js';
+
 const CACHE_DURATION = 30 * 60 * 1000;
 
 let cache = null;
 let cacheTime = 0;
 
-// DECODE XML
 function decodeXML(text) {
   return text
     .replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1')
@@ -40,7 +41,6 @@ function decodeXML(text) {
     .trim();
 }
 
-// BACA TAG XML
 function getTag(xml, tag) {
   const escaped = tag.replace(
     /[.*+?^${}()|[\]\\]/g,
@@ -57,7 +57,6 @@ function getTag(xml, tag) {
   return match ? decodeXML(match[1]) : '';
 }
 
-// BACA GOOGLE TRENDS RSS
 function getTrends(xml) {
   const items =
     xml.match(/<item\b[^>]*>[\s\S]*?<\/item>/gi) || [];
@@ -92,8 +91,6 @@ function getTrends(xml) {
   }).filter(item => item.title);
 }
 
-// KATEGORI DIGITEK STORE
-// KLASIFIKASI TREN DIGITEK STORE
 function classify(title) {
   const text = title.toLowerCase();
 
@@ -153,7 +150,6 @@ function classify(title) {
     ]
   };
 
-  // RELEVANSI LANGSUNG
   for (const [category, keywords] of Object.entries(categories)) {
     if (keywords.some(keyword => text.includes(keyword))) {
       return {
@@ -164,7 +160,6 @@ function classify(title) {
     }
   }
 
-  // TOPIK POTENSIAL
   const potentialKeywords = [
     'harga internet',
     'internet cepat',
@@ -190,18 +185,15 @@ function classify(title) {
     };
   }
 
-  // TREN TIDAK RELEVAN
   return {
     category: 'Tren umum',
     relevance: 'Tidak relevan',
     score: 10
   };
-      }
+}
 
-  
-
-// API HANDLER
 export default async function handler(req, res) {
+  res.setHeader('Cache-Control', 'no-store');
 
   if (req.method !== 'GET') {
     return res.status(405).json({
@@ -210,7 +202,12 @@ export default async function handler(req, res) {
     });
   }
 
-  // CEK CACHE
+  const supabase = createClient(
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_ROLE_KEY
+  );
+
+  // CACHE
   if (cache && Date.now() - cacheTime < CACHE_DURATION) {
     return res.status(200).json({
       success: true,
@@ -223,7 +220,6 @@ export default async function handler(req, res) {
   }
 
   try {
-
     const response = await fetch(
       'https://trends.google.com/trending/rss?geo=ID',
       {
@@ -242,7 +238,6 @@ export default async function handler(req, res) {
     }
 
     const xml = await response.text();
-
     const rawTrends = getTrends(xml);
 
     if (!rawTrends.length) {
@@ -256,6 +251,41 @@ export default async function handler(req, res) {
       ...classify(item.title)
     }));
 
+    // SIMPAN KEYWORD RELEVAN DAN POTENSIAL
+    const keywordData = trends
+      .filter(item =>
+        ['Relevan', 'Potensial'].includes(item.relevance)
+      )
+      .map(item => ({
+        keyword: item.title,
+        category: item.category,
+        relevance: item.relevance,
+        score: item.score,
+        traffic: item.traffic || null,
+        source: 'google_trends',
+        updated_at: new Date().toISOString()
+      }));
+
+    if (keywordData.length > 0) {
+      const { error: saveError } = await supabase
+        .from('keyword_pool')
+        .upsert(keywordData, {
+          onConflict: 'keyword',
+          ignoreDuplicates: false
+        });
+
+      if (saveError) {
+        console.error(
+          'KEYWORD POOL SAVE ERROR:',
+          saveError
+        );
+
+        throw new Error(
+          'Gagal menyimpan hasil riset keyword.'
+        );
+      }
+    }
+
     cache = trends;
     cacheTime = Date.now();
 
@@ -265,18 +295,17 @@ export default async function handler(req, res) {
       country: 'Indonesia',
       updatedAt: new Date(cacheTime).toISOString(),
       total: trends.length,
+      saved_keywords: keywordData.length,
       trends
     });
 
   } catch (error) {
-
     console.error('RISET PASAR ERROR:', error);
 
     return res.status(502).json({
       success: false,
-      message: 'Gagal mengambil data Google Trends.',
+      message: 'Gagal mengambil atau menyimpan data riset.',
       detail: error.message
     });
-
   }
-    }
+                   }

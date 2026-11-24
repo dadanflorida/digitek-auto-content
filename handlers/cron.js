@@ -95,12 +95,14 @@ let tahap = 'Memulai generator';
   );
 }
 
-    if (!setting.auto_mode) {
-      return res.status(200).json({
-        success: true,
-        message: 'Mode otomatis sedang tidak aktif.'
-      });
-    }
+tahap = 'Memeriksa hasil pengaturan Supabase';
+
+if (!setting.auto_mode) {
+  return res.status(200).json({
+    success: true,
+    message: 'Mode otomatis sedang tidak aktif.'
+  });
+}
 
     const manualRun = req.manualRun === true;
     const sekarang = waktuJakarta();

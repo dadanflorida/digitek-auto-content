@@ -80,6 +80,7 @@ let tahap = 'Memulai generator';
       process.env.SUPABASE_SERVICE_ROLE_KEY
     );
 
+    tahap = 'Membaca pengaturan Supabase';
     const { data: setting, error: settingError } =
       await supabase
         .from('posting_settings')

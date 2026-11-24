@@ -9,6 +9,7 @@ import deleteArticle from './handlers/delete-article.js';
 import generate from './handlers/generate.js';
 import listArticles from './handlers/list-articles.js';
 import research from './handlers/research.js';
+import keywordPool from './handlers/keyword-pool.js';
 import saveArticle from './handlers/save-article.js';
 import settings from './handlers/settings.js';
 import updateArticle from './handlers/update-article.js';

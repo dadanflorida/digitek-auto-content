@@ -143,19 +143,32 @@ if (!setting.auto_mode) {
       3
     );
 
-    const { count, error: countError } =
-      await supabase
-        .from('articles')
-        .select('*', {
-          count: 'exact',
-          head: true
-        })
-        .contains('labels', ['DIGITEK_AUTO'])
-        .gte('created_at', awalHari)
-        .lte('created_at', akhirHari);
+    tahap = 'Menghitung artikel otomatis di Supabase';
 
-    if (countError) throw countError;
+const { count, error: countError } =
+  await supabase
+    .from('articles')
+    .select('*', {
+      count: 'exact',
+      head: true
+    })
+    .contains('labels', ['DIGITEK_AUTO'])
+    .gte('created_at', awalHari)
+    .lte('created_at', akhirHari);
 
+if (countError) {
+  console.error('ARTICLES COUNT ERROR:', {
+    message: countError.message,
+    code: countError.code,
+    details: countError.details,
+    hint: countError.hint,
+    status: countError.status
+  });
+
+  throw countError;
+}
+
+tahap = 'Memeriksa batas artikel harian';
     if (count >= batas) {
       return res.status(200).json({
         success: true,

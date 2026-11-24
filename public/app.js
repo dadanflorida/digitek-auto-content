@@ -11,9 +11,9 @@ function dapatkanKunciGenerate() {
   }
 
   const secret = prompt('Masukkan kunci Generate Manual:');
-  if (!secret) return '';
+if (!secret) return '';
 
-  manualGenerateSecret = secret;
+manualGenerateSecret = secret.trim();
 
   return manualGenerateSecret;
 }

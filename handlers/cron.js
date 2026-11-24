@@ -73,12 +73,21 @@ export default async function handler(req, res) {
     });
   }
 
-let tahap = 'Memulai generator';  
-  try {
-    const supabase = createClient(
-      process.env.SUPABASE_URL,
-      process.env.SUPABASE_SERVICE_ROLE_KEY
-    );
+let tahap = 'Memulai generator';
+
+try {
+  const supabase = createClient(
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_ROLE_KEY
+  );
+
+  console.log('SUPABASE CONNECTION CHECK:', {
+    urlAvailable: !!process.env.SUPABASE_URL,
+    keyAvailable: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
+    urlMatches: process.env.SUPABASE_URL?.includes(
+      'owowltxpdiwghfmparau'
+    )
+  });
 
     tahap = 'Membaca pengaturan Supabase';
     const { data: setting, error: settingError } =

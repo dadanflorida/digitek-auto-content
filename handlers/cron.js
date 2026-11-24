@@ -142,15 +142,25 @@ const { count, error: countError } =
     .lte('created_at', akhirHari);
 
 if (countError) {
-  console.error('ARTICLES COUNT ERROR:', {
-    message: countError.message,
-    code: countError.code,
-    details: countError.details,
-    hint: countError.hint,
-    status: countError.status
-  });
+  const errorDetail = {};
 
-  throw countError;
+  if (countError && typeof countError === 'object') {
+    for (const key of Object.getOwnPropertyNames(countError)) {
+      errorDetail[key] = countError[key];
+    }
+  } else {
+    errorDetail.value = String(countError);
+  }
+
+  console.error(
+    'ARTICLES COUNT ERROR DETAIL:',
+    JSON.stringify(errorDetail, null, 2)
+  );
+
+  throw new Error(
+    'Gagal menghitung artikel: ' +
+    JSON.stringify(errorDetail)
+  );
 }
 
 tahap = 'Memeriksa batas artikel harian';

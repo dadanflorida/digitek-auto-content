@@ -178,33 +178,54 @@ tahap = 'Memeriksa batas artikel harian';
       });
     }
 
-    const { data: artikelLama, error: artikelError } =
+    // AMBIL RIWAYAT KEYWORD KHUSUS OTOMATIS
+    tahap = 'Memeriksa riwayat keyword otomatis';
+
+    const { data: riwayatOtomatis, error: riwayatError } =
       await supabase
-        .from('articles')
-        .select('slug')
-        .in('slug', TOPIK.map(slugify));
+        .from('keyword_usage')
+        .select('keyword_id')
+        .eq('usage_mode', 'automatic');
 
-    if (artikelError) throw artikelError;
+    if (riwayatError) throw riwayatError;
 
-    const slugTerpakai = new Set(
-      (artikelLama || []).map(item => item.slug)
+    const keywordTerpakai = new Set(
+      (riwayatOtomatis || [])
+        .map(item => item.keyword_id)
+        .filter(Boolean)
     );
 
-    const tersedia = TOPIK.filter(
-      topik => !slugTerpakai.has(slugify(topik))
+    // AMBIL KATALOG KEYWORD
+    tahap = 'Mengambil katalog keyword';
+
+    const { data: katalog, error: katalogError } =
+      await supabase
+        .from('keyword_pool')
+        .select('id, keyword, category, intent, relevance, score')
+        .eq('status', 'available');
+
+    if (katalogError) throw katalogError;
+
+    // PILIH KEYWORD YANG BELUM PERNAH DIPAKAI OTOMATIS
+    const tersedia = (katalog || []).filter(
+      item => !keywordTerpakai.has(item.id)
     );
 
     if (!tersedia.length) {
       return res.status(200).json({
         success: true,
-        message: 'Semua topik sudah pernah dibuat.'
+        message: 'Belum ada keyword baru untuk Generator Otomatis.',
+        total_katalog: (katalog || []).length,
+        total_terpakai: keywordTerpakai.size
       });
     }
 
-    const topik = tersedia[
+    const pilihan = tersedia[
       Math.floor(Math.random() * tersedia.length)
     ];
 
+    const topik = pilihan.keyword;
+    const keywordId = pilihan.id;
     const slug = slugify(topik);
 
     const prompt = `

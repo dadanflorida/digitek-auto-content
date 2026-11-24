@@ -384,6 +384,25 @@ Kembalikan hanya JSON:
         .single();
 
     if (simpanError) throw simpanError;
+  
+  // CATAT RIWAYAT KEYWORD OTOMATIS
+    tahap = 'Mencatat riwayat keyword otomatis';
+
+    const { error: historyError } = await supabase
+      .from('keyword_usage')
+      .insert({
+        keyword_id: keywordId,
+        keyword: topik,
+        usage_mode: 'automatic',
+        article_id: tersimpan.id
+      });
+
+    if (historyError) {
+      console.error(
+        'GAGAL MENCATAT RIWAYAT OTOMATIS:',
+        historyError
+      );
+    }
 
     return res.status(200).json({
       success: true,

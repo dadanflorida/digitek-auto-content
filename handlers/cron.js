@@ -1,20 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
 
-const TOPIK = [
-  'Cara Membeli Pulsa Online dengan Mudah dan Aman',
-  'Cara Memilih Paket Data Internet Sesuai Kebutuhan',
-  'Cara Cek Kuota Internet Berbagai Operator',
-  'Cara Membeli Token Listrik PLN Secara Online',
-  'Cara Mengisi Token Listrik ke Meteran dengan Benar',
-  'Cara Top Up DANA dengan Mudah',
-  'Cara Top Up OVO dan GoPay Secara Online',
-  'Cara Membeli Voucher Game Online',
-  'Tips Memilih Nominal Top Up Mobile Legends',
-  'Tips Aman Melakukan Transaksi Digital',
-  'Keuntungan Membeli Pulsa dan Paket Data Secara Online',
-  'Cara Memilih Layanan Top Up Digital yang Terpercaya'
-];
-
 function slugify(teks) {
   return String(teks)
     .toLowerCase()

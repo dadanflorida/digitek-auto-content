@@ -769,6 +769,33 @@ function tampilkanRisetKeyword() {
   resultContainer.innerHTML = '';
   resultContainer.appendChild(keywordContainer);
 
+    // SIMPAN 12 KEYWORD UTAMA KE SUPABASE
+  fetch('/api/keyword-pool', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      keywords: contentIdeas.map(idea => ({
+        keyword: idea.keyword,
+        category: idea.category,
+        intent: idea.intent
+      }))
+    })
+  })
+  .then(async response => {
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.message || 'Gagal menyimpan keyword.');
+    }
+
+    console.log('RISET KEYWORD TERSIMPAN:', result);
+  })
+  .catch(error => {
+    console.error('GAGAL MENYIMPAN RISET KEYWORD:', error);
+  });
+
   const keywordList = keywordContainer.querySelector('#keywordList');
 
   // HITUNG SEARCH INTENT

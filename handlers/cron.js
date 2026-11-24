@@ -88,7 +88,12 @@ let tahap = 'Memulai generator';
         .eq('id', 'main')
         .single();
 
-    if (settingError) throw settingError;
+    if (settingError) {
+  console.error('SETTING ERROR DETAIL:', JSON.stringify(settingError));
+  throw new Error(
+    settingError.message || JSON.stringify(settingError)
+  );
+}
 
     if (!setting.auto_mode) {
       return res.status(200).json({

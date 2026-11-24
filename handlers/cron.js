@@ -187,7 +187,7 @@ tahap = 'Memeriksa batas artikel harian';
       await supabase
         .from('keyword_pool')
         .select('id, keyword, category, intent, relevance, score')
-        .eq('status', 'available');
+        .eq('status', 'available')
         .eq('relevance', 'Relevan');
 
     if (katalogError) throw katalogError;

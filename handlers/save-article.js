@@ -10,7 +10,7 @@ export default async function handler(req, res) {
     });
   }
 
-  // Keamanan API
+  // KEAMANAN API
   const auth = req.headers.authorization;
 
   if (
@@ -35,6 +35,9 @@ export default async function handler(req, res) {
 
   try {
     const artikel = req.body || {};
+    const sourceKeyword = String(
+      artikel.source_keyword || ''
+    ).trim().toLowerCase();
 
     if (
       !artikel.title ||
@@ -47,11 +50,19 @@ export default async function handler(req, res) {
       });
     }
 
+    if (!sourceKeyword) {
+      return res.status(400).json({
+        success: false,
+        message: 'Keyword sumber tidak ditemukan.'
+      });
+    }
+
     const supabase = createClient(
       process.env.SUPABASE_URL,
       process.env.SUPABASE_SERVICE_ROLE_KEY
     );
 
+    // SIMPAN ARTIKEL TERLEBIH DAHULU
     const { data, error } = await supabase
       .from('articles')
       .insert({
@@ -68,21 +79,56 @@ export default async function handler(req, res) {
       .select()
       .single();
 
-    if (error) {
-      throw error;
+    if (error) throw error;
+
+    // CATAT RIWAYAT KEYWORD MANUAL
+    let historyWarning = null;
+
+    try {
+      const { data: keywordData, error: keywordError } =
+        await supabase
+          .from('keyword_pool')
+          .select('id')
+          .eq('keyword', sourceKeyword)
+          .maybeSingle();
+
+      if (keywordError) throw keywordError;
+
+      const { error: historyError } = await supabase
+        .from('keyword_usage')
+        .insert({
+          keyword_id: keywordData?.id || null,
+          keyword: sourceKeyword,
+          usage_mode: 'manual',
+          article_id: data.id
+        });
+
+      if (historyError) throw historyError;
+
+    } catch (historyError) {
+      console.error(
+        'GAGAL MENCATAT RIWAYAT KEYWORD:',
+        historyError
+      );
+
+      historyWarning =
+        'Artikel tersimpan, tetapi riwayat keyword belum tercatat.';
     }
 
     return res.status(200).json({
       success: true,
       message: 'Artikel berhasil disimpan sebagai draft.',
-      article: data
+      article: data,
+      history_warning: historyWarning
     });
 
   } catch (error) {
+    console.error('SAVE ARTICLE ERROR:', error);
+
     return res.status(500).json({
       success: false,
       message: 'Gagal menyimpan artikel.',
       error: error.message
     });
   }
-        }
+            }

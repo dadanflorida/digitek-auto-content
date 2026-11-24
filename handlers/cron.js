@@ -130,16 +130,17 @@ if (!setting.auto_mode) {
 
     tahap = 'Menghitung artikel otomatis di Supabase';
 
-const { data: artikelOtomatisHariIni, error: countError } =
+const { data: artikelHariIni, error: countError } =
   await supabase
     .from('articles')
-    .select('id')
-    .contains('labels', ['DIGITEK_AUTO'])
+    .select('id, labels')
     .gte('created_at', awalHari)
     .lte('created_at', akhirHari);
 
-const count = artikelOtomatisHariIni?.length || 0;
-
+const count = (artikelHariIni || []).filter(item =>
+  Array.isArray(item.labels) &&
+  item.labels.includes('DIGITEK_AUTO')
+).length;
 if (countError) {
   const errorDetail = {};
 

@@ -262,48 +262,85 @@ Kembalikan hanya JSON:
 
     tahap = 'Meminta Gemini membuat artikel';
 
-const controller = new AbortController();
-const timeout = setTimeout(
-  () => controller.abort(),
-  90000
-);
+let response;
+let raw = '';
+let hasil = null;
 
-    let response;
+const maxPercobaan = 3;
+
+for (let percobaan = 1; percobaan <= maxPercobaan; percobaan++) {
+
+  tahap = `Meminta Gemini membuat artikel (percobaan ${percobaan}/${maxPercobaan})`;
+
+  const controller = new AbortController();
+
+  const timeout = setTimeout(
+    () => controller.abort(),
+    90000
+  );
+
+  try {
+
+    response = await fetch(
+      'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-goog-api-key': process.env.GEMINI_API_KEY
+        },
+        body: JSON.stringify({
+          contents: [{
+            parts: [{ text: prompt }]
+          }],
+          generationConfig: {
+            responseMimeType: 'application/json',
+            temperature: 0.7,
+            maxOutputTokens: 4096
+          }
+        }),
+        signal: controller.signal
+      }
+    );
+
+    raw = await response.text();
 
     try {
-      response = await fetch(
-        'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-goog-api-key': process.env.GEMINI_API_KEY
-          },
-          body: JSON.stringify({
-            contents: [{
-              parts: [{ text: prompt }]
-            }],
-            generationConfig: {
-              responseMimeType: 'application/json',
-              temperature: 0.7,
-              maxOutputTokens: 4096
-            }
-          }),
-          signal: controller.signal
-        }
-      );
-    } finally {
-      clearTimeout(timeout);
+      hasil = JSON.parse(raw);
+    } catch {
+      hasil = {};
     }
 
-    const raw = await response.text();
-    const hasil = JSON.parse(raw);
+    if (response.ok) {
+      break;
+    }
 
-    if (!response.ok) {
+    const status = response.status;
+
+    const pesan =
+      hasil.error?.message ||
+      'Gemini gagal membuat artikel.';
+
+    const bolehRetry = [429, 500, 502, 503, 504].includes(status);
+
+    if (!bolehRetry || percobaan === maxPercobaan) {
       throw new Error(
-        hasil.error?.message || 'Gemini gagal membuat artikel.'
+        `Gemini gagal (HTTP ${status}): ${pesan}`
       );
     }
+
+    console.log(
+      `Gemini sedang sibuk. Percobaan ${percobaan} gagal. Mencoba kembali...`
+    );
+
+    await new Promise(resolve =>
+      setTimeout(resolve, percobaan * 3000)
+    );
+
+  } finally {
+    clearTimeout(timeout);
+  }
+}
 
     const teks = hasil.candidates?.[0]?.content?.parts
       ?.map(part => part.text || '')

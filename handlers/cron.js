@@ -357,17 +357,28 @@ Kembalikan hanya JSON:
     });
 
   } catch (error) {
-    console.error('CRON GENERATE ERROR:', {
+    const detailError = {
       tahap,
+      errorType: typeof error,
+      errorString: String(error),
+      errorJSON: (() => {
+        try {
+          return JSON.stringify(error);
+        } catch {
+          return 'Tidak bisa diubah menjadi JSON';
+        }
+      })(),
       name: error?.name,
       message: error?.message,
-      details: error?.details,
-      hint: error?.hint,
-      code: error?.code,
       stack: error?.stack
-    });
+    };
 
-    if (error.name === 'AbortError') {
+    console.error(
+      'CRON GENERATE ERROR DETAIL:',
+      detailError
+    );
+
+    if (error?.name === 'AbortError') {
       return res.status(504).json({
         success: false,
         message: 'Gemini terlalu lama merespons.'
@@ -377,7 +388,8 @@ Kembalikan hanya JSON:
     return res.status(500).json({
       success: false,
       message: 'Gagal menjalankan generator otomatis.',
-      error: error.message
+      tahap,
+      error: detailError.errorString
     });
   }
 }

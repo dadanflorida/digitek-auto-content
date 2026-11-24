@@ -188,6 +188,7 @@ tahap = 'Memeriksa batas artikel harian';
         .from('keyword_pool')
         .select('id, keyword, category, intent, relevance, score')
         .eq('status', 'available');
+        .eq('relevance', 'Relevan');
 
     if (katalogError) throw katalogError;
 

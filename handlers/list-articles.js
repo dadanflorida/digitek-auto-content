@@ -26,7 +26,12 @@ export default async function handler(req, res) {
   // FILTER STATUS
   const status = req.query.status;
 
-  const statusValid = ['draft', 'published', 'archived'];
+  const statusValid = [
+  'draft',
+  'publishing',
+  'published',
+  'archived'
+];
 
   if (status && !statusValid.includes(status)) {
     return res.status(400).json({

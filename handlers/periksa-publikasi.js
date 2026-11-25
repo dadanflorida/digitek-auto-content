@@ -300,15 +300,31 @@ if (duplikat && duplikat.length > 0) {
         .select('id')
         .maybeSingle();
 
-    if (updateError || !updated) {
-      console.error('SUPABASE RECOVERY ERROR:', updateError);
+    if (updateError) {
+  console.error('SUPABASE RECOVERY ERROR:', updateError);
 
-      return res.status(500).json({
-        success: false,
-        found: true,
-        message: 'Postingan ditemukan, tetapi status Supabase belum berhasil diperbarui.'
-      });
-    }
+  if (updateError.code === '23505') {
+    return res.status(409).json({
+      success: false,
+      found: true,
+      message: 'ID postingan Blogger sudah digunakan artikel lain. Pemeriksaan manual diperlukan.'
+    });
+  }
+
+  return res.status(500).json({
+    success: false,
+    found: true,
+    message: 'Postingan ditemukan, tetapi status Supabase belum berhasil diperbarui.'
+  });
+}
+
+if (!updated) {
+  return res.status(409).json({
+    success: false,
+    found: true,
+    message: 'Status artikel berubah atau artikel sudah diproses. Pemeriksaan ulang diperlukan.'
+  });
+}
 
     return res.status(200).json({
       success: true,

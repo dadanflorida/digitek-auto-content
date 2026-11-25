@@ -56,15 +56,19 @@ export default async function handler(req, res) {
       });
     }
 
-    // KUNCI ARTIKEL AGAR TIDAK TERBIT GANDA
-    const { data: locked, error: lockError } =
-      await supabase
-        .from('articles')
-        .update({ status: 'publishing' })
-        .eq('id', articleId)
-        .eq('status', 'draft')
-        .select('id')
-        .maybeSingle();
+    // KUNCI ARTIKEL DAN SIMPAN TUJUAN PUBLIKASI
+const { data: locked, error: lockError } =
+  await supabase
+    .from('articles')
+    .update({
+      status: 'publishing',
+      blogger_blog_id: String(blogId),
+      publish_attempted_at: new Date().toISOString()
+    })
+    .eq('id', articleId)
+    .eq('status', 'draft')
+    .select('id')
+    .maybeSingle();
 
     if (lockError) throw lockError;
 

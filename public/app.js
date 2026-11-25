@@ -1734,6 +1734,107 @@ ${status === 'draft' ? `
   }
 }
 
+// ===================================
+// TERBITKAN ARTIKEL KE BLOGGER
+// ===================================
+
+window.terbitkanArtikel = async function(id) {
+
+  const secret = dapatkanKunciGenerate();
+
+  if (!secret) return;
+
+  if (!confirm(
+    'Apakah Anda yakin ingin menerbitkan artikel ini ke Blogger?'
+  )) return;
+
+  try {
+
+    // AMBIL DAFTAR BLOG
+    const blogResponse = await fetch('/api/blogger-blogs');
+    const blogResult = await blogResponse.json();
+
+    if (!blogResponse.ok || !blogResult.success) {
+      throw new Error(
+        blogResult.message || 'Gagal mengambil daftar blog.'
+      );
+    }
+
+    const blogs = blogResult.blogs || [];
+
+    if (!blogs.length) {
+      throw new Error('Tidak ada blog yang tersedia.');
+    }
+
+    // PILIH BLOG TUJUAN
+    const pilihan = blogs.map((blog, index) =>
+      `${index + 1}. ${blog.name}`
+    ).join('\n');
+
+    const jawaban = prompt(
+      'PILIH BLOG TUJUAN:\n\n' +
+      pilihan +
+      '\n\nMasukkan nomor blog:'
+    );
+
+    if (jawaban === null) return;
+
+    const nomor = Number(jawaban);
+
+    if (
+      !Number.isInteger(nomor) ||
+      nomor < 1 ||
+      nomor > blogs.length
+    ) {
+      alert('Nomor blog tidak valid.');
+      return;
+    }
+
+    const blogTerpilih = blogs[nomor - 1];
+
+    if (!confirm(
+      `Terbitkan artikel ke blog "${blogTerpilih.name}"?`
+    )) return;
+
+    // KIRIM ARTIKEL KE API
+    const response = await fetch('/api/terbitkan', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + secret
+      },
+      body: JSON.stringify({
+        articleId: id,
+        blogId: blogTerpilih.id
+      })
+    });
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(
+        result.message || 'Artikel gagal diterbitkan.'
+      );
+    }
+
+    alert(
+      'Alhamdulillah! Artikel berhasil diterbitkan.\n\n' +
+      'Blog: ' + blogTerpilih.name +
+      '\n\nURL Artikel:\n' + result.url
+    );
+
+    // TAMPILKAN DAFTAR ARTIKEL TERBIT
+    tampilkanArtikelTersimpan('published');
+
+  } catch (error) {
+
+    alert(
+      'Gagal menerbitkan artikel:\n' + error.message
+    );
+
+  }
+};
+
 // PRATINJAU ARTIKEL
 window.pratinjauArtikel = async function(id) {
 

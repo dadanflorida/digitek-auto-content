@@ -57,8 +57,12 @@ export default async function handler(req, res) {
   content_html,
   keywords,
   labels,
-  faq,
+    faq,
   status,
+  blogger_blog_id,
+  blogger_post_id,
+  blogger_url,
+  published_at,
   created_at
 `)
       .order('created_at', { ascending: false })

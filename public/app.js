@@ -1703,6 +1703,16 @@ async function muatDaftarArtikel(status) {
   >
     ✏️ Edit Draft
   </button>
+
+${status === 'draft' ? `
+<button
+  class="primary-btn"
+  style="background:#198754"
+  onclick="terbitkanArtikel('${artikel.id}')"
+>
+  🚀 Terbitkan ke Blogger
+</button>
+` : ''}
   
 <button
   class="primary-btn"

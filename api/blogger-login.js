@@ -23,7 +23,7 @@ message: 'Konfigurasi Google OAuth belum lengkap.'
 const state = crypto.randomBytes(32).toString('hex');
 
 res.setHeader('Set-Cookie', [
-"blogger_oauth_state=${state}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=600"
+'blogger_oauth_state=${state}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=600'
 ]);
 
 const params = new URLSearchParams({

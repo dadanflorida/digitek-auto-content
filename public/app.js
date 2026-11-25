@@ -1394,7 +1394,8 @@ document.querySelectorAll(
 [
   '#generatorView',
   '#artikelTersimpanView',
-  '#jadwalPostingView'
+  '#jadwalPostingView',
+  '#bloggerConnectionView'
 ].forEach(selector => {
   const halaman = document.querySelector(selector);
   if (halaman) halaman.style.display = 'none';

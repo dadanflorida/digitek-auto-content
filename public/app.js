@@ -1601,7 +1601,13 @@ function tampilkanArtikelTersimpan(status = 'draft') {
   halaman.innerHTML = `
     <div style="padding:20px;background:white;border-radius:12px">
 
-      <h2>${status === 'draft' ? '📝 Draft Artikel' : '📰 Artikel Terbit'}</h2>
+      <h2>${
+  status === 'draft'
+    ? '📝 Draft Artikel'
+    : status === 'published'
+      ? '📰 Artikel Terbit'
+      : '⏳ Proses Tertahan'
+}</h2>
 
       <p style="color:#8496aa;font-size:13px">
         Daftar artikel yang tersimpan di Supabase.

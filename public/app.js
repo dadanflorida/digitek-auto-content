@@ -1658,12 +1658,16 @@ async function muatDaftarArtikel(status) {
     }
 
     if (!result.articles.length) {
-      daftar.innerHTML = `
-        <p>Belum ada artikel ${
-          status === 'draft' ? 'Draft' : 'yang diterbitkan'
-        }.</p>
-      `;
-      return;
+  const pesanKosong = {
+    draft: 'Belum ada Draft Artikel.',
+    published: 'Belum ada Artikel Terbit.',
+    publishing: 'Belum ada artikel dalam Proses Tertahan.'
+  };
+
+  daftar.innerHTML = `
+    <p>${pesanKosong[status] || 'Belum ada artikel.'}</p>
+  `;
+  return;
     }
 
     daftar.innerHTML = result.articles.map(artikel => `

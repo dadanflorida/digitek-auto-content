@@ -13,6 +13,7 @@ import keywordPool from './handlers/keyword-pool.js';
 import saveArticle from './handlers/save-article.js';
 import settings from './handlers/settings.js';
 import updateArticle from './handlers/update-article.js';
+import terbitkan from './handlers/terbitkan.js';
 
 const app = express();
 
@@ -40,6 +41,7 @@ app.all('/api/keyword-pool', keywordPool);
 app.all('/api/save-article', saveArticle);
 app.all('/api/settings', settings);
 app.all('/api/update-article', updateArticle);
+app.all('/api/terbitkan', terbitkan);
 
 // TES EXPRESS
 

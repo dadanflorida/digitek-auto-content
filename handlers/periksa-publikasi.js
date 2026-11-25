@@ -69,6 +69,15 @@ export default async function handler(req, res) {
       });
     }
 
+    // PASTIKAN WAKTU PERCOBAAN SUDAH TERCATAT
+if (!artikel.publish_attempted_at) {
+  return res.status(409).json({
+    success: false,
+    found: false,
+    message: 'Waktu percobaan publikasi belum tercatat. Pemeriksaan dibatalkan.'
+  });
+    }
+
     // AMBIL TOKEN BLOGGER
     const { data: saved, error: tokenError } =
       await supabase

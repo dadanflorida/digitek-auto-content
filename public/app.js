@@ -1670,7 +1670,11 @@ async function muatDaftarArtikel(status) {
   return;
     }
 
-    daftar.innerHTML = result.articles.map(artikel => `
+    daftar.innerHTML = result.articles.map(artikel => {
+
+  // TAMPILAN KHUSUS DRAFT
+  if (status === 'draft') {
+    return `
       <div style="
         padding:15px;
         margin:12px 0;
@@ -1681,62 +1685,144 @@ async function muatDaftarArtikel(status) {
         <h3>${escapeHTML(artikel.title)}</h3>
 
         <p style="font-size:12px;color:#8496aa">
-          ${escapeHTML(artikel.created_at || '')}
+          Dibuat: ${escapeHTML(artikel.created_at || '-')}
         </p>
 
-        <span style="
-          padding:5px 10px;
-          background:#e9f8f0;
-          color:#147c65;
-          border-radius:6px;
-          font-size:11px;
+        <span>📝 Draft</span>
+
+        <div style="
+          display:flex;
+          gap:8px;
+          flex-wrap:wrap;
+          margin-top:15px;
         ">
-          ${escapeHTML(artikel.status)}
+
+          <button class="primary-btn"
+            onclick="pratinjauArtikel('${artikel.id}')">
+            👁️ Pratinjau
+          </button>
+
+          <button class="primary-btn"
+            style="background:#e99b20"
+            onclick="editDraftArtikel('${artikel.id}')">
+            ✏️ Edit Draft
+          </button>
+
+          <button class="primary-btn"
+            style="background:#198754"
+            onclick="terbitkanArtikel('${artikel.id}')">
+            🚀 Terbitkan ke Blogger
+          </button>
+
+          <button class="primary-btn"
+            style="background:#dc3545"
+            onclick="hapusDraftArtikel('${artikel.id}')">
+            🗑️ Hapus Draft
+          </button>
+
+        </div>
+      </div>
+    `;
+  }
+
+  // TAMPILAN KHUSUS ARTIKEL TERBIT
+  if (status === 'published') {
+    return `
+      <div style="
+        padding:15px;
+        margin:12px 0;
+        border:1px solid #b8e4cc;
+        border-radius:9px;
+      ">
+
+        <h3>${escapeHTML(artikel.title)}</h3>
+
+        <p style="font-size:12px;color:#8496aa">
+          Diterbitkan: ${escapeHTML(artikel.published_at || '-')}
+        </p>
+
+        <span style="color:#198754">
+          ✓ Artikel Terbit
         </span>
 
-  <div style="
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  margin-top:15px;
-">
+        <p style="font-size:12px;margin-top:12px">
+          ID Blogger: ${escapeHTML(artikel.blogger_post_id || '-')}
+        </p>
 
-  <button
-    class="primary-btn"
-    onclick="pratinjauArtikel('${artikel.id}')"
-  >
-    👁️ Pratinjau
-  </button>
+        ${
+          artikel.blogger_url
+            ? `<a href="${escapeHTML(artikel.blogger_url)}"
+                 target="_blank"
+                 rel="noopener noreferrer">
+                 🌐 Buka Artikel di Blogger
+               </a>`
+            : '<p>URL Blogger belum tersedia.</p>'
+        }
 
-  <button
-    class="primary-btn"
-    style="background:#e99b20"
-    onclick="editDraftArtikel('${artikel.id}')"
-  >
-    ✏️ Edit Draft
-  </button>
-
-${status === 'draft' ? `
-<button
-  class="primary-btn"
-  style="background:#198754"
-  onclick="terbitkanArtikel('${artikel.id}')"
->
-  🚀 Terbitkan ke Blogger
-</button>
-` : ''}
-  
-<button
-  class="primary-btn"
-  style="background:#dc3545"
-  onclick="hapusDraftArtikel('${artikel.id}')"
->
-  🗑️ Hapus Draft
-</button>
-</div>
-</div>
       </div>
-    `).join('');
+    `;
+  }
+
+  // TAMPILAN KHUSUS PROSES TERTAHAN
+  return `
+    <div style="
+      padding:15px;
+      margin:12px 0;
+      border:1px solid #f0d49b;
+      border-radius:9px;
+      background:#fffaf0;
+    ">
+
+      <h3>${escapeHTML(artikel.title)}</h3>
+
+      <p style="font-size:12px;color:#8496aa">
+        Dibuat: ${escapeHTML(artikel.created_at || '-')}
+      </p>
+
+      <span style="color:#b47a17;font-weight:bold">
+        ⏳ PROSES TERTAHAN
+      </span>
+
+      <p style="
+        font-size:12px;
+        line-height:1.7;
+        margin-top:12px;
+        color:#805b19;
+      ">
+        Artikel sedang menunggu pemeriksaan hasil publikasi.
+        Jangan menerbitkan ulang sebelum statusnya dipastikan.
+      </p>
+
+      ${
+        artikel.blogger_post_id
+          ? `<p style="font-size:12px">
+               ID Blogger: ${escapeHTML(artikel.blogger_post_id)}
+             </p>`
+          : ''
+      }
+
+      ${
+        artikel.blogger_url
+          ? `<a href="${escapeHTML(artikel.blogger_url)}"
+               target="_blank"
+               rel="noopener noreferrer">
+               🌐 Periksa Artikel di Blogger
+             </a>`
+          : ''
+      }
+
+      ${
+        artikel.published_at
+          ? `<p style="font-size:12px">
+               Waktu terbit: ${escapeHTML(artikel.published_at)}
+             </p>`
+          : ''
+      }
+
+    </div>
+  `;
+
+}).join('');    
 
   } catch (error) {
 

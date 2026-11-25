@@ -43,6 +43,7 @@ app.all('/api/save-article', saveArticle);
 app.all('/api/settings', settings);
 app.all('/api/update-article', updateArticle);
 app.all('/api/terbitkan', terbitkan);
+app.all('/api/periksa-publikasi', periksaPublikasi);
 
 // TES EXPRESS
 

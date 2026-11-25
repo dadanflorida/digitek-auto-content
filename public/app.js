@@ -1453,8 +1453,10 @@ document.querySelectorAll(
 } else if (button.dataset.menu === 'Artikel Terbit') {
   tampilkanArtikelTersimpan('published');
 
+} else if (button.dataset.menu === 'Proses Tertahan') {
+  tampilkanArtikelTersimpan('publishing');
+
 } else if (button.dataset.menu === 'Koneksi Blogger') {
-  tampilkanKoneksiBlogger();
 
 } else if (button.dataset.menu === 'Dashboard') {
     } else {

@@ -33,14 +33,15 @@ res.setHeader('Set-Cookie',
 'blogger_oauth_state=; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=0'
 );
 
+const stateBuffer = Buffer.from(String(state || ''));
+const savedStateBuffer = Buffer.from(String(savedState || ''));
+
 if (
 !code ||
 !state ||
 !savedState ||
-!crypto.timingSafeEqual(
-Buffer.from(String(state)),
-Buffer.from(String(savedState))
-)
+stateBuffer.length !== savedStateBuffer.length ||
+!crypto.timingSafeEqual(stateBuffer, savedStateBuffer)
 ) {
 return res.status(400).send('Verifikasi OAuth gagal. Silakan ulangi login.');
 }

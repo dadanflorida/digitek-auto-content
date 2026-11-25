@@ -10,7 +10,6 @@ export default async function handler(req, res) {
     });
   }
 
-  // KEAMANAN API
   const auth = req.headers.authorization;
 
   if (
@@ -23,22 +22,25 @@ export default async function handler(req, res) {
     });
   }
 
+  const supabase = createClient(
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_ROLE_KEY
+  );
+
+  let articleId;
+
   try {
-    const { articleId, blogId } = req.body || {};
+    const { articleId: id, blogId } = req.body || {};
+    articleId = id;
 
     if (!articleId || !blogId) {
       return res.status(400).json({
         success: false,
-        message: 'ID artikel dan tujuan blog wajib diisi.'
+        message: 'ID artikel dan blog wajib diisi.'
       });
     }
 
-    const supabase = createClient(
-      process.env.SUPABASE_URL,
-      process.env.SUPABASE_SERVICE_ROLE_KEY
-    );
-
-    // AMBIL ARTIKEL DARI SUPABASE
+    // AMBIL DRAFT
     const { data: artikel, error: articleError } =
       await supabase
         .from('articles')
@@ -48,9 +50,28 @@ export default async function handler(req, res) {
         .single();
 
     if (articleError || !artikel) {
-      return res.status(404).json({
+      return res.status(409).json({
         success: false,
-        message: 'Draft artikel tidak ditemukan.'
+        message: 'Draft tidak ditemukan atau sedang diproses.'
+      });
+    }
+
+    // KUNCI ARTIKEL AGAR TIDAK TERBIT GANDA
+    const { data: locked, error: lockError } =
+      await supabase
+        .from('articles')
+        .update({ status: 'publishing' })
+        .eq('id', articleId)
+        .eq('status', 'draft')
+        .select('id')
+        .maybeSingle();
+
+    if (lockError) throw lockError;
+
+    if (!locked) {
+      return res.status(409).json({
+        success: false,
+        message: 'Artikel sudah diproses atau sudah diterbitkan.'
       });
     }
 
@@ -63,6 +84,12 @@ export default async function handler(req, res) {
         .single();
 
     if (tokenError || !saved?.refresh_token) {
+      await supabase
+        .from('articles')
+        .update({ status: 'draft' })
+        .eq('id', articleId)
+        .eq('status', 'publishing');
+
       return res.status(401).json({
         success: false,
         message: 'Koneksi Blogger tidak tersedia.'
@@ -71,7 +98,7 @@ export default async function handler(req, res) {
 
     let accessToken = saved.access_token;
 
-    // PERBARUI TOKEN JIKA KEDALUWARSA
+    // REFRESH TOKEN JIKA KEDALUWARSA
     const expired =
       !saved.expires_at ||
       new Date(saved.expires_at).getTime() < Date.now() + 60000;
@@ -96,12 +123,21 @@ export default async function handler(req, res) {
       const refreshed = await refreshResponse.json();
 
       if (!refreshResponse.ok) {
-        throw new Error('Gagal memperbarui sesi Blogger.');
+        await supabase
+          .from('articles')
+          .update({ status: 'draft' })
+          .eq('id', articleId)
+          .eq('status', 'publishing');
+
+        return res.status(401).json({
+          success: false,
+          message: 'Gagal memperbarui sesi Blogger.'
+        });
       }
 
       accessToken = refreshed.access_token;
 
-      const { error: updateTokenError } = await supabase
+      const { error: tokenUpdateError } = await supabase
         .from('blogger_tokens')
         .update({
           access_token: accessToken,
@@ -112,70 +148,98 @@ export default async function handler(req, res) {
         })
         .eq('id', 'main');
 
-      if (updateTokenError) {
-        throw new Error('Gagal menyimpan token Blogger terbaru.');
-      }
+      if (tokenUpdateError) throw tokenUpdateError;
     }
 
-    // TERBITKAN ARTIKEL KE BLOGGER
-    const bloggerResponse = await fetch(
-      `https://www.googleapis.com/blogger/v3/blogs/${encodeURIComponent(blogId)}/posts/`,
-      {
-        method: 'POST',
-        headers: {
-          Authorization: 'Bearer ' + accessToken,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          kind: 'blogger#post',
-          title: artikel.title,
-          content: artikel.content_html,
-          labels: artikel.labels || [],
-          isDraft: false
-        })
-      }
-    );
+    // KIRIM KE BLOGGER
+    let bloggerResponse;
+
+    try {
+      bloggerResponse = await fetch(
+        `https://www.googleapis.com/blogger/v3/blogs/${encodeURIComponent(blogId)}/posts/`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: 'Bearer ' + accessToken,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            kind: 'blogger#post',
+            title: artikel.title,
+            content: artikel.content_html,
+            labels: artikel.labels || [],
+            isDraft: false
+          })
+        }
+      );
+    } catch (networkError) {
+      // JANGAN KEMBALIKAN KE DRAFT.
+      // Hasil pengiriman belum dapat dipastikan.
+      console.error('BLOGGER NETWORK ERROR:', networkError);
+
+      return res.status(503).json({
+        success: false,
+        message: 'Hasil pengiriman belum dapat dipastikan. Artikel dikunci untuk mencegah publikasi ganda. Perlu pemeriksaan sebelum mencoba ulang.'
+      });
+    }
 
     const published = await bloggerResponse.json();
 
     if (!bloggerResponse.ok) {
-      console.error('BLOGGER PUBLISH ERROR:', published.error);
+      // BLOGGER MENOLAK PERMINTAAN
+      await supabase
+        .from('articles')
+        .update({ status: 'draft' })
+        .eq('id', articleId)
+        .eq('status', 'publishing');
 
-      throw new Error(
-        published.error?.message ||
-        'Blogger gagal menerbitkan artikel.'
-      );
+      return res.status(400).json({
+        success: false,
+        message:
+          published.error?.message ||
+          'Blogger gagal menerbitkan artikel.'
+      });
     }
 
-    // PERBARUI STATUS ARTIKEL DI SUPABASE
-    const { error: statusError } = await supabase
-      .from('articles')
-      .update({
-        status: 'published'
-      })
-      .eq('id', articleId)
-      .eq('status', 'draft');
+    // SIMPAN HASIL PENERBITAN
+    const { data: updated, error: statusError } =
+      await supabase
+        .from('articles')
+        .update({
+          status: 'published',
+          blogger_blog_id: String(blogId),
+          blogger_post_id: String(published.id),
+          blogger_url: published.url || null,
+          published_at: new Date().toISOString()
+        })
+        .eq('id', articleId)
+        .eq('status', 'publishing')
+        .select('id')
+        .maybeSingle();
 
-    if (statusError) {
-      console.error('STATUS UPDATE ERROR:', statusError);
-      throw new Error(
-        'Artikel sudah dikirim ke Blogger, tetapi status database gagal diperbarui.'
-      );
+    if (statusError || !updated) {
+      console.error('PUBLISH STATUS ERROR:', statusError);
+
+      return res.status(500).json({
+        success: false,
+        message: 'Blogger mungkin sudah menerbitkan artikel, tetapi pencatatan Supabase belum berhasil. Jangan mencoba menerbitkan ulang.'
+      });
     }
 
     return res.status(200).json({
       success: true,
-      message: 'Artikel berhasil diterbitkan ke Blogger.',
+      message: 'Artikel berhasil diterbitkan.',
       url: published.url,
       blogger_post_id: published.id
     });
 
   } catch (error) {
-    console.error('TERBITKAN ARTIKEL ERROR:', error);
+    console.error('TERBITKAN ERROR:', error);
 
     return res.status(500).json({
       success: false,
-      message: error.message
+      message: 'Terjadi kesalahan. Jika artikel sudah berstatus publishing, jangan mencoba ulang sebelum diperiksa.',
+      error: error.message
     });
   }
-        }
+}

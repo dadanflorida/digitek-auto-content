@@ -210,19 +210,34 @@ if (attemptRecordError || !attemptRecorded) {
     const published = await bloggerResponse.json();
 
     if (!bloggerResponse.ok) {
-      // BLOGGER MENOLAK PERMINTAAN
-      await supabase
-        .from('articles')
-        .update({ status: 'draft' })
-        .eq('id', articleId)
-        .eq('status', 'publishing');
 
-      return res.status(400).json({
-        success: false,
-        message:
-          published.error?.message ||
-          'Blogger gagal menerbitkan artikel.'
-      });
+  // JIKA HASILNYA BELUM PASTI, JANGAN KEMBALIKAN KE DRAFT
+  if (
+    bloggerResponse.status >= 500 ||
+    bloggerResponse.status === 408 ||
+    bloggerResponse.status === 429
+  ) {
+    console.error('BLOGGER UNCERTAIN RESPONSE:', published);
+
+    return res.status(503).json({
+      success: false,
+      message: 'Respons Blogger belum dapat dipastikan. Artikel tetap dikunci untuk pemeriksaan sebelum mencoba ulang.'
+    });
+  }
+
+  // JIKA BLOGGER JELAS MENOLAK PERMINTAAN
+  await supabase
+    .from('articles')
+    .update({ status: 'draft' })
+    .eq('id', articleId)
+    .eq('status', 'publishing');
+
+  return res.status(400).json({
+    success: false,
+    message:
+      published.error?.message ||
+      'Blogger menolak permintaan penerbitan.'
+  });
     }
 
     // SIMPAN HASIL PENERBITAN

@@ -14,6 +14,7 @@ import saveArticle from './handlers/save-article.js';
 import settings from './handlers/settings.js';
 import updateArticle from './handlers/update-article.js';
 import terbitkan from './handlers/terbitkan.js';
+import periksaPublikasi from './handlers/periksa-publikasi.js';
 
 const app = express();
 

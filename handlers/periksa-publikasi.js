@@ -133,36 +133,7 @@ export default async function handler(req, res) {
       if (updateTokenError) throw updateTokenError;
     }
 
-    // CARI POSTINGAN BERDASARKAN JUDUL
-    const searchUrl =
-      'https://www.googleapis.com/blogger/v3/blogs/' +
-      encodeURIComponent(artikel.blogger_blog_id) +
-      '/posts/search?' +
-      new URLSearchParams({
-        q: artikel.title,
-        fetchBodies: 'true'
-      }).toString();
-
-    const searchResponse = await fetch(searchUrl, {
-      headers: {
-        Authorization: 'Bearer ' + accessToken
-      }
-    });
-
-    const searchResult = await searchResponse.json();
-
-    if (!searchResponse.ok) {
-      console.error('BLOGGER SEARCH ERROR:', searchResult);
-
-      return res.status(502).json({
-        success: false,
-        message: 'Gagal memeriksa postingan di Blogger.'
-      });
-    }
-
-    const posts = searchResult.items || [];
-
-    // AMBIL DAFTAR POSTINGAN YANG BENAR-BENAR LIVE
+    // AMBIL POSTINGAN LIVE DARI BLOGGER
 const waktuPercobaan = artikel.publish_attempted_at
   ? new Date(
       new Date(artikel.publish_attempted_at).getTime() -
@@ -205,11 +176,11 @@ do {
   const liveResult = await liveResponse.json();
 
   if (!liveResponse.ok) {
-    console.error('BLOGGER LIVE LIST ERROR:', liveResult);
+    console.error('BLOGGER LIVE ERROR:', liveResult);
 
     return res.status(502).json({
       success: false,
-      message: 'Gagal memastikan status publikasi di Blogger.'
+      message: 'Gagal mengambil daftar artikel yang sudah terbit.'
     });
   }
 
@@ -220,12 +191,17 @@ do {
 
 } while (pageToken && halaman < 5);
 
-// COCOKKAN JUDUL DAN ISI DENGAN POSTINGAN LIVE
-const liveIds = new Set(
-  livePosts.map(post => String(post.id))
-);
+// JANGAN MENYIMPULKAN JIKA PEMERIKSAAN BELUM LENGKAP
+if (pageToken) {
+  return res.status(200).json({
+    success: true,
+    found: false,
+    message: 'Pemeriksaan belum lengkap. Status tetap publishing.'
+  });
+}
 
-const artikelCocok = posts.filter(post => {
+// COCOKKAN JUDUL DAN ISI
+const artikelCocok = livePosts.filter(post => {
   const judulSama =
     String(post.title || '').trim() ===
     String(artikel.title || '').trim();
@@ -234,30 +210,12 @@ const artikelCocok = posts.filter(post => {
     normalisasiIsi(post.content) ===
     normalisasiIsi(artikel.content_html);
 
-  const benarBenarLive =
-    liveIds.has(String(post.id)) &&
-    Boolean(post.published && post.url);
-
-  return judulSama && isiSama && benarBenarLive;
+  return (
+    judulSama &&
+    isiSama &&
+    Boolean(post.id && post.published && post.url)
+  );
 });
-
-// JIKA PAGINASI BELUM SELESAI, JANGAN MENYIMPULKAN GAGAL
-if (pageToken) {
-  return res.status(200).json({
-    success: true,
-    found: false,
-    message: 'Pemeriksaan belum lengkap karena batas halaman tercapai. Status tetap publishing.'
-  });
-}
-
-// TIDAK ADA HASIL YANG COCOK
-if (artikelCocok.length === 0) {
-  return res.status(200).json({
-    success: true,
-    found: false,
-    message: 'Postingan live yang cocok belum ditemukan. Status tetap publishing.'
-  });
-}
 
     // HASIL GANDA: JANGAN PILIH SEMBARANGAN
     if (artikelCocok.length > 1) {

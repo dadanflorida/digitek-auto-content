@@ -257,6 +257,33 @@ if (artikelCocok.length === 0) {
 
     const post = artikelCocok[0];
 
+    // CEK APAKAH POSTINGAN SUDAH DIGUNAKAN ARTIKEL LAIN
+const { data: duplikat, error: duplicateError } =
+  await supabase
+    .from('articles')
+    .select('id')
+    .eq('blogger_blog_id', String(artikel.blogger_blog_id))
+    .eq('blogger_post_id', String(post.id))
+    .neq('id', artikel.id)
+    .limit(1);
+
+if (duplicateError) {
+  console.error('DUPLICATE CHECK ERROR:', duplicateError);
+
+  return res.status(500).json({
+    success: false,
+    message: 'Gagal memeriksa kemungkinan duplikasi postingan.'
+  });
+}
+
+if (duplikat && duplikat.length > 0) {
+  return res.status(409).json({
+    success: false,
+    found: true,
+    message: 'Postingan Blogger sudah tercatat pada artikel lain. Pemeriksaan manual diperlukan.'
+  });
+}
+
     // SIMPAN HASIL PEMERIKSAAN
     const { data: updated, error: updateError } =
       await supabase

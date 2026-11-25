@@ -26,6 +26,7 @@ const menu = [
 ['▦', 'Jadwal Posting'], 
 ['📝', 'Draft Artikel'],
 ['▤', 'Artikel Terbit'],
+['🌐', 'Koneksi Blogger'],
 ['↗', 'Analitik SEO']
 ];
 

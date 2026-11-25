@@ -217,6 +217,15 @@ const artikelCocok = livePosts.filter(post => {
   );
 });
 
+// JIKA TIDAK DITEMUKAN, JANGAN UBAH STATUS
+if (artikelCocok.length === 0) {
+  return res.status(200).json({
+    success: true,
+    found: false,
+    message: 'Artikel belum ditemukan di Blogger. Status tetap publishing.'
+  });
+}
+    
     // HASIL GANDA: JANGAN PILIH SEMBARANGAN
     if (artikelCocok.length > 1) {
       return res.status(409).json({

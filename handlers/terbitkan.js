@@ -61,10 +61,9 @@ const { data: locked, error: lockError } =
   await supabase
     .from('articles')
     .update({
-      status: 'publishing',
-      blogger_blog_id: String(blogId),
-      publish_attempted_at: new Date().toISOString()
-    })
+  status: 'publishing',
+  blogger_blog_id: String(blogId)
+})
     .eq('id', articleId)
     .eq('status', 'draft')
     .select('id')

@@ -154,6 +154,27 @@ const { data: locked, error: lockError } =
       if (tokenUpdateError) throw tokenUpdateError;
     }
 
+    // CATAT WAKTU SEBELUM MENGIRIM KE BLOGGER
+const { data: attemptRecorded, error: attemptRecordError } =
+  await supabase
+    .from('articles')
+    .update({
+      publish_attempted_at: new Date().toISOString()
+    })
+    .eq('id', articleId)
+    .eq('status', 'publishing')
+    .select('id')
+    .maybeSingle();
+
+if (attemptRecordError || !attemptRecorded) {
+  console.error('PUBLISH ATTEMPT RECORD ERROR:', attemptRecordError);
+
+  return res.status(500).json({
+    success: false,
+    message: 'Waktu percobaan gagal dicatat. Pengiriman ke Blogger dibatalkan.'
+  });
+    }
+
     // KIRIM KE BLOGGER
     let bloggerResponse;
 

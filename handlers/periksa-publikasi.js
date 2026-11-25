@@ -162,31 +162,102 @@ export default async function handler(req, res) {
 
     const posts = searchResult.items || [];
 
-    // COCOKKAN JUDUL DAN ISI
-    const artikelCocok = posts.filter(post => {
-      const judulSama =
-        String(post.title || '').trim() ===
-        String(artikel.title || '').trim();
+    // AMBIL DAFTAR POSTINGAN YANG BENAR-BENAR LIVE
+const waktuPercobaan = artikel.publish_attempted_at
+  ? new Date(
+      new Date(artikel.publish_attempted_at).getTime() -
+      24 * 60 * 60 * 1000
+    ).toISOString()
+  : undefined;
 
-      const isiSama =
-        normalisasiIsi(post.content) ===
-        normalisasiIsi(artikel.content_html);
+const liveParams = new URLSearchParams({
+  status: 'live',
+  fetchBodies: 'true',
+  maxResults: '500',
+  orderBy: 'published'
+});
 
-      const sudahTerbit =
-        Boolean(post.published && post.url) &&
-        (!post.status || post.status === 'LIVE');
+if (waktuPercobaan) {
+  liveParams.set('startDate', waktuPercobaan);
+}
 
-      return judulSama && isiSama && sudahTerbit;
-    });
+let livePosts = [];
+let pageToken = null;
+let halaman = 0;
 
-    // TIDAK ADA HASIL YANG COCOK
-    if (artikelCocok.length === 0) {
-      return res.status(200).json({
-        success: true,
-        found: false,
-        message: 'Postingan belum ditemukan dengan kecocokan yang meyakinkan. Status tetap publishing.'
-      });
+do {
+  if (pageToken) {
+    liveParams.set('pageToken', pageToken);
+  }
+
+  const liveUrl =
+    'https://www.googleapis.com/blogger/v3/blogs/' +
+    encodeURIComponent(artikel.blogger_blog_id) +
+    '/posts?' +
+    liveParams.toString();
+
+  const liveResponse = await fetch(liveUrl, {
+    headers: {
+      Authorization: 'Bearer ' + accessToken
     }
+  });
+
+  const liveResult = await liveResponse.json();
+
+  if (!liveResponse.ok) {
+    console.error('BLOGGER LIVE LIST ERROR:', liveResult);
+
+    return res.status(502).json({
+      success: false,
+      message: 'Gagal memastikan status publikasi di Blogger.'
+    });
+  }
+
+  livePosts.push(...(liveResult.items || []));
+
+  pageToken = liveResult.nextPageToken || null;
+  halaman++;
+
+} while (pageToken && halaman < 5);
+
+// COCOKKAN JUDUL DAN ISI DENGAN POSTINGAN LIVE
+const liveIds = new Set(
+  livePosts.map(post => String(post.id))
+);
+
+const artikelCocok = posts.filter(post => {
+  const judulSama =
+    String(post.title || '').trim() ===
+    String(artikel.title || '').trim();
+
+  const isiSama =
+    normalisasiIsi(post.content) ===
+    normalisasiIsi(artikel.content_html);
+
+  const benarBenarLive =
+    liveIds.has(String(post.id)) &&
+    Boolean(post.published && post.url);
+
+  return judulSama && isiSama && benarBenarLive;
+});
+
+// JIKA PAGINASI BELUM SELESAI, JANGAN MENYIMPULKAN GAGAL
+if (pageToken) {
+  return res.status(200).json({
+    success: true,
+    found: false,
+    message: 'Pemeriksaan belum lengkap karena batas halaman tercapai. Status tetap publishing.'
+  });
+}
+
+// TIDAK ADA HASIL YANG COCOK
+if (artikelCocok.length === 0) {
+  return res.status(200).json({
+    success: true,
+    found: false,
+    message: 'Postingan live yang cocok belum ditemukan. Status tetap publishing.'
+  });
+}
 
     // HASIL GANDA: JANGAN PILIH SEMBARANGAN
     if (artikelCocok.length > 1) {

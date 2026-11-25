@@ -209,7 +209,11 @@ if (pageToken) {
   });
 }
 
-// COCOKKAN JUDUL DAN ISI
+// COCOKKAN JUDUL, ISI, DAN WAKTU TERBIT
+const waktuPercobaanMs = new Date(
+  artikel.publish_attempted_at
+).getTime();
+
 const artikelCocok = livePosts.filter(post => {
   const judulSama =
     String(post.title || '').trim() ===
@@ -219,9 +223,16 @@ const artikelCocok = livePosts.filter(post => {
     normalisasiIsi(post.content) ===
     normalisasiIsi(artikel.content_html);
 
+  const waktuTerbitMs = new Date(post.published).getTime();
+
+  const waktuSesuai =
+    Number.isFinite(waktuTerbitMs) &&
+    waktuTerbitMs >= waktuPercobaanMs - 5 * 60 * 1000;
+
   return (
     judulSama &&
     isiSama &&
+    waktuSesuai &&
     Boolean(post.id && post.published && post.url)
   );
 });

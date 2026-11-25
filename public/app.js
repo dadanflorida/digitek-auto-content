@@ -26,8 +26,8 @@ const menu = [
 ['▦', 'Jadwal Posting'], 
 ['📝', 'Draft Artikel'],
 ['▤', 'Artikel Terbit'],
+['⏳', 'Proses Tertahan'],
 ['🌐', 'Koneksi Blogger'],
-['↗', 'Analitik SEO']
 ];
 
 document.querySelector('#app').innerHTML = `

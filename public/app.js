@@ -1468,6 +1468,112 @@ document.querySelectorAll(
 
  });
 });
+
+// ===================================
+// HALAMAN KONEKSI BLOGGER
+// ===================================
+
+async function tampilkanKoneksiBlogger() {
+
+  const main = document.querySelector('.main');
+
+  main.querySelectorAll(
+    '.welcome, .stats, .content-grid, footer'
+  ).forEach(el => {
+    el.style.display = 'none';
+  });
+
+  let halaman = document.querySelector('#bloggerConnectionView');
+
+  if (!halaman) {
+    halaman = document.createElement('section');
+    halaman.id = 'bloggerConnectionView';
+    main.appendChild(halaman);
+  }
+
+  halaman.style.display = 'block';
+
+  halaman.innerHTML = `
+    <div class="panel" style="margin-top:20px">
+
+      <span class="eyebrow">PUBLISHING INTEGRATION</span>
+
+      <h2>🌐 Koneksi Blogger</h2>
+
+      <p class="muted">
+        Hubungkan akun Google untuk mengelola blog
+        dan menerbitkan artikel langsung dari dashboard.
+      </p>
+
+      <div id="bloggerStatus" style="margin:20px 0">
+        Memeriksa koneksi Blogger...
+      </div>
+
+      <button class="primary-btn" id="hubungkanBlogger">
+        Hubungkan Blogger →
+      </button>
+
+      <div id="daftarBlog" style="margin-top:20px"></div>
+
+    </div>
+  `;
+
+  document.querySelector('#hubungkanBlogger')
+    .addEventListener('click', () => {
+      window.location.href = '/api/blogger-login';
+    });
+
+  try {
+
+    const response = await fetch('/api/blogger-blogs');
+    const result = await response.json();
+
+    const status = document.querySelector('#bloggerStatus');
+    const daftar = document.querySelector('#daftarBlog');
+
+    if (!response.ok || !result.success) {
+      status.innerHTML = `
+        <span style="color:#d97706">
+          ● Blogger belum terhubung
+        </span>
+      `;
+      return;
+    }
+
+    status.innerHTML = `
+      <span style="color:#16a34a">
+        ● Blogger berhasil terhubung
+      </span>
+    `;
+
+    daftar.innerHTML = `
+      <h3>Daftar Blog</h3>
+      ${
+        result.blogs.length
+          ? result.blogs.map(blog => `
+              <div style="padding:12px;border:1px solid #e5e7eb;
+              border-radius:8px;margin-top:10px">
+                <strong>${escapeHTML(blog.name)}</strong>
+                <p>
+                  <a href="${escapeHTML(blog.url)}"
+                     target="_blank"
+                     rel="noopener noreferrer">
+                    Kunjungi Blog
+                  </a>
+                </p>
+              </div>
+            `).join('')
+          : '<p>Belum ada blog pada akun ini.</p>'
+      }
+    `;
+
+  } catch (error) {
+
+    document.querySelector('#bloggerStatus').textContent =
+      'Gagal memeriksa koneksi: ' + error.message;
+
+  }
+}
     
 // HALAMAN ARTIKEL TERSIMPAN
 function tampilkanArtikelTersimpan(status = 'draft') {

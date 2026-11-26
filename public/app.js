@@ -1234,15 +1234,35 @@ async function tampilkanJadwalPosting() {
         ">Jam publikasi</label>
 
         <input type="time" id="jamPosting"
-          value="06:00"
-          disabled
-          style="
-            width:100%;
-            padding:11px;
-            margin-top:7px;
-            border:1px solid #dce5ed;
-            border-radius:7px;
-          ">
+  value="07:00"
+  disabled
+  style="
+    width:100%;
+    padding:11px;
+    margin-top:7px;
+    border:1px solid #dce5ed;
+    border-radius:7px;
+  ">
+
+<label style="
+  display:block;
+  margin-top:18px;
+  font-size:12px;
+  font-weight:bold;
+">
+  Jam Publikasi Blogger
+</label>
+
+<input type="time" id="jamPublikasi"
+  value="09:00"
+  disabled
+  style="
+    width:100%;
+    padding:11px;
+    margin-top:7px;
+    border:1px solid #dce5ed;
+    border-radius:7px;
+  ">
 
         <button id="simpanJadwal" disabled style="
           width:100%;

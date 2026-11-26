@@ -1977,7 +1977,7 @@ window.terbitkanArtikel = async function(id) {
   }
 };
 
-// GENERATE BANNER ARTIKEL
+// GENERATE DAN TAMPILKAN BANNER
 window.buatBannerArtikel = async function(id) {
 
   const secret = dapatkanKunciGenerate();
@@ -2005,9 +2005,82 @@ window.buatBannerArtikel = async function(id) {
       throw new Error(result.message || 'Gagal membuat banner.');
     }
 
-    alert('Alhamdulillah! Banner berhasil dibuat.');
+    // TAMPILKAN BANNER DI DASHBOARD
+    let preview = document.getElementById('bannerPreview');
 
-    window.open(result.image_url, '_blank');
+    if (!preview) {
+      preview = document.createElement('div');
+      preview.id = 'bannerPreview';
+      document.body.appendChild(preview);
+    }
+
+    preview.innerHTML = `
+      <div style="
+        position:fixed;
+        inset:0;
+        z-index:99999;
+        background:rgba(0,0,0,0.85);
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        padding:15px;
+        overflow:auto;
+      ">
+
+        <div style="
+          background:white;
+          padding:18px;
+          border-radius:14px;
+          width:100%;
+          max-width:750px;
+          text-align:center;
+        ">
+
+          <h3>🎨 Banner DIGITEK STORE</h3>
+
+          <img
+            src="${result.image_url}"
+            style="
+              width:100%;
+              height:auto;
+              border-radius:8px;
+            "
+          >
+
+          <p style="font-size:13px;color:#555">
+            Banner berhasil dibuat dan tersimpan.
+          </p>
+
+          <a href="${result.image_url}"
+             target="_blank"
+             style="
+               display:inline-block;
+               padding:11px 18px;
+               background:#0879E8;
+               color:white;
+               text-decoration:none;
+               border-radius:7px;
+               margin:5px;
+             ">
+             Buka Gambar
+          </a>
+
+          <button
+            onclick="document.getElementById('bannerPreview').innerHTML=''"
+            style="
+              padding:11px 18px;
+              background:#dc3545;
+              color:white;
+              border:0;
+              border-radius:7px;
+              margin:5px;
+            ">
+            Tutup
+          </button>
+
+        </div>
+      </div>
+    `;
 
   } catch (error) {
 

@@ -268,13 +268,22 @@ export default async function handler(req, res) {
 
     const svg = buatSVG(artikel);
 
-    const png = await sharp(
-      Buffer.from(svg)
-    )
-      .resize(1200, 630)
-      .png()
-      .toBuffer();
+    const renderer = new Resvg(svg, {
+  fitTo: {
+    mode: 'width',
+    value: 1200
+  },
+  font: {
+    fontFiles: [
+      FONT_REGULAR,
+      FONT_BOLD
+    ],
+    loadSystemFonts: false,
+    defaultFontFamily: 'Roboto'
+  }
+});
 
+const png = renderer.render().asPng();
     const filePath = `${artikel.id}.png`;
 
     const { error: uploadError } =

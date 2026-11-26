@@ -1,3 +1,5 @@
+import { createClient } from '@supabase/supabase-js';
+
 export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
 
@@ -11,8 +13,8 @@ export default async function handler(req, res) {
   const auth = req.headers.authorization;
 
   if (
-    !process.env.MANUAL_GENERATE_SECRET ||
-    auth !== `Bearer ${process.env.MANUAL_GENERATE_SECRET}`
+    !process.env.FACEBOOK_TOKEN_SETUP_SECRET ||
+    auth !== `Bearer ${process.env.FACEBOOK_TOKEN_SETUP_SECRET}`
   ) {
     return res.status(401).json({
       success: false,
@@ -23,22 +25,34 @@ export default async function handler(req, res) {
   const {
     FACEBOOK_APP_ID,
     FACEBOOK_APP_SECRET,
-    FACEBOOK_USER_TOKEN
+    FACEBOOK_USER_TOKEN,
+    FACEBOOK_PAGE_ID,
+    SUPABASE_URL,
+    SUPABASE_SERVICE_ROLE_KEY
   } = process.env;
 
   if (
     !FACEBOOK_APP_ID ||
     !FACEBOOK_APP_SECRET ||
-    !FACEBOOK_USER_TOKEN
+    !FACEBOOK_USER_TOKEN ||
+    !FACEBOOK_PAGE_ID ||
+    !SUPABASE_URL ||
+    !SUPABASE_SERVICE_ROLE_KEY
   ) {
     return res.status(500).json({
       success: false,
-      message: 'Environment Facebook belum lengkap.'
+      message: 'Environment belum lengkap.'
     });
   }
 
+  const supabase = createClient(
+    SUPABASE_URL,
+    SUPABASE_SERVICE_ROLE_KEY
+  );
+
   try {
-    const response = await fetch(
+    // 1. Tukar User Token menjadi Long-Lived Token
+    const exchangeResponse = await fetch(
       'https://graph.facebook.com/v27.0/oauth/access_token',
       {
         method: 'POST',
@@ -54,32 +68,87 @@ export default async function handler(req, res) {
       }
     );
 
-    const result = await response.json();
+    const exchange = await exchangeResponse.json();
 
-    if (!response.ok || !result.access_token) {
+    if (!exchangeResponse.ok || !exchange.access_token) {
       return res.status(400).json({
         success: false,
-        message: result.error?.message ||
-          'Pertukaran token gagal.'
+        message: exchange.error?.message ||
+          'Pertukaran User Token gagal.'
+      });
+    }
+
+    const userToken = exchange.access_token;
+
+    // 2. Ambil Page Access Token
+    const accountsUrl = new URL(
+      'https://graph.facebook.com/v27.0/me/accounts'
+    );
+
+    accountsUrl.searchParams.set('fields', 'id,name,access_token');
+    accountsUrl.searchParams.set('access_token', userToken);
+
+    const accountsResponse = await fetch(accountsUrl);
+    const accounts = await accountsResponse.json();
+
+    if (!accountsResponse.ok || !accounts.data) {
+      return res.status(400).json({
+        success: false,
+        message: accounts.error?.message ||
+          'Gagal mengambil daftar halaman Facebook.'
+      });
+    }
+
+    const page = accounts.data.find(
+      item => item.id === FACEBOOK_PAGE_ID
+    );
+
+    if (!page || !page.access_token) {
+      return res.status(400).json({
+        success: false,
+        message: 'Page Digitek Store tidak ditemukan atau token tidak tersedia.'
+      });
+    }
+
+    // 3. Simpan token di Supabase
+    const userExpiry = exchange.expires_in
+      ? new Date(Date.now() + exchange.expires_in * 1000).toISOString()
+      : null;
+
+    const { error } = await supabase
+      .from('facebook_tokens')
+      .upsert({
+        id: 'main',
+        user_access_token: userToken,
+        user_token_expires_at: userExpiry,
+        page_access_token: page.access_token,
+        page_token_expires_at: null,
+        updated_at: new Date().toISOString()
+      });
+
+    if (error) {
+      console.error('FACEBOOK TOKEN STORAGE ERROR:', error.message);
+
+      return res.status(500).json({
+        success: false,
+        message: 'Token diperoleh, tetapi gagal disimpan.'
       });
     }
 
     return res.status(200).json({
       success: true,
-      message: 'Token berhasil ditukar.',
-      access_token: result.access_token,
-      expires_in: result.expires_in,
-      expires_days: Math.floor(
-        result.expires_in / 86400
-      )
+      message: 'Long-Lived User Token dan Page Access Token berhasil disimpan.',
+      expires_days: exchange.expires_in
+        ? Math.floor(exchange.expires_in / 86400)
+        : null
     });
 
   } catch (error) {
-    console.error('FACEBOOK TOKEN EXCHANGE:', error);
+    console.error('FACEBOOK TOKEN SETUP ERROR:', error.message);
 
     return res.status(500).json({
       success: false,
-      message: 'Terjadi kesalahan saat menghubungi Meta.'
+      message: 'Terjadi kesalahan saat memproses token Facebook.'
     });
   }
-          }
+        }

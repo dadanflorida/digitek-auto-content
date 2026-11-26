@@ -156,7 +156,7 @@ urlArtikel;
 const graphVersion = 'v27.0';
 
 const facebookResponse = await fetch(
-"https://graph.facebook.com/${graphVersion}/${process.env.FACEBOOK_PAGE_ID}/photos",
+  `https://graph.facebook.com/${graphVersion}/${process.env.FACEBOOK_PAGE_ID}/photos`,
 {
 method: 'POST',
 headers: {

@@ -137,7 +137,7 @@ export default async function handler(req, res) {
     }
 
     // KIRIM KE FACEBOOK PAGE
-    const graphVersion = 'v23.0';
+    const graphVersion = 'v27.0';
 
     const facebookResponse = await fetch(
       `https://graph.facebook.com/${graphVersion}/${process.env.FACEBOOK_PAGE_ID}/feed`,

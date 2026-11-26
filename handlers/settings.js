@@ -28,25 +28,19 @@ export default async function handler(req, res) {
     });
   }
 
-  if (req.method === 'POST') {
-    const {
-  auto_mode,
-  articles_per_day,
-  posting_time,
-  publishing_time
-} = req.body || {};
-    if (
-      typeof auto_mode !== 'boolean' ||
-      !Number.isInteger(Number(articles_per_day)) ||
-      Number(articles_per_day) < 1 ||
-      Number(articles_per_day) > 3 ||
-      !/^([01]\d|2[0-3]):[0-5]\d$/.test(posting_time || '')
-    ) {
-      return res.status(400).json({
-        success: false,
-        message: 'Pengaturan tidak valid.'
-      });
-    }
+  if (
+  typeof auto_mode !== 'boolean' ||
+  !Number.isInteger(Number(articles_per_day)) ||
+  Number(articles_per_day) < 1 ||
+  Number(articles_per_day) > 3 ||
+  !/^([01]\d|2[0-3]):[0-5]\d$/.test(posting_time || '') ||
+  !/^([01]\d|2[0-3]):[0-5]\d$/.test(publishing_time || '')
+) {
+  return res.status(400).json({
+    success: false,
+    message: 'Pengaturan tidak valid.'
+  });
+}
 
     const { data, error } = await supabase
       .from('posting_settings')

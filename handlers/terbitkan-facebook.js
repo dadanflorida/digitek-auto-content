@@ -75,6 +75,16 @@ export default async function handler(req, res) {
       });
     }
 
+    // BANNER WAJIB ADA SEBELUM PUBLIKASI
+const imageUrl = artikel.facebook_image_url;
+
+if (!imageUrl) {
+  return res.status(400).json({
+    success: false,
+    message: 'Banner artikel belum dibuat. Buat banner terlebih dahulu.'
+  });
+}
+
     // CEK STATUS FACEBOOK
     const statusFacebook =
       artikel.facebook_status || 'pending';

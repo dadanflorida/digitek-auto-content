@@ -1971,6 +1971,57 @@ window.terbitkanArtikel = async function(id) {
   }
 };
 
+// ===================================
+// TERBITKAN ARTIKEL KE FACEBOOK
+// ===================================
+window.terbitkanFacebook = async function(id) {
+
+  const secret = dapatkanKunciGenerate();
+
+  if (!secret) return;
+
+  if (!confirm(
+    'Terbitkan artikel ini ke Fanpage Facebook Digitek Store?'
+  )) return;
+
+  try {
+
+    const response = await fetch('/api/terbitkan-facebook', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + secret
+      },
+      body: JSON.stringify({
+        articleId: id
+      })
+    });
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(
+        result.message || 'Artikel gagal diterbitkan ke Facebook.'
+      );
+    }
+
+    alert(
+      'Alhamdulillah! Artikel berhasil diterbitkan ke Facebook.\n\n' +
+      'URL Fanpage:\n' + result.facebook_url
+    );
+
+    // MUAT ULANG DAFTAR DRAFT
+    tampilkanArtikelTersimpan('draft');
+
+  } catch (error) {
+
+    alert(
+      'Gagal menerbitkan ke Facebook:\n' + error.message
+    );
+
+  }
+};
+
 // PRATINJAU ARTIKEL
 window.pratinjauArtikel = async function(id) {
 

@@ -1977,6 +1977,45 @@ window.terbitkanArtikel = async function(id) {
   }
 };
 
+// GENERATE BANNER ARTIKEL
+window.buatBannerArtikel = async function(id) {
+
+  const secret = dapatkanKunciGenerate();
+
+  if (!secret) return;
+
+  if (!confirm('Buat banner untuk artikel ini?')) return;
+
+  try {
+
+    const response = await fetch('/api/generate-banner', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + secret
+      },
+      body: JSON.stringify({
+        articleId: id
+      })
+    });
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.message || 'Gagal membuat banner.');
+    }
+
+    alert('Alhamdulillah! Banner berhasil dibuat.');
+
+    window.open(result.image_url, '_blank');
+
+  } catch (error) {
+
+    alert('Gagal membuat banner:\n' + error.message);
+
+  }
+};
+
 // ===================================
 // TERBITKAN ARTIKEL KE FACEBOOK
 // ===================================

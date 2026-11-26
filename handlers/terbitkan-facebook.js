@@ -127,42 +127,48 @@ if (!imageUrl) {
 
     locked = true;
 
-        // SUSUN PESAN FACEBOOK
-    const judul = artikel.title || '';
-    const ringkasan =
-      artikel.meta_description ||
-      artikel.excerpt ||
-      '';
+        // SUSUN CAPTION FACEBOOK
+const judul = artikel.title || '';
 
-    const urlArtikel = artikel.blogger_url || '';
+const ringkasan =
+artikel.meta_description ||
+artikel.excerpt ||
+'';
 
-    let pesan = judul;
+let caption =
+(artikel.facebook_caption || '').trim();
 
-    if (ringkasan) {
-      pesan += '\n\n' + ringkasan;
-    }
+if (!caption) {
+caption = [judul, ringkasan]
+.filter(Boolean)
+.join('\n\n');
+}
 
-    if (urlArtikel) {
-      pesan += '\n\nBaca selengkapnya:\n' + urlArtikel;
-    }
+const urlArtikel = (artikel.blogger_url || '').trim();
 
-    // KIRIM KE FACEBOOK PAGE
-    const graphVersion = 'v27.0';
+if (urlArtikel && !caption.includes(urlArtikel)) {
+caption +=
+'\n\nBaca artikel selengkapnya di sini:\n' +
+urlArtikel;
+}
 
-    const facebookResponse = await fetch(
-      `https://graph.facebook.com/${graphVersion}/${process.env.FACEBOOK_PAGE_ID}/feed`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: new URLSearchParams({
-          message: pesan,
-          access_token: process.env.FACEBOOK_PAGE_ACCESS_TOKEN
-        })
-      }
-    );
+// KIRIM BANNER + CAPTION KE FACEBOOK
+const graphVersion = 'v27.0';
 
+const facebookResponse = await fetch(
+"https://graph.facebook.com/${graphVersion}/${process.env.FACEBOOK_PAGE_ID}/photos",
+{
+method: 'POST',
+headers: {
+'Content-Type': 'application/x-www-form-urlencoded'
+},
+body: new URLSearchParams({
+url: imageUrl,
+caption,
+access_token: process.env.FACEBOOK_PAGE_ACCESS_TOKEN
+})
+}
+);
     let facebookResult;
 
     try {

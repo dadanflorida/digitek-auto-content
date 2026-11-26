@@ -12,9 +12,10 @@ import research from './handlers/research.js';
 import keywordPool from './handlers/keyword-pool.js';
 import saveArticle from './handlers/save-article.js';
 import settings from './handlers/settings.js';
-import updateArticle from './handlers/update-article.js';
+import updateArticle from './handlers/update-article.js';        
 import terbitkan from './handlers/terbitkan.js';
 import periksaPublikasi from './handlers/periksa-publikasi.js';
+import terbitkanFacebook from './handlers/terbitkan-facebook.js';  
 
 const app = express();
 
@@ -44,6 +45,7 @@ app.all('/api/settings', settings);
 app.all('/api/update-article', updateArticle);
 app.all('/api/terbitkan', terbitkan);
 app.all('/api/periksa-publikasi', periksaPublikasi);
+app.all('/api/terbitkan-facebook', terbitkanFacebook);
 
 // TES EXPRESS
 

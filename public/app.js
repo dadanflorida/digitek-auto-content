@@ -1357,6 +1357,7 @@ try {
     autoMode.disabled = false;
     jumlahArtikel.disabled = false;
     jamPosting.disabled = false;
+    jamPublikasi.disabled = false;
 
     simpanJadwal.disabled = false;
     simpanJadwal.textContent = 'Simpan Pengaturan';

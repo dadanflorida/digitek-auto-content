@@ -63,6 +63,11 @@ export default async function handler(req, res) {
   blogger_post_id,
   blogger_url,
   published_at,
+  facebook_status,
+  facebook_post_id,
+  facebook_url,
+  facebook_published_at,
+  facebook_error,
   created_at
 `)
       .order('created_at', { ascending: false })

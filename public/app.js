@@ -1350,6 +1350,7 @@ try {
     autoMode.checked = settings.auto_mode;
     jumlahArtikel.value = String(settings.articles_per_day);
     jamPosting.value = String(settings.posting_time).slice(0, 5);
+    jamPublikasi.value = String(settings.publishing_time).slice(0, 5);
 
     perbaruiTampilanMode();
 

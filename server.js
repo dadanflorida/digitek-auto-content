@@ -16,7 +16,8 @@ import settings from './handlers/settings.js';
 import updateArticle from './handlers/update-article.js';        
 import terbitkan from './handlers/terbitkan.js';
 import periksaPublikasi from './handlers/periksa-publikasi.js';
-import terbitkanFacebook from './handlers/terbitkan-facebook.js';  
+import terbitkanFacebook from './handlers/terbitkan-facebook.js';
+import tukarTokenFacebook from './handlers/tukar-token-facebook.js';
 
 const app = express();
 
@@ -48,6 +49,7 @@ app.all('/api/update-article', updateArticle);
 app.all('/api/terbitkan', terbitkan);
 app.all('/api/periksa-publikasi', periksaPublikasi);
 app.all('/api/terbitkan-facebook', terbitkanFacebook);
+app.all('/api/tukar-token-facebook', tukarTokenFacebook);
 
 // TES EXPRESS
 

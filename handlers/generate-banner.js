@@ -78,7 +78,7 @@ function buatSVG(artikel) {
 
   const teksJudul = judul.map((baris, i) => `
     <text x="75" y="${270 + i * 76}"
-      font-family="DejaVu Sans, sans-serif"
+      font-family="Roboto"
       font-size="55"
       font-weight="bold"
       fill="#123B70">${escapeXml(baris)}</text>
@@ -124,14 +124,14 @@ function buatSVG(artikel) {
       stroke-linecap="round"/>
 
     <text x="145" y="96"
-      font-family="DejaVu Sans, sans-serif"
+      font-family="Roboto"
       font-size="27"
       font-weight="bold"
       fill="#FFFFFF">DIGITEK STORE</text>
 
     <text x="1100" y="94"
       text-anchor="end"
-      font-family="DejaVu Sans, sans-serif"
+      font-family="Roboto"
       font-size="17"
       fill="#FFFFFF">MEDIA DIGITAL</text>
 
@@ -140,7 +140,7 @@ function buatSVG(artikel) {
       rx="12" fill="#D5EAFE"/>
 
     <text x="95" y="190"
-      font-family="DejaVu Sans, sans-serif"
+      font-family="Roboto"
       font-size="20"
       font-weight="bold"
       fill="#0879E8">${escapeXml(kategori)}</text>
@@ -153,7 +153,7 @@ function buatSVG(artikel) {
       rx="3" fill="#0879E8"/>
 
     <text x="75" y="545"
-      font-family="DejaVu Sans, sans-serif"
+      font-family="Roboto"
       font-size="22"
       fill="#31577D">Informasi dan solusi digital terpercaya</text>
 
@@ -198,7 +198,7 @@ function buatSVG(artikel) {
       fill="#B6D9FA"/>
 
     <text x="75" y="615"
-      font-family="DejaVu Sans, sans-serif"
+      font-family="Roboto"
       font-size="17"
       fill="#31577D">DIGITEK STORE | Solusi Layanan Digital</text>
 

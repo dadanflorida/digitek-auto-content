@@ -197,4 +197,72 @@ export default async function handler(req, res) {
           ? 'uncertain'
           : 'failed'
       });
-          }
+    }
+
+      // SIMPAN HASIL PUBLIKASI
+    const postId = String(facebookResult.id);
+
+    const facebookUrl =
+      `https://www.facebook.com/${postId}`;
+
+    const { data: updated, error: updateError } =
+      await supabase
+        .from('articles')
+        .update({
+          facebook_status: 'published',
+          facebook_post_id: postId,
+          facebook_url: facebookUrl,
+          facebook_published_at: new Date().toISOString(),
+          facebook_error: null
+        })
+        .eq('id', articleId)
+        .eq('facebook_status', 'publishing')
+        .select('id')
+        .maybeSingle();
+
+    if (updateError || !updated) {
+      console.error(
+        'FACEBOOK STATUS UPDATE ERROR:',
+        updateError
+      );
+
+      return res.status(500).json({
+        success: false,
+        message:
+          'Facebook mungkin sudah menerbitkan artikel, tetapi pencatatan Supabase gagal. Jangan kirim ulang sebelum diperiksa.'
+      });
+    }
+
+    locked = false;
+
+    return res.status(200).json({
+      success: true,
+      message: 'Artikel berhasil diterbitkan ke Facebook.',
+      facebook_post_id: postId,
+      facebook_url: facebookUrl
+    });
+
+  } catch (error) {
+    console.error('FACEBOOK PUBLISH ERROR:', error);
+
+    // JIKA PROSES TERHENTI SETELAH ARTIKEL DIKUNCI
+    // HASIL PENGIRIMAN DIANGGAP BELUM PASTI
+    if (locked && articleId) {
+      await supabase
+        .from('articles')
+        .update({
+          facebook_status: 'uncertain',
+          facebook_error:
+            'Proses terhenti. Periksa Fanpage sebelum mencoba kembali.'
+        })
+        .eq('id', articleId)
+        .eq('facebook_status', 'publishing');
+    }
+
+    return res.status(500).json({
+      success: false,
+      message:
+        'Terjadi kesalahan. Periksa status publikasi Facebook sebelum mencoba kembali.'
+    });
+  }
+}

@@ -103,10 +103,12 @@ if (!setting.auto_mode) {
     const jamSekarang =
       `${sekarang.hour}:${sekarang.minute}`;
 
-    if (
-      !manualRun &&
-      jamSekarang !== setting.posting_time
-    ) {
+    const waktuPosting = String(setting.posting_time).slice(0, 5);
+
+if (
+  !manualRun &&
+  jamSekarang !== waktuPosting
+) {
       return res.status(200).json({
         success: true,
         message: 'Belum waktunya membuat artikel.',

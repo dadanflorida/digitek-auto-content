@@ -1388,10 +1388,11 @@ try {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          auto_mode: autoMode.checked,
-          articles_per_day: Number(jumlahArtikel.value),
-          posting_time: jamPosting.value
-        })
+  auto_mode: autoMode.checked,
+  articles_per_day: Number(jumlahArtikel.value),
+  posting_time: jamPosting.value,
+  publishing_time: jamPublikasi.value
+})
       });
 
       const result = await response.json();

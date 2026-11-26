@@ -116,3 +116,85 @@ export default async function handler(req, res) {
     }
 
     locked = true;
+
+        // SUSUN PESAN FACEBOOK
+    const judul = artikel.title || '';
+    const ringkasan =
+      artikel.meta_description ||
+      artikel.excerpt ||
+      '';
+
+    const urlArtikel = artikel.blogger_url || '';
+
+    let pesan = judul;
+
+    if (ringkasan) {
+      pesan += '\n\n' + ringkasan;
+    }
+
+    if (urlArtikel) {
+      pesan += '\n\nBaca selengkapnya:\n' + urlArtikel;
+    }
+
+    // KIRIM KE FACEBOOK PAGE
+    const graphVersion = 'v23.0';
+
+    const facebookResponse = await fetch(
+      `https://graph.facebook.com/${graphVersion}/${process.env.FACEBOOK_PAGE_ID}/feed`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: new URLSearchParams({
+          message: pesan,
+          access_token: process.env.FACEBOOK_PAGE_ACCESS_TOKEN
+        })
+      }
+    );
+
+    let facebookResult;
+
+    try {
+      facebookResult = await facebookResponse.json();
+    } catch {
+      facebookResult = {};
+    }
+
+    // JIKA RESPONS FACEBOOK TIDAK BERHASIL
+    if (!facebookResponse.ok || !facebookResult.id) {
+
+      const errorMessage =
+        facebookResult.error?.message ||
+        'Facebook menolak permintaan publikasi.';
+
+      const uncertain =
+        facebookResponse.status >= 500 ||
+        facebookResponse.status === 408 ||
+        facebookResponse.status === 429;
+
+      await supabase
+        .from('articles')
+        .update({
+          facebook_status: uncertain
+            ? 'uncertain'
+            : 'failed',
+          facebook_error: errorMessage
+        })
+        .eq('id', articleId)
+        .eq('facebook_status', 'publishing');
+
+      locked = false;
+
+      return res.status(
+        uncertain ? 503 : 400
+      ).json({
+        success: false,
+        message: uncertain
+          ? 'Hasil pengiriman belum dapat dipastikan. Periksa halaman Facebook sebelum mencoba kembali.'
+          : errorMessage,
+        facebook_status: uncertain
+          ? 'uncertain'
+          : 'failed'
+      });
+          }

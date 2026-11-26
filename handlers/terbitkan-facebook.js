@@ -216,8 +216,9 @@ access_token: process.env.FACEBOOK_PAGE_ACCESS_TOKEN
     }
 
       // SIMPAN HASIL PUBLIKASI
-    const postId = String(facebookResult.id);
-
+    const postId = String(
+  facebookResult.post_id || facebookResult.id
+);
     const facebookUrl =
       `https://www.facebook.com/${postId}`;
 

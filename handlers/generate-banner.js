@@ -60,90 +60,137 @@ function tentukanKategori(artikel) {
 }
 
 function buatSVG(artikel) {
-  const judul = potongJudul(artikel.title);
+  const judul = potongJudul(artikel.title, 25);
   const kategori = tentukanKategori(artikel);
 
-  const teksJudul = judul.map((baris, i) =>
-    `<text x="75" y="${275 + i * 75}"
-      font-size="57"
+  const teksJudul = judul.map((baris, i) => `
+    <text x="75" y="${270 + i * 76}"
+      font-family="DejaVu Sans, sans-serif"
+      font-size="55"
       font-weight="bold"
-      fill="#123B70">${escapeXml(baris)}</text>`
-  ).join('');
+      fill="#123B70">${escapeXml(baris)}</text>
+  `).join('');
 
   return `
   <svg xmlns="http://www.w3.org/2000/svg"
        width="1200" height="630">
 
     <defs>
-      <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <linearGradient id="background"
+        x1="0" y1="0" x2="1" y2="1">
         <stop offset="0%" stop-color="#FFFFFF"/>
         <stop offset="100%" stop-color="#DCEEFF"/>
       </linearGradient>
+
+      <linearGradient id="blue"
+        x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#0879E8"/>
+        <stop offset="100%" stop-color="#064A9B"/>
+      </linearGradient>
     </defs>
 
-    <rect width="1200" height="630" fill="url(#bg)"/>
+    <rect width="1200" height="630"
+      fill="url(#background)"/>
 
-    <circle cx="1050" cy="110" r="180"
-            fill="#1684E8" opacity="0.10"/>
+    <circle cx="1100" cy="100" r="220"
+      fill="#1684E8" opacity="0.08"/>
 
-    <circle cx="1080" cy="500" r="220"
-            fill="#1684E8" opacity="0.12"/>
+    <circle cx="1100" cy="550" r="250"
+      fill="#1684E8" opacity="0.10"/>
 
-    <rect x="75" y="65" width="370" height="48"
-          rx="24" fill="#0879E8"/>
+    <!-- HEADER BRAND -->
+    <rect x="65" y="48" width="1070" height="75"
+      rx="18" fill="url(#blue)"/>
 
-    <text x="100" y="97"
-          font-size="24"
-          font-weight="bold"
-          fill="#FFFFFF">DIGITEK STORE</text>
+    <rect x="85" y="64" width="45" height="45"
+      rx="10" fill="#FFFFFF"/>
 
-    <rect x="75" y="160" width="300" height="42"
-          rx="10" fill="#D5EAFE"/>
+    <path d="M97 78 H118 M97 87 H118 M97 96 H112"
+      stroke="#0879E8"
+      stroke-width="4"
+      stroke-linecap="round"/>
 
-    <text x="95" y="188"
-          font-size="21"
-          font-weight="bold"
-          fill="#0879E8">${escapeXml(kategori)}</text>
+    <text x="145" y="96"
+      font-family="DejaVu Sans, sans-serif"
+      font-size="27"
+      font-weight="bold"
+      fill="#FFFFFF">DIGITEK STORE</text>
 
+    <text x="1100" y="94"
+      text-anchor="end"
+      font-family="DejaVu Sans, sans-serif"
+      font-size="17"
+      fill="#FFFFFF">MEDIA DIGITAL</text>
+
+    <!-- CATEGORY -->
+    <rect x="75" y="160" width="340" height="45"
+      rx="12" fill="#D5EAFE"/>
+
+    <text x="95" y="190"
+      font-family="DejaVu Sans, sans-serif"
+      font-size="20"
+      font-weight="bold"
+      fill="#0879E8">${escapeXml(kategori)}</text>
+
+    <!-- ARTICLE TITLE -->
     ${teksJudul}
 
-    <rect x="75" y="525" width="430" height="5"
-          rx="2" fill="#0879E8"/>
+    <!-- ACCENT LINE -->
+    <rect x="75" y="495" width="430" height="6"
+      rx="3" fill="#0879E8"/>
 
-    <text x="75" y="575"
-          font-size="25"
-          fill="#31577D">Informasi dan solusi digital</text>
+    <text x="75" y="545"
+      font-family="DejaVu Sans, sans-serif"
+      font-size="22"
+      fill="#31577D">Informasi dan solusi digital terpercaya</text>
 
-    <g transform="translate(850 210)">
-      <circle cx="120" cy="100" r="125"
-              fill="#0879E8" opacity="0.12"/>
+    <!-- DIGITAL ILLUSTRATION -->
+    <g transform="translate(790 175)">
 
-      <rect x="45" y="25" width="150" height="150"
-            rx="28" fill="#0879E8"/>
+      <circle cx="165" cy="145" r="165"
+        fill="#0879E8" opacity="0.10"/>
 
-      <path d="M85 75 H155 M85 100 H155 M85 125 H140"
-            stroke="#FFFFFF"
-            stroke-width="13"
-            stroke-linecap="round"/>
+      <circle cx="165" cy="145" r="125"
+        fill="#0879E8" opacity="0.12"/>
 
-      <circle cx="180" cy="165" r="30"
-              fill="#FFFFFF"/>
+      <rect x="75" y="45" width="180" height="200"
+        rx="28" fill="url(#blue)"/>
 
-      <path d="M165 165 L177 177 L198 151"
-            fill="none"
-            stroke="#0879E8"
-            stroke-width="9"
-            stroke-linecap="round"
-            stroke-linejoin="round"/>
+      <rect x="105" y="80" width="120" height="14"
+        rx="7" fill="#FFFFFF"/>
+
+      <rect x="105" y="115" width="120" height="14"
+        rx="7" fill="#FFFFFF"/>
+
+      <rect x="105" y="150" width="85" height="14"
+        rx="7" fill="#FFFFFF"/>
+
+      <rect x="105" y="185" width="105" height="14"
+        rx="7" fill="#FFFFFF"/>
+
+      <circle cx="260" cy="245" r="43"
+        fill="#FFFFFF"/>
+
+      <path d="M239 245 L254 260 L282 229"
+        fill="none"
+        stroke="#0879E8"
+        stroke-width="12"
+        stroke-linecap="round"
+        stroke-linejoin="round"/>
+
     </g>
 
-    <text x="850" y="500"
-          font-size="25"
-          font-weight="bold"
-          fill="#0879E8">DIGITEK STORE</text>
+    <!-- FOOTER -->
+    <rect x="65" y="585" width="1070" height="3"
+      fill="#B6D9FA"/>
+
+    <text x="75" y="615"
+      font-family="DejaVu Sans, sans-serif"
+      font-size="17"
+      fill="#31577D">DIGITEK STORE | Solusi Layanan Digital</text>
 
   </svg>`;
-}
+        }
 
 export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');

@@ -45,11 +45,12 @@ export default async function handler(req, res) {
     const { data, error } = await supabase
       .from('posting_settings')
       .update({
-        auto_mode,
-        articles_per_day: Number(articles_per_day),
-        posting_time,
-        updated_at: new Date().toISOString()
-      })
+  auto_mode,
+  articles_per_day: Number(articles_per_day),
+  posting_time,
+  publishing_time,
+  updated_at: new Date().toISOString()
+})
       .eq('id', 'main')
       .select()
       .single();

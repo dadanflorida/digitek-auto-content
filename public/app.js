@@ -1293,6 +1293,7 @@ async function tampilkanJadwalPosting() {
   const modeStatus = scheduleContainer.querySelector('#modeStatus');
   const jumlahArtikel = scheduleContainer.querySelector('#jumlahArtikel');
   const jamPosting = scheduleContainer.querySelector('#jamPosting');
+  const jamPublikasi = scheduleContainer.querySelector('#jamPublikasi');
   const statusJadwal = scheduleContainer.querySelector('#statusJadwal');
   const simpanJadwal = scheduleContainer.querySelector('#simpanJadwal');
 

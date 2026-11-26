@@ -1747,6 +1747,12 @@ async function muatDaftarArtikel(status) {
           </button>
 
           <button class="primary-btn"
+  style="background:#1877F2"
+  onclick="terbitkanFacebook('${artikel.id}')">
+  📘 Terbitkan ke Facebook
+</button>
+
+          <button class="primary-btn"
             style="background:#dc3545"
             onclick="hapusDraftArtikel('${artikel.id}')">
             🗑️ Hapus Draft

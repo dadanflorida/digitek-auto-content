@@ -1,8 +1,19 @@
 import { createClient } from '@supabase/supabase-js';
-import sharp from 'sharp';
 import { Resvg } from '@resvg/resvg-js';
 import { fileURLToPath } from 'node:url';
+import { dirname, resolve } from 'node:path';
 
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+const FONT_REGULAR = resolve(
+  __dirname,
+  '../fonts/Roboto-Regular.ttf'
+);
+
+const FONT_BOLD = resolve(
+  __dirname,
+  '../fonts/Roboto-Bold.ttf'
+);
 function escapeXml(text) {
   return String(text || '')
     .replace(/&/g, '&amp;')

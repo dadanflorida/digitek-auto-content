@@ -30,11 +30,11 @@ export default async function handler(req, res) {
 
   if (req.method === 'POST') {
     const {
-      auto_mode,
-      articles_per_day,
-      posting_time
-    } = req.body || {};
-
+  auto_mode,
+  articles_per_day,
+  posting_time,
+  publishing_time
+} = req.body || {};
     if (
       typeof auto_mode !== 'boolean' ||
       !Number.isInteger(Number(articles_per_day)) ||

@@ -1,5 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import sharp from 'sharp';
+import { Resvg } from '@resvg/resvg-js';
+import { fileURLToPath } from 'node:url';
 
 function escapeXml(text) {
   return String(text || '')

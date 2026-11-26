@@ -1290,6 +1290,14 @@ async function tampilkanJadwalPosting() {
     }
   }
 
+  autoMode.addEventListener('change', () => {
+  perbaruiTampilanMode();
+
+  statusJadwal.textContent = autoMode.checked
+    ? 'Mode otomatis akan AKTIF setelah pengaturan disimpan.'
+    : 'Mode otomatis akan NONAKTIF setelah pengaturan disimpan.';
+});
+
   // AMBIL PENGATURAN DARI SUPABASE
   try {
     const response = await fetch('/api/settings', {

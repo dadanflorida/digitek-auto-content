@@ -164,6 +164,33 @@ const daftar = new Map();
 
 for (const artikel of daftar.values()) {
 
+  // PERIKSA APAKAH ADA ARTIKEL SIAP TERBIT
+if (!daftar.size) {
+  return res.status(200).json({
+    success: true,
+    message: 'Tidak ada artikel yang siap diterbitkan.'
+  });
+}
+
+// KUNCI EKSEKUSI HARIAN
+const runKey =
+  `${sekarang.year}-${sekarang.month}-${sekarang.day}_${jadwal}`;
+
+const { data: berhasilDikunci, error: lockError } =
+  await supabase.rpc('claim_auto_publish', {
+    p_run_key: runKey
+  });
+
+if (lockError) throw lockError;
+
+if (!berhasilDikunci) {
+  return res.status(200).json({
+    success: true,
+    message: 'Jadwal penerbitan hari ini sudah dijalankan.',
+    run_key: runKey
+  });
+}
+
   const catatan = {
     article_id: artikel.id,
     title: artikel.title,

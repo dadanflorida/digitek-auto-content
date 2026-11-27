@@ -29,7 +29,7 @@ message: 'Method not allowed.'
 if (
 !process.env.CRON_SECRET ||
 req.headers.authorization !==
-"Bearer ${process.env.CRON_SECRET}"
+`Bearer ${process.env.CRON_SECRET}`
 ) {
 return res.status(401).json({
 success: false,

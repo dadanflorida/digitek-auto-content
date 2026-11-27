@@ -45,6 +45,27 @@ export default async function handler(req, res) {
     process.env.SUPABASE_SERVICE_ROLE_KEY
   );
 
+  // AMBIL PAGE ACCESS TOKEN TERBARU DARI SUPABASE
+const { data: facebookToken, error: tokenError } =
+  await supabase
+    .from('facebook_tokens')
+    .select('page_access_token')
+    .eq('id', 'main')
+    .single();
+
+if (
+  tokenError ||
+  !facebookToken ||
+  !facebookToken.page_access_token
+) {
+  return res.status(500).json({
+    success: false,
+    message: 'Token Facebook belum tersedia. Silakan perbarui token terlebih dahulu.'
+  });
+}
+
+const pageAccessToken = facebookToken.page_access_token;
+
   let articleId = null;
   let locked = false;
 

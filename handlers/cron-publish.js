@@ -162,8 +162,6 @@ const daftar = new Map();
 [...(drafts || []), ...(facebookPending || [])]
   .forEach(item => daftar.set(item.id, item));
 
-for (const artikel of daftar.values()) {
-
   // PERIKSA APAKAH ADA ARTIKEL SIAP TERBIT
 if (!daftar.size) {
   return res.status(200).json({
@@ -190,6 +188,8 @@ if (!berhasilDikunci) {
     run_key: runKey
   });
 }
+
+  for (const artikel of daftar.values()) {
 
   const catatan = {
     article_id: artikel.id,

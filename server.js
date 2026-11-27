@@ -53,6 +53,7 @@ app.all('/api/terbitkan', terbitkan);
 app.all('/api/periksa-publikasi', periksaPublikasi);
 app.all('/api/terbitkan-facebook', terbitkanFacebook);
 app.all('/api/tukar-token-facebook', tukarTokenFacebook);
+app.all('/api/cek-facebook', cekFacebook);
 
 // TES EXPRESS
 

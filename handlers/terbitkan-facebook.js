@@ -45,6 +45,11 @@ export default async function handler(req, res) {
     process.env.SUPABASE_SERVICE_ROLE_KEY
   );
 
+  let articleId = null;
+  let locked = false;
+
+  try {
+
   // AMBIL PAGE ACCESS TOKEN TERBARU DARI SUPABASE
 const { data: facebookToken, error: tokenError } =
   await supabase
@@ -66,10 +71,7 @@ if (
 
 const pageAccessToken = facebookToken.page_access_token;
 
-  let articleId = null;
-  let locked = false;
-
-  try {
+  
     const { articleId: id } = req.body || {};
     articleId = id;
 

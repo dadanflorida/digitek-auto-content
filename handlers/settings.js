@@ -33,6 +33,7 @@ export default async function handler(req, res) {
   if (req.method === 'POST') {
     const {
       auto_mode,
+      auto_publish,
       articles_per_day,
       posting_time,
       publishing_time
@@ -40,6 +41,7 @@ export default async function handler(req, res) {
 
     if (
       typeof auto_mode !== 'boolean' ||
+      typeof auto_publish !== 'boolean' ||
       !Number.isInteger(Number(articles_per_day)) ||
       Number(articles_per_day) < 1 ||
       Number(articles_per_day) > 3 ||
@@ -56,6 +58,7 @@ export default async function handler(req, res) {
       .from('posting_settings')
       .update({
         auto_mode,
+        auto_publish,
         articles_per_day: Number(articles_per_day),
         posting_time,
         publishing_time,
@@ -83,4 +86,4 @@ export default async function handler(req, res) {
     success: false,
     message: 'Method not allowed.'
   });
-        }
+}

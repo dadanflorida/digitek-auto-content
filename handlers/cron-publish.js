@@ -115,6 +115,25 @@ if (
   });
 }
 
+  // KUNCI EKSEKUSI HARIAN
+const runKey =
+  `${sekarang.year}-${sekarang.month}-${sekarang.day}_${jadwal}`;
+
+const { data: berhasilDikunci, error: lockError } =
+  await supabase.rpc('claim_auto_publish', {
+    p_run_key: runKey
+  });
+
+if (lockError) throw lockError;
+
+if (!berhasilDikunci) {
+  return res.status(200).json({
+    success: true,
+    message: 'Jadwal penerbitan hari ini sudah dijalankan.',
+    run_key: runKey
+  });
+}
+
 const host = req.headers['x-forwarded-host'] ||
   req.headers.host;
 

@@ -1208,6 +1208,61 @@ async function tampilkanJadwalPosting() {
 
       </div>
 
+            <div style="
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        padding:15px;
+        margin-top:12px;
+        background:#f1f7f5;
+        border:1px solid #dcebe5;
+        border-radius:10px;
+      ">
+
+        <div>
+          <strong style="font-size:13px;color:#183653">
+            Mesin Penerbitan Otomatis
+          </strong>
+
+          <p id="publishStatus" style="
+            margin:5px 0 0;
+            font-size:11px;
+            color:#8496aa;
+          ">Memuat pengaturan...</p>
+        </div>
+
+        <label style="
+          position:relative;
+          display:inline-block;
+          width:52px;
+          height:28px;
+        ">
+          <input type="checkbox" id="autoPublish"
+            disabled
+            style="opacity:0;width:0;height:0">
+
+          <span id="publishSlider" style="
+            position:absolute;
+            inset:0;
+            background:#aab7c4;
+            border-radius:30px;
+          "></span>
+
+          <span id="publishKnob" style="
+            position:absolute;
+            left:3px;
+            top:3px;
+            width:22px;
+            height:22px;
+            background:white;
+            border-radius:50%;
+            transition:.3s;
+            pointer-events:none;
+          "></span>
+        </label>
+
+      </div>
+
       <div style="margin-top:18px">
 
         <label style="font-size:12px;font-weight:bold">

@@ -1343,6 +1343,10 @@ async function tampilkanJadwalPosting() {
   resultContainer.appendChild(scheduleContainer);
 
   const autoMode = scheduleContainer.querySelector('#autoMode');
+  const autoPublish = scheduleContainer.querySelector('#autoPublish');
+  const publishSlider = scheduleContainer.querySelector('#publishSlider');
+  const publishKnob = scheduleContainer.querySelector('#publishKnob');
+  const publishStatus = scheduleContainer.querySelector('#publishStatus');
   const autoSlider = scheduleContainer.querySelector('#autoSlider');
   const autoKnob = scheduleContainer.querySelector('#autoKnob');
   const modeStatus = scheduleContainer.querySelector('#modeStatus');

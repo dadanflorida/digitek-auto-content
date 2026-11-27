@@ -245,10 +245,10 @@ for (const artikel of daftar.values()) {
   }
 
   if (
-    ['published', 'publishing', 'uncertain'].includes(
-      terbaru.facebook_status
-    )
-  ) {
+  ['published', 'publishing', 'uncertain', 'failed'].includes(
+    terbaru.facebook_status
+  )
+) {
     catatan.facebook =
       'dilewati: status ' + terbaru.facebook_status;
   } else if (!terbaru.facebook_image_url) {

@@ -26,7 +26,6 @@ export default async function handler(req, res) {
     'SUPABASE_URL',
     'SUPABASE_SERVICE_ROLE_KEY',
     'FACEBOOK_PAGE_ID',
-    'FACEBOOK_PAGE_ACCESS_TOKEN'
   ];
 
   const missingEnv = requiredEnv.filter(

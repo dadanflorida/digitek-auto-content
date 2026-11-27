@@ -1421,13 +1421,16 @@ try {
     const settings = result.settings;
 
     autoMode.checked = settings.auto_mode;
+    autoPublish.checked = settings.auto_publish;
     jumlahArtikel.value = String(settings.articles_per_day);
     jamPosting.value = String(settings.posting_time).slice(0, 5);
     jamPublikasi.value = String(settings.publishing_time).slice(0, 5);
 
     perbaruiTampilanMode();
+    perbaruiTampilanPublish();
 
     autoMode.disabled = false;
+    autoPublish.disabled = false;
     jumlahArtikel.disabled = false;
     jamPosting.disabled = false;
     jamPublikasi.disabled = false;

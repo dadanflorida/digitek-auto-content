@@ -72,6 +72,13 @@ const { data: setting, error: settingError } =
 if (settingError) throw settingError;
 
 if (!setting.auto_publish) {
+  console.log(
+    'AUTO PUBLISH STATUS:',
+    'OFF',
+    '| Waktu:',
+    new Date().toISOString()
+  );
+
   return res.status(200).json({
     success: true,
     message: 'Mesin penerbitan otomatis sedang OFF.'

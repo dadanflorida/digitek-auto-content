@@ -93,7 +93,20 @@ const jadwal = String(
   setting.publishing_time
 ).slice(0, 5);
 
-if (jamSekarang !== jadwal) {
+const menitSekarang =
+  Number(sekarang.hour) * 60 +
+  Number(sekarang.minute);
+
+const [jamJadwal, menitJadwal] =
+  jadwal.split(':').map(Number);
+
+const menitTarget =
+  jamJadwal * 60 + menitJadwal;
+
+if (
+  menitSekarang < menitTarget ||
+  menitSekarang >= menitTarget + 15
+) {
   return res.status(200).json({
     success: true,
     message: 'Belum waktunya menerbitkan artikel.',

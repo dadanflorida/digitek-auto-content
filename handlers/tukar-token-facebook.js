@@ -31,19 +31,22 @@ export default async function handler(req, res) {
     SUPABASE_SERVICE_ROLE_KEY
   } = process.env;
 
-  if (
-    !FACEBOOK_APP_ID ||
-    !FACEBOOK_APP_SECRET ||
-    !FACEBOOK_USER_TOKEN ||
-    !FACEBOOK_PAGE_ID ||
-    !SUPABASE_URL ||
-    !SUPABASE_SERVICE_ROLE_KEY
-  ) {
-    return res.status(500).json({
-      success: false,
-      message: 'Environment belum lengkap.'
-    });
-  }
+  const missingEnv = [
+  'FACEBOOK_APP_ID',
+  'FACEBOOK_APP_SECRET',
+  'FACEBOOK_USER_TOKEN',
+  'FACEBOOK_PAGE_ID',
+  'SUPABASE_URL',
+  'SUPABASE_SERVICE_ROLE_KEY'
+].filter(key => !process.env[key]);
+
+if (missingEnv.length > 0) {
+  return res.status(500).json({
+    success: false,
+    message: 'Environment belum lengkap.',
+    missing: missingEnv
+  });
+}
 
   const supabase = createClient(
     SUPABASE_URL,

@@ -97,10 +97,16 @@ form.addEventListener('submit', async (e) => {
     const result = await response.json();
 
     if (!response.ok || !result.success) {
-      throw new Error(
-        result.message || 'Permintaan gagal.'
-      );
-    }
+
+  let pesan = result.message || 'Permintaan gagal.';
+
+  if (result.missing && result.missing.length > 0) {
+    pesan += '\n\nVariabel yang belum tersedia:\n';
+    pesan += result.missing.join('\n');
+  }
+
+  throw new Error(pesan);
+}
 
     statusBox.textContent =
       result.message +

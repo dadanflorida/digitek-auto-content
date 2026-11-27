@@ -1370,6 +1370,20 @@ async function tampilkanJadwalPosting() {
     }
   }
 
+function perbaruiTampilanPublish() {
+  if (autoPublish.checked) {
+    publishSlider.style.background = '#147c65';
+    publishKnob.style.transform = 'translateX(24px)';
+    publishStatus.textContent = 'ON · Penerbitan Otomatis Aktif';
+    publishStatus.style.color = '#147c65';
+  } else {
+    publishSlider.style.background = '#aab7c4';
+    publishKnob.style.transform = 'translateX(0)';
+    publishStatus.textContent = 'OFF · Penerbitan Manual';
+    publishStatus.style.color = '#8496aa';
+  }
+}
+  
   autoMode.addEventListener('change', () => {
   perbaruiTampilanMode();
 

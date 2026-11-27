@@ -122,6 +122,13 @@ if (
   });
 }
 
+  if (!daftar.size) {
+  return res.status(200).json({
+    success: true,
+    message: 'Tidak ada artikel yang siap diterbitkan.'
+  });
+  }
+
   // KUNCI EKSEKUSI HARIAN
 const runKey =
   `${sekarang.year}-${sekarang.month}-${sekarang.day}_${jadwal}`;
@@ -180,13 +187,6 @@ const daftar = new Map();
 
 [...(drafts || []), ...(facebookPending || [])]
   .forEach(item => daftar.set(item.id, item));
-
-if (!daftar.size) {
-  return res.status(200).json({
-    success: true,
-    message: 'Tidak ada artikel yang siap diterbitkan.'
-  });
-}
 
 for (const artikel of daftar.values()) {
 

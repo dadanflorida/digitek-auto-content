@@ -185,7 +185,7 @@ headers: {
 body: new URLSearchParams({
 url: imageUrl,
 caption,
-access_token: process.env.FACEBOOK_PAGE_ACCESS_TOKEN
+access_token: pageAccessToken
 })
 }
 );

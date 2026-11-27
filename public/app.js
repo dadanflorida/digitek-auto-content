@@ -1392,6 +1392,12 @@ function perbaruiTampilanPublish() {
     : 'Mode otomatis akan NONAKTIF setelah pengaturan disimpan.';
 });
 
+  autoPublish.addEventListener('change', () => {
+  perbaruiTampilanPublish();
+  statusJadwal.textContent =
+    'Perubahan belum disimpan. Tekan Simpan Pengaturan.';
+});
+
   // AMBIL PENGATURAN DARI SUPABASE
   try {
     const response = await fetch('/api/settings', {

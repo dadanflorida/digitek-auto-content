@@ -151,7 +151,7 @@ const { data: facebookPending, error: facebookError } =
     .from('articles')
     .select('id, title, facebook_status, facebook_image_url')
     .eq('status', 'published')
-    .in('facebook_status', ['pending', 'failed'])
+    .in('facebook_status', ['pending'])
     .not('blogger_post_id', 'is', null)
     .limit(5);
 

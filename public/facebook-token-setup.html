@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Facebook Token Setup</title>
+<style>
+body {
+  font-family: Arial;
+  background: #f3f6fa;
+  padding: 20px;
+}
+main {
+  max-width: 500px;
+  margin: 40px auto;
+  background: white;
+  padding: 22px;
+  border-radius: 12px;
+}
+input, button {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 13px;
+  margin-top: 12px;
+  border-radius: 8px;
+}
+input { border: 1px solid #ccc; }
+button {
+  background: #147c65;
+  color: white;
+  border: 0;
+  font-weight: bold;
+}
+#status {
+  margin-top: 15px;
+  white-space: pre-wrap;
+}
+</style>
+</head>
+<body>
+
+<main>
+<h2>Hubungkan Token Facebook</h2>
+
+<p>
+Masukkan kunci FACEBOOK_TOKEN_SETUP_SECRET
+yang tersimpan di Vercel.
+</p>
+
+<form id="form">
+<input
+  id="secret"
+  type="password"
+  placeholder="Kunci pengaturan Facebook"
+  autocomplete="off"
+  required
+>
+
+<button id="submit" type="submit">
+Tukar dan Simpan Token
+</button>
+</form>
+
+<div id="status"></div>
+</main>
+
+<script>
+const form = document.getElementById('form');
+const input = document.getElementById('secret');
+const button = document.getElementById('submit');
+const statusBox = document.getElementById('status');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const secret = input.value.trim();
+  if (!secret) return;
+
+  button.disabled = true;
+  button.textContent = 'Memproses...';
+
+  statusBox.textContent = 'Menghubungi server...';
+
+  try {
+    const response = await fetch(
+      '/api/tukar-token-facebook',
+      {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer ' + secret,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({})
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(
+        result.message || 'Permintaan gagal.'
+      );
+    }
+
+    statusBox.textContent =
+      result.message +
+      (result.expires_days != null
+        ? '\nMasa berlaku User Token: ' +
+          result.expires_days + ' hari.'
+        : '');
+
+    input.value = '';
+
+  } catch (error) {
+    statusBox.textContent =
+      'Gagal: ' + error.message;
+  }
+
+  button.disabled = false;
+  button.textContent = 'Tukar dan Simpan Token';
+});
+</script>
+
+</body>
+  </html>

@@ -1465,6 +1465,7 @@ try {
         },
         body: JSON.stringify({
   auto_mode: autoMode.checked,
+  auto_publish: autoPublish.checked,
   articles_per_day: Number(jumlahArtikel.value),
   posting_time: jamPosting.value,
   publishing_time: jamPublikasi.value

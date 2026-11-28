@@ -269,7 +269,7 @@ function buatSVG(artikel) {
   const kategori = tentukanKategori(artikel);
 
   const teksJudul = judul.map((baris, i) => `
-    <text x="75" y="${270 + i * 76}"
+    <text x="95" y="${270 + i * 76}"
       font-family="Roboto"
       font-size="55"
       font-weight="bold"
@@ -353,6 +353,9 @@ function buatSVG(artikel) {
       font-size="20"
       font-weight="bold"
       fill="#0879E8">${escapeXml(kategori)}</text>
+
+      <rect x="65" y="230" width="7" height="225"
+  rx="3.5" fill="url(#blue)"/>
 
     <!-- ARTICLE TITLE -->
     ${teksJudul}

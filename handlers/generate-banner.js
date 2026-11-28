@@ -175,7 +175,7 @@ async function generateIlustrasiAI(artikel) {
   );
           }
 
-function buatSVG(artikel) {
+function buatSVG(artikel, ilustrasiBase64) {
   const judul = potongJudul(artikel.title, 25);
   const kategori = tentukanKategori(artikel);
 

@@ -340,6 +340,18 @@ function buatSVG(artikel, ilustrasiBase64) {
     <!-- DYNAMIC CATEGORY ILLUSTRATION -->
     ${buatIlustrasiSVG(artikel)}
 
+        <!-- FOOTER -->
+    <rect x="65" y="585" width="1070" height="3"
+      fill="#B6D9FA"/>
+
+    <text x="75" y="615"
+      font-family="Roboto"
+      font-size="17"
+      fill="#31577D">DIGITEK STORE | Solusi Layanan Digital</text>
+
+  </svg>`;
+}
+
 export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
 

@@ -175,6 +175,82 @@ async function generateIlustrasiAI(artikel) {
   );
           }
 
+function buatIlustrasiSVG(artikel) {
+  const kategori = tentukanKategori(artikel);
+
+  const ilustrasi = {
+    'PULSA DIGITAL': `
+      <rect x="100" y="35" width="150" height="250"
+        rx="25" fill="url(#blue)"/>
+      <rect x="120" y="65" width="110" height="150"
+        rx="12" fill="#FFFFFF"/>
+      <circle cx="175" cy="250" r="12" fill="#FFFFFF"/>
+      <path d="M145 120 L170 145 L205 105"
+        stroke="#0879E8" stroke-width="12"
+        fill="none" stroke-linecap="round"/>
+    `,
+
+    'PAKET DATA': `
+      <circle cx="175" cy="150" r="120"
+        fill="#0879E8" opacity="0.12"/>
+      <path d="M85 130 Q175 35 265 130"
+        stroke="#0879E8" stroke-width="18"
+        fill="none" stroke-linecap="round"/>
+      <path d="M115 165 Q175 105 235 165"
+        stroke="#0879E8" stroke-width="18"
+        fill="none" stroke-linecap="round"/>
+      <path d="M150 200 Q175 175 200 200"
+        stroke="#0879E8" stroke-width="18"
+        fill="none" stroke-linecap="round"/>
+      <circle cx="175" cy="235" r="13" fill="#0879E8"/>
+    `,
+
+    'LISTRIK & PLN': `
+      <path d="M185 30 L85 175 H155 L125 290
+        L270 125 H195 L225 30 Z"
+        fill="url(#blue)" stroke="#FFFFFF"
+        stroke-width="8" stroke-linejoin="round"/>
+    `,
+
+    'E-WALLET': `
+      <rect x="65" y="85" width="220" height="155"
+        rx="25" fill="url(#blue)"/>
+      <rect x="185" y="125" width="110" height="75"
+        rx="15" fill="#FFFFFF"/>
+      <circle cx="220" cy="162" r="10" fill="#0879E8"/>
+    `,
+
+    'VOUCHER GAME': `
+      <path d="M90 100 Q90 65 125 65 H235
+        Q270 65 270 100 V125
+        Q235 145 270 170 V205
+        Q270 240 235 240 H125
+        Q90 240 90 205 V170
+        Q125 145 90 125 Z"
+        fill="url(#blue)"/>
+      <path d="M135 120 V185 M103 152 H168"
+        stroke="#FFFFFF" stroke-width="13"
+        stroke-linecap="round"/>
+      <circle cx="220" cy="135" r="10" fill="#FFFFFF"/>
+      <circle cx="220" cy="175" r="10" fill="#FFFFFF"/>
+    `
+  };
+
+  return `
+    <g transform="translate(790 175)">
+      <circle cx="165" cy="145" r="165"
+        fill="#0879E8" opacity="0.10"/>
+      ${ilustrasi[kategori] || `
+        <rect x="75" y="45" width="180" height="200"
+          rx="28" fill="url(#blue)"/>
+        <path d="M115 110 H215 M115 145 H215 M115 180 H195"
+          stroke="#FFFFFF" stroke-width="13"
+          stroke-linecap="round"/>
+      `}
+    </g>
+  `;
+}
+
 function buatSVG(artikel, ilustrasiBase64) {
   const judul = potongJudul(artikel.title, 25);
   const kategori = tentukanKategori(artikel);

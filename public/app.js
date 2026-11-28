@@ -1572,6 +1572,7 @@ document.querySelectorAll(
   tampilkanArtikelTersimpan('publishing');
 
 } else if (button.dataset.menu === 'Koneksi Blogger') {
+  tampilkanKoneksiBlogger();
 
 } else if (button.dataset.menu === 'Dashboard') {
     } else {

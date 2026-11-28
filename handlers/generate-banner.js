@@ -191,19 +191,60 @@ function buatIlustrasiSVG(artikel) {
     `,
 
     'PAKET DATA': `
-      <circle cx="175" cy="150" r="120"
-        fill="#0879E8" opacity="0.12"/>
-      <path d="M85 130 Q175 35 265 130"
-        stroke="#0879E8" stroke-width="18"
-        fill="none" stroke-linecap="round"/>
-      <path d="M115 165 Q175 105 235 165"
-        stroke="#0879E8" stroke-width="18"
-        fill="none" stroke-linecap="round"/>
-      <path d="M150 200 Q175 175 200 200"
-        stroke="#0879E8" stroke-width="18"
-        fill="none" stroke-linecap="round"/>
-      <circle cx="175" cy="235" r="13" fill="#0879E8"/>
-    `,
+  <!-- SMARTPHONE -->
+  <rect x="105" y="25" width="145" height="255"
+    rx="25" fill="#0879E8"/>
+
+  <rect x="117" y="43" width="121" height="215"
+    rx="16" fill="#FFFFFF"/>
+
+  <rect x="155" y="52" width="45" height="6"
+    rx="3" fill="#9BBFE5"/>
+
+  <!-- NETWORK ICON -->
+  <path d="M145 125 Q177 90 210 125"
+    stroke="#0879E8" stroke-width="9"
+    fill="none" stroke-linecap="round"/>
+
+  <path d="M158 140 Q177 122 197 140"
+    stroke="#1684E8" stroke-width="9"
+    fill="none" stroke-linecap="round"/>
+
+  <circle cx="178" cy="153" r="7"
+    fill="#0879E8"/>
+
+  <!-- DATA BAR -->
+  <rect x="135" y="180" width="85" height="12"
+    rx="6" fill="#DCEEFF"/>
+
+  <rect x="135" y="180" width="65" height="12"
+    rx="6" fill="#0879E8"/>
+
+  <rect x="135" y="205" width="85" height="12"
+    rx="6" fill="#DCEEFF"/>
+
+  <rect x="135" y="205" width="45" height="12"
+    rx="6" fill="#1684E8"/>
+
+  <!-- 5G BADGE -->
+  <circle cx="260" cy="85" r="43"
+    fill="#FFD740"/>
+
+  <text x="260" y="96"
+    text-anchor="middle"
+    font-size="30"
+    font-weight="bold"
+    font-family="Roboto"
+    fill="#123B70">5G</text>
+
+  <!-- FLOATING DATA ICON -->
+  <circle cx="75" cy="220" r="30"
+    fill="#DCEEFF"/>
+
+  <path d="M62 220 H88 M75 207 V233"
+    stroke="#0879E8" stroke-width="8"
+    stroke-linecap="round"/>
+`,
 
     'LISTRIK & PLN': `
   <rect x="55" y="30" width="240" height="240"

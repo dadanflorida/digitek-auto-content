@@ -207,10 +207,11 @@ function buatIlustrasiSVG(artikel) {
 
     'LISTRIK & PLN': `
   <rect x="55" y="30" width="240" height="240"
-  rx="35" fill="#FFD740"/>
+    rx="35" fill="#FFD740"/>
 
-  <path d="M185 30 L85 175 H155 L125 290
-    L270 125 H195 L225 30 Z"
+  <path transform="translate(40 40) scale(0.8)"
+    d="M185 30 L85 175 H155 L125 290
+      L270 125 H195 L225 30 Z"
     fill="#E53935"
     stroke="#FFFFFF"
     stroke-width="8"

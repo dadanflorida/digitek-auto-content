@@ -206,11 +206,16 @@ function buatIlustrasiSVG(artikel) {
     `,
 
     'LISTRIK & PLN': `
-      <path d="M185 30 L85 175 H155 L125 290
-        L270 125 H195 L225 30 Z"
-        fill="url(#blue)" stroke="#FFFFFF"
-        stroke-width="8" stroke-linejoin="round"/>
-    `,
+  <rect x="45" y="20" width="260" height="260"
+    rx="35" fill="#FFD740"/>
+
+  <path d="M185 30 L85 175 H155 L125 290
+    L270 125 H195 L225 30 Z"
+    fill="#E53935"
+    stroke="#FFFFFF"
+    stroke-width="8"
+    stroke-linejoin="round"/>
+`,
 
     'E-WALLET': `
       <rect x="65" y="85" width="220" height="155"

@@ -379,6 +379,8 @@ function buatIlustrasiSVG(artikel) {
     fill="#64D8FF"/>
 `,
 
+   }; 
+
   return `
     <g transform="translate(760 155) scale(1.18)">
       <circle cx="165" cy="145" r="165"

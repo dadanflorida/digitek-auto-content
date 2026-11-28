@@ -239,7 +239,20 @@ function buatIlustrasiSVG(artikel) {
   return `
     <g transform="translate(760 155) scale(1.18)">
       <circle cx="165" cy="145" r="165"
-        fill="#0879E8" opacity="0.10"/>
+  fill="#0879E8" opacity="0.08"/>
+
+<circle cx="165" cy="145" r="125"
+  fill="#FFFFFF" opacity="0.55"/>
+
+<circle cx="165" cy="145" r="105"
+  fill="none" stroke="#1684E8"
+  stroke-width="3" opacity="0.18"/>
+
+<circle cx="35" cy="35" r="12"
+  fill="#1684E8" opacity="0.35"/>
+
+<circle cx="295" cy="250" r="9"
+  fill="#1684E8" opacity="0.45"/>
       ${ilustrasi[kategori] || `
         <rect x="75" y="45" width="180" height="200"
           rx="28" fill="url(#blue)"/>

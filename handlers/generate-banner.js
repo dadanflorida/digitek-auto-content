@@ -111,6 +111,70 @@ IMPORTANT:
 `;
 }
 
+// ===================================
+// GENERATE ILUSTRASI DENGAN GEMINI AI
+// ===================================
+
+async function generateIlustrasiAI(artikel) {
+
+  if (!process.env.GEMINI_API_KEY) {
+    throw new Error('GEMINI_API_KEY belum tersedia.');
+  }
+
+  const response = await fetch(
+    'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image:generateContent',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-goog-api-key': process.env.GEMINI_API_KEY
+      },
+      body: JSON.stringify({
+        contents: [
+          {
+            parts: [
+              {
+                text: buatPromptIlustrasi(artikel)
+              }
+            ]
+          }
+        ],
+        generationConfig: {
+          responseModalities: ['IMAGE'],
+          imageConfig: {
+            aspectRatio: '16:9',
+            imageSize: '1K'
+          }
+        }
+      })
+    }
+  );
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(
+      result.error?.message || 'Gemini gagal membuat ilustrasi.'
+    );
+  }
+
+  const parts =
+    result.candidates?.[0]?.content?.parts || [];
+
+  const gambar = parts.find(
+    part => part.inlineData?.data
+  );
+
+  if (!gambar) {
+    throw new Error('Gemini tidak menghasilkan gambar.');
+  }
+
+  return Buffer.from(
+    gambar.inlineData.data,
+    'base64'
+  );
+          }
+
 function buatSVG(artikel) {
   const judul = potongJudul(artikel.title, 25);
   const kategori = tentukanKategori(artikel);

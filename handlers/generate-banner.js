@@ -483,6 +483,76 @@ function buatIlustrasiSVG(artikel) {
     fill="#FFD740"/>
 `,
 
+    'VOUCHER GAME': `
+  <!-- CAHAYA LATAR GAMING -->
+  <circle cx="165" cy="150" r="145"
+    fill="#0879E8" opacity="0.12"/>
+
+  <circle cx="165" cy="150" r="115"
+    fill="#1684E8" opacity="0.10"/>
+
+  <!-- GAME CONTROLLER -->
+  <path d="
+    M75 105
+    Q80 75 115 75
+    H215
+    Q250 75 255 105
+    L285 205
+    Q295 245 265 255
+    Q245 260 225 230
+    L205 210
+    H125
+    L105 230
+    Q85 260 60 250
+    Q35 240 45 205
+    Z"
+    fill="url(#blue)"
+    stroke="#FFFFFF"
+    stroke-width="7"
+    stroke-linejoin="round"/>
+
+  <!-- D-PAD -->
+  <path d="M105 125 V185 M75 155 H135"
+    stroke="#FFFFFF"
+    stroke-width="15"
+    stroke-linecap="round"/>
+
+  <!-- TOMBOL GAMING -->
+  <circle cx="210" cy="130" r="14"
+    fill="#FFD740"/>
+
+  <circle cx="245" cy="165" r="14"
+    fill="#FFFFFF"/>
+
+  <circle cx="205" cy="190" r="12"
+    fill="#64D8FF"/>
+
+  <circle cx="250" cy="210" r="11"
+    fill="#FFD740"/>
+
+  <!-- EFEK ENERGI -->
+  <path d="M45 65 L60 45 L75 65"
+    fill="none"
+    stroke="#FFD740"
+    stroke-width="7"
+    stroke-linecap="round"
+    stroke-linejoin="round"/>
+
+  <path d="M265 55 L280 35 L295 55"
+    fill="none"
+    stroke="#1684E8"
+    stroke-width="7"
+    stroke-linecap="round"
+    stroke-linejoin="round"/>
+
+  <!-- AKSEN CAHAYA -->
+  <circle cx="35" cy="180" r="7"
+    fill="#FFD740"/>
+
+  <circle cx="295" cy="115" r="8"
+    fill="#64D8FF"/>
+`,
+
     'INFORMASI DIGITAL': `
   <!-- DOKUMEN DIGITAL -->
   <rect x="85" y="35" width="175" height="235"

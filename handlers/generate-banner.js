@@ -251,7 +251,7 @@ function buatIlustrasiSVG(artikel) {
   `;
 }
 
-function buatSVG(artikel, ilustrasiBase64) {
+function buatSVG(artikel) {
   const judul = potongJudul(artikel.title, 25);
   const kategori = tentukanKategori(artikel);
 

@@ -488,7 +488,7 @@ const png = renderer.render().asPng();
         .from('facebook-banners')
         .getPublicUrl(filePath);
 
-    const imageUrl = publicData.publicUrl;
+    const imageUrl = `${publicData.publicUrl}?v=${Date.now()}`;
 
     const { error: updateError } =
       await supabase

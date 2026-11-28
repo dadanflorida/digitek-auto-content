@@ -10,7 +10,7 @@ function dapatkanKunciGenerate() {
     return manualGenerateSecret;
   }
 
-  const secret = prompt('Masukkan kunci Generate Manual:');
+  const secret = kunci || dapatkanKunciGenerate();
 if (!secret) return '';
 
 manualGenerateSecret = secret.trim();

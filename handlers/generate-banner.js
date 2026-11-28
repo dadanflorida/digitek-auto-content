@@ -345,10 +345,13 @@ function buatSVG(artikel) {
       fill="#FFFFFF">MEDIA DIGITAL</text>
 
     <!-- CATEGORY -->
-    <rect x="75" y="160" width="340" height="45"
-      rx="12" fill="#D5EAFE"/>
+    <rect x="75" y="160" width="360" height="48"
+  rx="14" fill="url(#blue)"/>
 
-    <text x="95" y="190"
+<circle cx="98" cy="184" r="5"
+  fill="#FFFFFF"/>
+
+    <text x="115" y="191"
       font-family="Roboto"
       font-size="20"
       font-weight="bold"

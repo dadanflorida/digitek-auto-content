@@ -467,6 +467,47 @@ ideaContainer.innerHTML = `
 
 researchPanel.appendChild(ideaContainer);
 
+// AKTIFKAN TOMBOL BUAT ARTIKEL DARI 12 IDE KONTEN
+ideaContainer.querySelectorAll('.buat-artikel').forEach(button => {
+
+  button.addEventListener('click', () => {
+
+    const keyword = button.dataset.keyword;
+
+    // BUKA HALAMAN GENERATOR ARTIKEL
+    const menuGenerator = document.querySelector(
+      '[data-menu="Generator Artikel"]'
+    );
+
+    if (!menuGenerator) {
+      alert('Menu Generator Artikel tidak ditemukan.');
+      return;
+    }
+
+    menuGenerator.click();
+
+    // PILIH MODE GENERATE MANUAL
+    const modeManual = document.querySelector('#modeManual');
+
+    if (!modeManual) {
+      alert('Mode Generate Manual tidak ditemukan.');
+      return;
+    }
+
+    modeManual.click();
+
+    // ISI KEYWORD SECARA OTOMATIS
+    const inputKeyword = document.querySelector('#manualKeyword');
+
+    if (inputKeyword) {
+      inputKeyword.value = keyword;
+      inputKeyword.focus();
+    }
+
+  });
+
+});
+
 async function jalankanRiset() {
   resultContainer.innerHTML = `
     <p style="color:#147c65;font-size:12px">

@@ -260,12 +260,54 @@ function buatIlustrasiSVG(artikel) {
 `,
 
     'E-WALLET': `
-      <rect x="65" y="85" width="220" height="155"
-        rx="25" fill="url(#blue)"/>
-      <rect x="185" y="125" width="110" height="75"
-        rx="15" fill="#FFFFFF"/>
-      <circle cx="220" cy="162" r="10" fill="#0879E8"/>
-    `,
+  <!-- DOMPET DIGITAL -->
+  <rect x="65" y="90" width="220" height="155"
+    rx="28" fill="url(#blue)"/>
+
+  <rect x="85" y="65" width="175" height="125"
+    rx="22" fill="#FFFFFF"
+    stroke="#0879E8" stroke-width="9"/>
+
+  <!-- KARTU PEMBAYARAN -->
+  <rect x="125" y="105" width="175" height="120"
+    rx="20" fill="#0879E8"/>
+
+  <rect x="145" y="125" width="135" height="12"
+    rx="6" fill="#FFFFFF" opacity="0.9"/>
+
+  <rect x="145" y="150" width="65" height="12"
+    rx="6" fill="#FFFFFF" opacity="0.65"/>
+
+  <circle cx="250" cy="185" r="18"
+    fill="#FFD740"/>
+
+  <!-- SIMBOL QRIS -->
+  <rect x="35" y="195" width="75" height="75"
+    rx="12" fill="#FFFFFF"
+    stroke="#1684E8" stroke-width="5"/>
+
+  <rect x="47" y="207" width="18" height="18"
+    fill="#0879E8"/>
+  <rect x="80" y="207" width="13" height="13"
+    fill="#0879E8"/>
+  <rect x="47" y="240" width="13" height="13"
+    fill="#0879E8"/>
+  <rect x="72" y="235" width="9" height="9"
+    fill="#0879E8"/>
+  <rect x="87" y="250" width="8" height="8"
+    fill="#0879E8"/>
+
+  <!-- KOIN DIGITAL -->
+  <circle cx="285" cy="65" r="35"
+    fill="#FFD740"/>
+
+  <text x="285" y="77"
+    text-anchor="middle"
+    font-size="32"
+    font-weight="bold"
+    font-family="Roboto"
+    fill="#123B70">Rp</text>
+`,
 
     'VOUCHER GAME': `
       <path d="M90 100 Q90 65 125 65 H235

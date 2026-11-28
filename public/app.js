@@ -1938,6 +1938,17 @@ async function muatDaftarArtikel(status) {
           : ''
       }
 
+      <button
+  class="primary-btn"
+  style="
+    background:#198754;
+    margin-top:12px;
+  "
+  onclick="periksaPublikasiArtikel('${artikel.id}')"
+>
+  🔍 Periksa Status Publikasi
+</button>
+
       ${
         artikel.published_at
           ? `<p style="font-size:12px">

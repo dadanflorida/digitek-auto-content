@@ -72,6 +72,45 @@ function tentukanKategori(artikel) {
   return 'INFORMASI DIGITAL';
 }
 
+// ===================================
+// PROMPT ILUSTRASI AI GEMINI
+// ===================================
+
+function buatPromptIlustrasi(artikel) {
+
+  const kategori = tentukanKategori(artikel);
+
+  return `
+Create a premium editorial illustration
+for a professional Indonesian digital services brand.
+
+ARTICLE TITLE:
+${artikel.title}
+
+CATEGORY:
+${kategori}
+
+VISUAL REQUIREMENTS:
+- Create a unique illustration based on the article topic.
+- Modern professional technology aesthetic.
+- Dominant blue and white color palette.
+- Clean, premium, sophisticated composition.
+- Main visual subject positioned on the RIGHT side.
+- Keep the LEFT side mostly clean and uncluttered.
+- Soft blue lighting and subtle depth.
+- Suitable for a professional Facebook article banner.
+- Wide landscape composition, 16:9 ratio.
+- High visual quality and realistic details.
+
+IMPORTANT:
+- Do not include any text.
+- Do not include letters or numbers.
+- Do not create logos or watermarks.
+- Do not imitate existing brand logos.
+- The image will receive its title and branding separately.
+`;
+}
+
 function buatSVG(artikel) {
   const judul = potongJudul(artikel.title, 25);
   const kategori = tentukanKategori(artikel);

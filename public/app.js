@@ -1520,7 +1520,8 @@ document.querySelectorAll('.nav-item').forEach(button => {
 [
   '#generatorView',
   '#artikelTersimpanView',
-  '#jadwalPostingView'
+  '#jadwalPostingView',
+  '#bloggerConnectionView'
 ].forEach(selector => {
   const halaman = document.querySelector(selector);
   if (halaman) halaman.remove();

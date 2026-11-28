@@ -321,16 +321,65 @@ function buatIlustrasiSVG(artikel) {
 `,
 
     'LISTRIK & PLN': `
-  <rect x="55" y="30" width="240" height="240"
-    rx="35" fill="#FFD740"/>
+  <!-- CAHAYA LATAR -->
+  <circle cx="165" cy="150" r="145"
+    fill="#FFD740" opacity="0.18"/>
 
-  <path transform="translate(40 40) scale(0.8)"
-    d="M185 30 L85 175 H155 L125 290
-      L270 125 H195 L225 30 Z"
-    fill="#E53935"
+  <!-- METERAN LISTRIK -->
+  <rect x="75" y="35" width="190" height="245"
+    rx="25" fill="#0879E8"/>
+
+  <rect x="92" y="55" width="156" height="105"
+    rx="14" fill="#FFFFFF"/>
+
+  <!-- LAYAR DIGITAL -->
+  <rect x="108" y="75" width="124" height="58"
+    rx="8" fill="#DCEEFF"/>
+
+  <text x="170" y="116"
+    text-anchor="middle"
+    font-size="34"
+    font-weight="bold"
+    font-family="Roboto"
+    fill="#123B70">220V</text>
+
+  <!-- INDIKATOR -->
+  <circle cx="120" cy="185" r="9"
+    fill="#64D8FF"/>
+
+  <circle cx="170" cy="185" r="9"
+    fill="#FFD740"/>
+
+  <circle cx="220" cy="185" r="9"
+    fill="#FFFFFF"/>
+
+  <!-- PETIR -->
+  <path d="
+    M185 205
+    L145 255
+    H172
+    L155 290
+    L215 225
+    H185
+    Z"
+    fill="#FFD740"
     stroke="#FFFFFF"
-    stroke-width="8"
+    stroke-width="5"
     stroke-linejoin="round"/>
+
+  <!-- AKSEN ENERGI -->
+  <path d="M45 75 L60 55 L75 75"
+    fill="none"
+    stroke="#E53935"
+    stroke-width="8"
+    stroke-linecap="round"
+    stroke-linejoin="round"/>
+
+  <circle cx="285" cy="85" r="12"
+    fill="#FFD740"/>
+
+  <circle cx="45" cy="220" r="10"
+    fill="#64D8FF"/>
 `,
 
     'E-WALLET': `

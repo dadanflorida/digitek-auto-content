@@ -281,14 +281,31 @@ function buatSVG(artikel) {
       </linearGradient>
     </defs>
 
-    <rect width="1200" height="630"
-      fill="url(#background)"/>
+    <!-- PREMIUM BACKGROUND -->
+<rect width="1200" height="630"
+  fill="url(#background)"/>
 
-    <circle cx="1100" cy="100" r="220"
-      fill="#1684E8" opacity="0.08"/>
+<path d="M720 0 H1200 V630 H850
+  Q950 420 720 0 Z"
+  fill="#0879E8" opacity="0.07"/>
 
-    <circle cx="1100" cy="550" r="250"
-      fill="#1684E8" opacity="0.10"/>
+<circle cx="1020" cy="310" r="245"
+  fill="#1684E8" opacity="0.08"/>
+
+<circle cx="1020" cy="310" r="195"
+  fill="none" stroke="#1684E8"
+  stroke-width="2" opacity="0.12"/>
+
+<circle cx="1020" cy="310" r="155"
+  fill="none" stroke="#1684E8"
+  stroke-width="2" opacity="0.16"/>
+
+<rect x="755" y="145" width="355" height="365"
+  rx="35" fill="#FFFFFF" opacity="0.65"/>
+
+<path d="M65 140 H520"
+  stroke="#1684E8" stroke-width="3"
+  opacity="0.15"/>
 
     <!-- HEADER BRAND -->
     <rect x="65" y="48" width="1070" height="75"

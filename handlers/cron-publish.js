@@ -140,7 +140,7 @@ const { data: drafts, error: draftError } =
     .select('id, title, facebook_status, facebook_image_url')
     .eq('status', 'draft')
     .order('created_at', { ascending: true })
-    .limit(5);
+    .limit(2);
 
 if (draftError) throw draftError;
 

@@ -45,17 +45,42 @@ function potongJudul(text, max = 27) {
 }
 
 function tentukanKategori(artikel) {
+  const judul = String(artikel.title || '').toLowerCase();
+
   const text = [
-    artikel.title,
+    judul,
     ...(artikel.keywords || []),
     ...(artikel.labels || [])
   ].join(' ').toLowerCase();
 
-  if (/pulsa|telkomsel|indosat|xl|smartfren/.test(text))
+  // PRIORITAS UTAMA BERDASARKAN JUDUL
+  if (/bisnis|usaha|peluang usaha|peluang bisnis/.test(judul))
+    return 'BISNIS DIGITAL';
+
+  if (/paket data|internet|kuota|wifi/.test(judul))
+    return 'PAKET DATA';
+
+  if (/pulsa|telkomsel|indosat|xl|smartfren/.test(judul))
     return 'PULSA DIGITAL';
 
-  if (/internet|paket data|kuota|wifi/.test(text))
+  if (/listrik|pln|token/.test(judul))
+    return 'LISTRIK & PLN';
+
+  if (/ewallet|e-wallet|dana|ovo|gopay|dompet digital/.test(judul))
+    return 'E-WALLET';
+
+  if (/game|gaming|voucher/.test(judul))
+    return 'VOUCHER GAME';
+
+  // PEMERIKSAAN KEYWORD DAN LABEL JIKA JUDUL BELUM COCOK
+  if (/bisnis|usaha|entrepreneur/.test(text))
+    return 'BISNIS DIGITAL';
+
+  if (/paket data|internet|kuota|wifi/.test(text))
     return 'PAKET DATA';
+
+  if (/pulsa|telkomsel|indosat|xl|smartfren/.test(text))
+    return 'PULSA DIGITAL';
 
   if (/listrik|pln|token/.test(text))
     return 'LISTRIK & PLN';
@@ -65,9 +90,6 @@ function tentukanKategori(artikel) {
 
   if (/game|gaming|voucher/.test(text))
     return 'VOUCHER GAME';
-
-  if (/bisnis|usaha|digital|teknologi/.test(text))
-    return 'BISNIS DIGITAL';
 
   return 'INFORMASI DIGITAL';
 }

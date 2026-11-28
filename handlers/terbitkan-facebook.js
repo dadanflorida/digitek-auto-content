@@ -188,6 +188,66 @@ caption +=
   '\n\n🛒 BUTUH PULSA, DATA, TOKEN PLN, ATAU E-WALLET?\n' +
   'Langsung transaksi di DIGITEK STORE:\n' +
   urlPPOB;
+
+    // HASHTAG OTOMATIS BERDASARKAN KATEGORI ARTIKEL
+const sumberHashtag = [
+  artikel.title,
+  artikel.meta_description,
+  artikel.excerpt,
+  ...(Array.isArray(artikel.labels) ? artikel.labels : []),
+  ...(Array.isArray(artikel.keywords) ? artikel.keywords : [])
+].filter(Boolean).join(' ').toLowerCase();
+
+const aturanHashtag = [
+  {
+    kata: ['voucher game', 'voucher', 'game online', 'top up game', 'topup game', 'mobile legends', 'free fire', 'pubg'],
+    tag: ['#VoucherGame', '#TopUpGame', '#GameOnline']
+  },
+  {
+    kata: ['pulsa'],
+    tag: ['#Pulsa', '#IsiPulsa']
+  },
+  {
+    kata: ['paket data', 'kuota internet', 'kuota', 'internet'],
+    tag: ['#PaketData', '#KuotaInternet']
+  },
+  {
+    kata: ['token pln', 'listrik prabayar', 'token listrik'],
+    tag: ['#TokenPLN', '#ListrikPrabayar']
+  },
+  {
+    kata: ['pln pascabayar', 'tagihan listrik'],
+    tag: ['#PLNPascabayar', '#TagihanListrik']
+  },
+  {
+    kata: ['e-wallet', 'ewallet', 'dompet digital', 'top up saldo'],
+    tag: ['#EWallet', '#DompetDigital', '#TopUpSaldo']
+  },
+  {
+    kata: ['bpjs', 'jaminan kesehatan'],
+    tag: ['#BPJS', '#BayarTagihan']
+  },
+  {
+    kata: ['tagihan', 'pembayaran online', 'bayar tagihan'],
+    tag: ['#BayarTagihan', '#PembayaranOnline']
+  }
+];
+
+const hashtagKategori = [];
+
+for (const aturan of aturanHashtag) {
+  if (aturan.kata.some(kata => sumberHashtag.includes(kata))) {
+    hashtagKategori.push(...aturan.tag);
+  }
+}
+
+const hashtagFinal = [
+  '#DigitekStore',
+  '#LayananDigital',
+  ...hashtagKategori
+];
+
+caption += '\n\n' + [...new Set(hashtagFinal)].join(' ');
     
 
 // KIRIM BANNER + CAPTION KE FACEBOOK

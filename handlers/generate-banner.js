@@ -336,39 +336,9 @@ function buatSVG(artikel, ilustrasiBase64) {
       font-size="22"
       fill="#31577D">Informasi dan solusi digital terpercaya</text>
 
-    <!-- AI GENERATED ILLUSTRATION -->
-<defs>
-  <clipPath id="aiIllustrationClip">
-    <rect x="760" y="150"
-      width="390" height="350"
-      rx="28"/>
-  </clipPath>
-</defs>
-
-<rect x="760" y="150"
-  width="390" height="350"
-  rx="28"
-  fill="#EAF4FF"/>
-
-<image
-  href="data:image/png;base64,${ilustrasiBase64}"
-  x="760"
-  y="150"
-  width="390"
-  height="350"
-  preserveAspectRatio="xMidYMid slice"
-  clip-path="url(#aiIllustrationClip)"/>
-    <!-- FOOTER -->
-    <rect x="65" y="585" width="1070" height="3"
-      fill="#B6D9FA"/>
-
-    <text x="75" y="615"
-      font-family="Roboto"
-      font-size="17"
-      fill="#31577D">DIGITEK STORE | Solusi Layanan Digital</text>
-
-  </svg>`;
-        }
+    
+    <!-- DYNAMIC CATEGORY ILLUSTRATION -->
+    ${buatIlustrasiSVG(artikel)}
 
 export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');

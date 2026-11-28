@@ -54,6 +54,9 @@ function tentukanKategori(artikel) {
   ].join(' ').toLowerCase();
 
   // PRIORITAS UTAMA BERDASARKAN JUDUL
+  if (/informasi|berita|tips|panduan teknologi|perkembangan teknologi/.test(judul))
+    return 'INFORMASI DIGITAL';
+  
   if (/bisnis|usaha|peluang usaha|peluang bisnis/.test(judul))
     return 'BISNIS DIGITAL';
 

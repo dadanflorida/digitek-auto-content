@@ -419,7 +419,7 @@ const png = renderer.render().asPng();
     return res.status(500).json({
       success: false,
       message: 'Gagal membuat banner.',
-      error: error.message
+      error: 'Terjadi kendala saat membuat banner. Silakan coba kembali.'
     });
   }
     }

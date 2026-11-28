@@ -174,6 +174,15 @@ caption +=
 urlArtikel;
 }
 
+    // TAUTAN LANGSUNG LAYANAN PPOB
+const urlPPOB =
+  'https://digitekstore.blogspot.com/2026/11/layananppob.html';
+
+caption +=
+  '\n\n🛒 BUTUH PULSA, DATA, TOKEN PLN, ATAU E-WALLET?\n' +
+  'Langsung transaksi di DIGITEK STORE:\n' +
+  urlPPOB;
+
 // KIRIM BANNER + CAPTION KE FACEBOOK
 const graphVersion = 'v27.0';
 

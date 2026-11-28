@@ -355,7 +355,11 @@ export default async function handler(req, res) {
       });
     }
 
-    const svg = buatSVG(artikel);
+    const ilustrasi = await generateIlustrasiAI(artikel);
+
+const ilustrasiBase64 = ilustrasi.toString('base64');
+
+const svg = buatSVG(artikel, ilustrasiBase64);
 
     const renderer = new Resvg(svg, {
   fitTo: {

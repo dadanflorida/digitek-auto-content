@@ -1971,6 +1971,48 @@ async function muatDaftarArtikel(status) {
 }
 
 // ===================================
+// PERIKSA STATUS PUBLIKASI BLOGGER
+// ===================================
+
+window.periksaPublikasiArtikel = async function(id) {
+
+  const secret = prompt('Masukkan kunci Generate Manual:');
+
+  if (!secret) return;
+
+  if (!confirm(
+    'Periksa status artikel ini di Blogger? Artikel tidak akan diterbitkan ulang.'
+  )) return;
+
+  try {
+
+    const response = await fetch('/api/periksa-publikasi', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + secret
+      },
+      body: JSON.stringify({
+        articleId: id
+      })
+    });
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.message || 'Pemeriksaan gagal.');
+    }
+
+    alert(result.message || 'Pemeriksaan selesai.');
+
+  } catch (error) {
+
+    alert('Gagal memeriksa publikasi: ' + error.message);
+
+  }
+};
+
+// ===================================
 // TERBITKAN ARTIKEL KE BLOGGER
 // ===================================
 

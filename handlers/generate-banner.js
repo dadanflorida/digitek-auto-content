@@ -413,12 +413,7 @@ export default async function handler(req, res) {
       });
     }
 
-    const ilustrasi = await generateIlustrasiAI(artikel);
-
-const ilustrasiBase64 = ilustrasi.toString('base64');
-
-const svg = buatSVG(artikel, ilustrasiBase64);
-
+    const svg = buatSVG(artikel);
     const renderer = new Resvg(svg, {
   fitTo: {
     mode: 'width',

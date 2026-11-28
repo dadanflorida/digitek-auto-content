@@ -165,16 +165,6 @@ const ringkasan =
   artikel.excerpt ||
   '';
 
-const urlArtikel = (artikel.blogger_url || '').trim();
-
-// LINK ARTIKEL WAJIB TERSEDIA
-if (!urlArtikel) {
-  return res.status(400).json({
-    success: false,
-    message: 'Artikel harus diterbitkan ke Blogger terlebih dahulu.'
-  });
-}
-
 // SUSUN ISI CAPTION
 let caption =
   (artikel.facebook_caption || '').trim();

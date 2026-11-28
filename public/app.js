@@ -1976,8 +1976,7 @@ async function muatDaftarArtikel(status, kunci = '') {
 
 window.periksaPublikasiArtikel = async function(id) {
 
-  const secret = prompt('Masukkan kunci Generate Manual:');
-
+  const secret = dapatkanKunciGenerate();
   if (!secret) return;
 
   if (!confirm(

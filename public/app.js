@@ -2163,6 +2163,9 @@ window.buatBannerArtikel = async function(id) {
       throw new Error(result.message || 'Gagal membuat banner.');
     }
 
+        // PERBARUI DAFTAR ARTIKEL TERBIT OTOMATIS
+    await tampilkanArtikelTersimpan('published');
+
     // TAMPILKAN BANNER DI DASHBOARD
     let preview = document.getElementById('bannerPreview');
 

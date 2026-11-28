@@ -309,6 +309,57 @@ function buatIlustrasiSVG(artikel) {
     fill="#123B70">Rp</text>
 `,
 
+    'BISNIS DIGITAL': `
+  <!-- LAPTOP -->
+  <rect x="65" y="65" width="205" height="145"
+    rx="15" fill="url(#blue)"/>
+
+  <rect x="80" y="80" width="175" height="115"
+    rx="7" fill="#FFFFFF"/>
+
+  <!-- GRAFIK PERTUMBUHAN -->
+  <path d="M100 165 L130 140 L160 150
+    L190 115 L225 95"
+    fill="none"
+    stroke="#0879E8"
+    stroke-width="9"
+    stroke-linecap="round"
+    stroke-linejoin="round"/>
+
+  <circle cx="225" cy="95" r="9"
+    fill="#FFD740"/>
+
+  <!-- DASAR LAPTOP -->
+  <path d="M45 215 H285 L265 235 H65 Z"
+    fill="#064A9B"/>
+
+  <!-- KOIN KEUNTUNGAN -->
+  <circle cx="265" cy="65" r="38"
+    fill="#FFD740"/>
+
+  <text x="265" y="78"
+    text-anchor="middle"
+    font-size="34"
+    font-weight="bold"
+    font-family="Roboto"
+    fill="#123B70">Rp</text>
+
+  <!-- PANAH PERTUMBUHAN -->
+  <path d="M45 95 L65 75 L85 95"
+    fill="none"
+    stroke="#1684E8"
+    stroke-width="8"
+    stroke-linecap="round"
+    stroke-linejoin="round"/>
+
+  <!-- AKSEN DIGITAL -->
+  <circle cx="45" cy="165" r="9"
+    fill="#64D8FF"/>
+
+  <circle cx="295" cy="180" r="10"
+    fill="#FFD740"/>
+`,
+
     'VOUCHER GAME': `
   <!-- CAHAYA LATAR GAMING -->
   <circle cx="165" cy="150" r="145"

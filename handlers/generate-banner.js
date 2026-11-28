@@ -260,42 +260,28 @@ function buatSVG(artikel, ilustrasiBase64) {
       font-size="22"
       fill="#31577D">Informasi dan solusi digital terpercaya</text>
 
-    <!-- DIGITAL ILLUSTRATION -->
-    <g transform="translate(790 175)">
+    <!-- AI GENERATED ILLUSTRATION -->
+<defs>
+  <clipPath id="aiIllustrationClip">
+    <rect x="760" y="150"
+      width="390" height="350"
+      rx="28"/>
+  </clipPath>
+</defs>
 
-      <circle cx="165" cy="145" r="165"
-        fill="#0879E8" opacity="0.10"/>
+<rect x="760" y="150"
+  width="390" height="350"
+  rx="28"
+  fill="#EAF4FF"/>
 
-      <circle cx="165" cy="145" r="125"
-        fill="#0879E8" opacity="0.12"/>
-
-      <rect x="75" y="45" width="180" height="200"
-        rx="28" fill="url(#blue)"/>
-
-      <rect x="105" y="80" width="120" height="14"
-        rx="7" fill="#FFFFFF"/>
-
-      <rect x="105" y="115" width="120" height="14"
-        rx="7" fill="#FFFFFF"/>
-
-      <rect x="105" y="150" width="85" height="14"
-        rx="7" fill="#FFFFFF"/>
-
-      <rect x="105" y="185" width="105" height="14"
-        rx="7" fill="#FFFFFF"/>
-
-      <circle cx="260" cy="245" r="43"
-        fill="#FFFFFF"/>
-
-      <path d="M239 245 L254 260 L282 229"
-        fill="none"
-        stroke="#0879E8"
-        stroke-width="12"
-        stroke-linecap="round"
-        stroke-linejoin="round"/>
-
-    </g>
-
+<image
+  href="data:image/png;base64,${ilustrasiBase64}"
+  x="760"
+  y="150"
+  width="390"
+  height="350"
+  preserveAspectRatio="xMidYMid slice"
+  clip-path="url(#aiIllustrationClip)"/>
     <!-- FOOTER -->
     <rect x="65" y="585" width="1070" height="3"
       fill="#B6D9FA"/>

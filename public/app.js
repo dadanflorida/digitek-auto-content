@@ -1747,7 +1747,7 @@ async function muatDaftarArtikel(status, kunci = '') {
 
   if (!daftar) return;
 
-  const secret = prompt('Masukkan kunci Generate Manual:');
+  const secret = kunci || dapatkanKunciGenerate();
 
   if (!secret) {
     daftar.textContent = 'Akses dibatalkan.';

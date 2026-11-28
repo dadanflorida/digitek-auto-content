@@ -64,6 +64,7 @@ export default async function handler(req, res) {
   blogger_url,
   published_at,
   facebook_status,
+  facebook_image_url,
   facebook_post_id,
   facebook_url,
   facebook_published_at,

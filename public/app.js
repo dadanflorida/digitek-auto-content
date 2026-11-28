@@ -1876,6 +1876,35 @@ async function muatDaftarArtikel(status, kunci = '') {
             : '<p>URL Blogger belum tersedia.</p>'
         }
 
+                ${
+          !artikel.facebook_image_url
+            ? `<button class="primary-btn"
+                 style="background:#0879E8;margin-top:15px"
+                 onclick="buatBannerArtikel('${artikel.id}')">
+                 🎨 Buat Banner
+               </button>`
+            : ['pending', 'failed'].includes(
+                artikel.facebook_status || 'pending'
+              )
+              ? `<button class="primary-btn"
+                   style="background:#1877F2;margin-top:15px"
+                   onclick="terbitkanFacebook('${artikel.id}')">
+                   📘 Terbitkan ke Facebook
+                 </button>`
+              : artikel.facebook_status === 'published'
+                ? `<p style="color:#198754;margin-top:15px">
+                     ✓ Sudah diterbitkan ke Facebook
+                   </p>
+                   <a href="${escapeHTML(artikel.facebook_url || '#')}"
+                      target="_blank"
+                      rel="noopener noreferrer">
+                     Buka Postingan Facebook
+                   </a>`
+                : `<p style="color:#b7791f;margin-top:15px">
+                     Status Facebook: ${escapeHTML(artikel.facebook_status || '-')}
+                   </p>`
+                }
+
       </div>
     `;
   }

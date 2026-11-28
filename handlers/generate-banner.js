@@ -202,15 +202,67 @@ function buatIlustrasiSVG(artikel) {
 
   const ilustrasi = {
     'PULSA DIGITAL': `
-      <rect x="100" y="35" width="150" height="250"
-        rx="25" fill="url(#blue)"/>
-      <rect x="120" y="65" width="110" height="150"
-        rx="12" fill="#FFFFFF"/>
-      <circle cx="175" cy="250" r="12" fill="#FFFFFF"/>
-      <path d="M145 120 L170 145 L205 105"
-        stroke="#0879E8" stroke-width="12"
-        fill="none" stroke-linecap="round"/>
-    `,
+  <!-- LINGKARAN AKSEN -->
+  <circle cx="165" cy="150" r="140"
+    fill="#0879E8" opacity="0.10"/>
+
+  <!-- SMARTPHONE -->
+  <rect x="95" y="25" width="145" height="260"
+    rx="25" fill="url(#blue)"/>
+
+  <rect x="108" y="48" width="119" height="205"
+    rx="15" fill="#FFFFFF"/>
+
+  <rect x="150" y="35" width="35" height="5"
+    rx="3" fill="#9BBFE5"/>
+
+  <circle cx="167" cy="269" r="8"
+    fill="#FFFFFF"/>
+
+  <!-- SIMBOL TELEPON -->
+  <path d="
+    M145 105
+    Q135 115 145 135
+    Q165 175 195 185
+    Q210 190 220 175
+    L200 155
+    Q190 165 180 155
+    L165 140
+    Q175 130 165 120
+    Z"
+    fill="#0879E8"/>
+
+  <!-- GELOMBANG KOMUNIKASI -->
+  <path d="M205 95 Q240 115 235 150"
+    fill="none"
+    stroke="#1684E8"
+    stroke-width="8"
+    stroke-linecap="round"/>
+
+  <path d="M220 75 Q275 105 260 160"
+    fill="none"
+    stroke="#64D8FF"
+    stroke-width="7"
+    stroke-linecap="round"/>
+
+  <!-- KOIN PULSA -->
+  <circle cx="65" cy="85" r="42"
+    fill="#FFD740"/>
+
+  <text x="65" y="96"
+    text-anchor="middle"
+    font-size="30"
+    font-weight="bold"
+    font-family="Roboto"
+    fill="#123B70">Rp</text>
+
+  <!-- AKSEN DIGITAL -->
+  <circle cx="65" cy="220" r="10"
+    fill="#64D8FF"/>
+
+  <circle cx="275" cy="225" r="12"
+    fill="#FFD740"/>
+`,
 
     'PAKET DATA': `
   <!-- SMARTPHONE -->

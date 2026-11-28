@@ -1741,7 +1741,7 @@ function tampilkanArtikelTersimpan(status = 'draft') {
 
 // AMBIL DAFTAR ARTIKEL DARI SUPABASE
 
-async function muatDaftarArtikel(status) {
+async function muatDaftarArtikel(status, kunci = '') {
 
   const daftar = document.querySelector('#daftarArtikel');
 

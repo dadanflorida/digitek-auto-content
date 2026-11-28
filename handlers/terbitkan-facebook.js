@@ -106,6 +106,14 @@ if (!imageUrl) {
     message: 'Banner artikel belum dibuat. Buat banner terlebih dahulu.'
   });
 }
+    const urlArtikel = (artikel.blogger_url || '').trim();
+
+if (!urlArtikel) {
+  return res.status(400).json({
+    success: false,
+    message: 'Artikel harus diterbitkan ke Blogger terlebih dahulu agar tautan artikel tersedia.'
+  });
+}
 
     // CEK STATUS FACEBOOK
     const statusFacebook =
@@ -153,27 +161,43 @@ if (!imageUrl) {
 const judul = artikel.title || '';
 
 const ringkasan =
-artikel.meta_description ||
-artikel.excerpt ||
-'';
-
-let caption =
-(artikel.facebook_caption || '').trim();
-
-if (!caption) {
-caption = [judul, ringkasan]
-.filter(Boolean)
-.join('\n\n');
-}
+  artikel.meta_description ||
+  artikel.excerpt ||
+  '';
 
 const urlArtikel = (artikel.blogger_url || '').trim();
 
-if (urlArtikel && !caption.includes(urlArtikel)) {
-caption +=
-'\n\nBaca artikel selengkapnya di sini:\n' +
-urlArtikel;
+// LINK ARTIKEL WAJIB TERSEDIA
+if (!urlArtikel) {
+  return res.status(400).json({
+    success: false,
+    message: 'Artikel harus diterbitkan ke Blogger terlebih dahulu.'
+  });
 }
 
+// SUSUN ISI CAPTION
+let caption =
+  (artikel.facebook_caption || '').trim();
+
+if (!caption) {
+  caption = [judul, ringkasan]
+    .filter(Boolean)
+    .join('\n\n');
+}
+
+// LINK BACA ARTIKEL
+caption +=
+  '\n\n📖 BACA ARTIKEL LENGKAP:\n' +
+  urlArtikel;
+
+// LINK LANGSUNG PPOB
+const urlPPOB =
+  'https://digitekstore.blogspot.com/2026/11/layananppob.html';
+
+caption +=
+  '\n\n🛒 BUTUH PULSA, DATA, TOKEN PLN, ATAU E-WALLET?\n' +
+  'Langsung transaksi di DIGITEK STORE:\n' +
+  urlPPOB;
     // TAUTAN LANGSUNG LAYANAN PPOB
 const urlPPOB =
   'https://digitekstore.blogspot.com/2026/11/layananppob.html';

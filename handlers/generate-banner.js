@@ -206,8 +206,8 @@ function buatIlustrasiSVG(artikel) {
     `,
 
     'LISTRIK & PLN': `
-  <rect x="45" y="20" width="260" height="260"
-    rx="35" fill="#FFD740"/>
+  <rect x="55" y="30" width="240" height="240"
+  rx="35" fill="#FFD740"/>
 
   <path d="M185 30 L85 175 H155 L125 290
     L270 125 H195 L225 30 Z"
@@ -360,7 +360,7 @@ function buatSVG(artikel) {
       font-family="Roboto"
       font-size="20"
       font-weight="bold"
-      fill="#0879E8">${escapeXml(kategori)}</text>
+      fill="#FFFFFF">${escapeXml(kategori)}</text>
 
       <rect x="65" y="230" width="7" height="225"
   rx="3.5" fill="url(#blue)"/>

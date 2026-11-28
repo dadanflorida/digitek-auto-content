@@ -2003,6 +2003,10 @@ window.periksaPublikasiArtikel = async function(id) {
     }
 
     alert(result.message || 'Pemeriksaan selesai.');
+    await muatDaftarArtikel(
+  result.found ? 'published' : 'publishing',
+  secret
+);
 
   } catch (error) {
 

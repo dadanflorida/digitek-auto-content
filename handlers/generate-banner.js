@@ -483,74 +483,48 @@ function buatIlustrasiSVG(artikel) {
     fill="#FFD740"/>
 `,
 
-    'VOUCHER GAME': `
-  <!-- CAHAYA LATAR GAMING -->
-  <circle cx="165" cy="150" r="145"
-    fill="#0879E8" opacity="0.12"/>
+    'INFORMASI DIGITAL': `
+  <!-- DOKUMEN DIGITAL -->
+  <rect x="85" y="35" width="175" height="235"
+    rx="20" fill="url(#blue)"/>
 
-  <circle cx="165" cy="150" r="115"
-    fill="#1684E8" opacity="0.10"/>
+  <rect x="102" y="52" width="141" height="195"
+    rx="12" fill="#FFFFFF"/>
 
-  <!-- GAME CONTROLLER -->
-  <path d="
-    M75 105
-    Q80 75 115 75
-    H215
-    Q250 75 255 105
-    L285 205
-    Q295 245 265 255
-    Q245 260 225 230
-    L205 210
-    H125
-    L105 230
-    Q85 260 60 250
-    Q35 240 45 205
-    Z"
-    fill="url(#blue)"
-    stroke="#FFFFFF"
-    stroke-width="7"
-    stroke-linejoin="round"/>
-
-  <!-- D-PAD -->
-  <path d="M105 125 V185 M75 155 H135"
-    stroke="#FFFFFF"
-    stroke-width="15"
-    stroke-linecap="round"/>
-
-  <!-- TOMBOL GAMING -->
-  <circle cx="210" cy="130" r="14"
+  <!-- SIMBOL INFORMASI -->
+  <circle cx="172" cy="105" r="30"
     fill="#FFD740"/>
 
-  <circle cx="245" cy="165" r="14"
-    fill="#FFFFFF"/>
+  <text x="172" y="119"
+    text-anchor="middle"
+    font-size="42"
+    font-weight="bold"
+    font-family="Roboto"
+    fill="#123B70">i</text>
 
-  <circle cx="205" cy="190" r="12"
+  <!-- BARIS INFORMASI -->
+  <rect x="125" y="155" width="95" height="10"
+    rx="5" fill="#0879E8"/>
+
+  <rect x="125" y="180" width="75" height="10"
+    rx="5" fill="#9BBFE5"/>
+
+  <rect x="125" y="205" width="85" height="10"
+    rx="5" fill="#9BBFE5"/>
+
+  <!-- AKSEN DIGITAL -->
+  <circle cx="65" cy="75" r="13"
     fill="#64D8FF"/>
 
-  <circle cx="250" cy="210" r="11"
+  <circle cx="280" cy="195" r="15"
     fill="#FFD740"/>
 
-  <!-- EFEK ENERGI -->
-  <path d="M45 65 L60 45 L75 65"
-    fill="none"
-    stroke="#FFD740"
-    stroke-width="7"
-    stroke-linecap="round"
-    stroke-linejoin="round"/>
-
-  <path d="M265 55 L280 35 L295 55"
+  <path d="M45 225 L65 205 L85 225"
     fill="none"
     stroke="#1684E8"
-    stroke-width="7"
+    stroke-width="8"
     stroke-linecap="round"
     stroke-linejoin="round"/>
-
-  <!-- AKSEN CAHAYA -->
-  <circle cx="35" cy="180" r="7"
-    fill="#FFD740"/>
-
-  <circle cx="295" cy="115" r="8"
-    fill="#64D8FF"/>
 `,
 
    }; 
